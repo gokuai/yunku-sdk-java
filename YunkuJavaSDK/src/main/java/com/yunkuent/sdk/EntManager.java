@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by Brandon on 2014/8/14.
  */
-public class EntManager extends QauthEngine {
+public class EntManager extends OauthEngine {
 
     private static final String URL_API_GET_GROUPS = API_ENT_HOST + "/1/ent/get_groups";
     private static final String URL_API_GET_MEMBERS = API_ENT_HOST + "/1/ent/get_members";

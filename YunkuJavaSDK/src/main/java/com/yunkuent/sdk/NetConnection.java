@@ -24,6 +24,7 @@ final class NetConnection {
 
     private static final String LOG_TAG = "NetConnection";
     public static final String USER_AGENT = "GK_ANDROID" + ";" + System.getProperties().getProperty("http.agent");
+    public static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
     public static final int TIMEOUT = 30000;
     public static final int CONNECT_TIMEOUT = 10000;
 
@@ -66,11 +67,7 @@ final class NetConnection {
 
         headerBuilder.add("User-Agent", USER_AGENT);
 
-        if (Locale.getDefault().toString().contains("zh")) {
-            headerBuilder.add("Accept-Language", "zh-CN");
-        } else {
-            headerBuilder.add("Accept-Language", "en-US");
-        }
+        headerBuilder.add("Accept-Language",ACCEPT_LANGUAGE);
 
         Request.Builder requestBuilder = new Request.Builder();
         Request request = null;

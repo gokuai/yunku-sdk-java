@@ -16,7 +16,7 @@ public class GetMemberByOutId {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntManagerHelper.getInstance().getMemberByOutId("dqwdqw");
+        String returnString = EntManagerHelper.getInstance().getMemberByOutId("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

@@ -16,7 +16,7 @@ public class GetMemberFileLink {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntManagerHelper.getInstance().getMemberFileLink(52, true);
+        String returnString = EntManagerHelper.getInstance().getMemberFileLink(74478, true);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

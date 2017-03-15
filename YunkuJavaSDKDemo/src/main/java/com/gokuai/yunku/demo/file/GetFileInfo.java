@@ -17,7 +17,7 @@ public class GetFileInfo {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().getFileInfo("p.jpg", EntFileManager.NetType.DEFAULT);
+        String returnString = EntFileManagerHelper.getInstance().getFileInfo("qq.jpg", EntFileManager.NetType.DEFAULT);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

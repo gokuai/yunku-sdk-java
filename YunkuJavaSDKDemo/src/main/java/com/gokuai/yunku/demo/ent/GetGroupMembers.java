@@ -16,7 +16,7 @@ public class GetGroupMembers {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntManagerHelper.getInstance().getGroupMembers(1086, 0, 3, true);
+        String returnString = EntManagerHelper.getInstance().getGroupMembers(71715, 0, 3, true);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

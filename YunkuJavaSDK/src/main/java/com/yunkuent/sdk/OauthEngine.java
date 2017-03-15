@@ -10,11 +10,11 @@ import java.util.HashMap;
 /**
  * Created by Brandon on 2014/8/6.
  */
-abstract class QauthEngine extends HttpEngine {
+abstract class OauthEngine extends HttpEngine {
 
     protected boolean mIsEnt;
 
-    public QauthEngine(String clientId, String clientSecret, boolean isEnt) {
+    public OauthEngine(String clientId, String clientSecret, boolean isEnt) {
         mClientId = clientId;
         mClientSecret = clientSecret;
         mIsEnt = isEnt;

@@ -17,7 +17,7 @@ public class Set {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().set(379619, "中国梦", "9999", "", "");
+        String returnString = EntLibraryManagerHelper.getInstance().set(1258748, "ttt", "1073741824", "", "");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

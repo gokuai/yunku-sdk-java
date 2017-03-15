@@ -17,7 +17,7 @@ public class GetDownloadUrlByHash {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByHash("fe515ef69e56d6b60ecf3ed779c542f1920c3136",false, EntFileManager.NetType.DEFAULT);
+        String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByHash("5ef2b3b8449cf3440b8a3b1874da5e4236b06dd8",false, EntFileManager.NetType.DEFAULT);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

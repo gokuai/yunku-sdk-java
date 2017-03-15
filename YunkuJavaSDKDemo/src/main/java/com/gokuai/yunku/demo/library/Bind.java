@@ -16,7 +16,7 @@ public class Bind {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().bind(1255127,"YunkuJavaSDKDemo",null);
+        String returnString = EntLibraryManagerHelper.getInstance().bind(1258748,"YunkuJavaSDKDemo",null);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

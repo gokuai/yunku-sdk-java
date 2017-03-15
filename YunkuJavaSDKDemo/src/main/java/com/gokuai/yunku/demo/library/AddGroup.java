@@ -16,7 +16,7 @@ public class AddGroup {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().addGroup(150998,4448,2892);
+        String returnString = EntLibraryManagerHelper.getInstance().addGroup(1258748,71715,3208);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

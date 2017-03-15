@@ -17,7 +17,7 @@ public class Link {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().link("test.png", 0, EntFileManager.AuthType.DEFAULT, null);
+        String returnString = EntFileManagerHelper.getInstance().link("qq.jpg", 0, EntFileManager.AuthType.DEFAULT, null);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

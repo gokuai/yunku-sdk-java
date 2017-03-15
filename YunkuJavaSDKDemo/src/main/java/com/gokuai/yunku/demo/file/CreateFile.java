@@ -16,7 +16,7 @@ public class CreateFile {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().createFile("WoWScrnShot_031415_175713.jpeg","Brandon","/Users/Brandon/Desktop/gugepinyinshurufa_427.apk");
+        String returnString = EntFileManagerHelper.getInstance().createFile("qqq.jpg","Brandon","/Users/gokuai/Desktop/qq.jpg ");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

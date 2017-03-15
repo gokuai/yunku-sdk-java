@@ -17,7 +17,7 @@ public class GetDownloadUrlByFullPath {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByFullPath("q.jpg",false, EntFileManager.NetType.DEFAULT);
+        String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByFullPath("qq.jpg",false, EntFileManager.NetType.DEFAULT);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

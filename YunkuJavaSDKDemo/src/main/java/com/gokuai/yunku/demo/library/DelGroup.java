@@ -16,7 +16,7 @@ public class DelGroup {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().delGroup(150998,4448);
+        String returnString = EntLibraryManagerHelper.getInstance().delGroup(1258748,71715);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

@@ -16,7 +16,7 @@ public class SetGroupRole {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().setGroupRole(150998,4448,2894);
+        String returnString = EntLibraryManagerHelper.getInstance().setGroupRole(1258748,4448,3208);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

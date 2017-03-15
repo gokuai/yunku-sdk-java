@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * 企业库管理http请求类
  */
-public class EntLibManager extends QauthEngine {
+public class EntLibManager extends OauthEngine {
 
     private static final String URL_API_CREATE_LIB = API_ENT_HOST + "/1/org/create";
     private static final String URL_API_GET_LIB_LIST = API_ENT_HOST + "/1/org/ls";

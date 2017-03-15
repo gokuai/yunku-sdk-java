@@ -16,7 +16,7 @@ public class GetInfo {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().getInfo(1255127);
+        String returnString = EntLibraryManagerHelper.getInstance().getInfo(1258748);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

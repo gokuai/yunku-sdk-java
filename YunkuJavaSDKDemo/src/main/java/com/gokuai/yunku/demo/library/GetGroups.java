@@ -16,7 +16,7 @@ public class GetGroups {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().getGroups(32657);
+        String returnString = EntLibraryManagerHelper.getInstance().getGroups(1258748);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

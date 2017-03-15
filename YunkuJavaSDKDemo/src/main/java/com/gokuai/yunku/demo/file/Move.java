@@ -16,7 +16,7 @@ public class Move {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().move("test/test.txt","test.txt","Brandon");
+        String returnString = EntFileManagerHelper.getInstance().move("qqq.jpg","test/qqq.jpg","Brandon");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

@@ -16,7 +16,7 @@ public class SetMemberRole {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().setMemberRole(150998,2894,new int[]{4});
+        String returnString = EntLibraryManagerHelper.getInstance().setMemberRole(1258748,3208,new int[]{216144});
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

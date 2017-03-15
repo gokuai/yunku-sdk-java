@@ -16,8 +16,8 @@ public class CreateFileByUrl {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().createFileByUrl("ppp", 0,
-                "Brandon", true, "http://img02.tooopen.com/images/20150614/tooopen_sy_130377131846.jpg");
+        String returnString = EntFileManagerHelper.getInstance().createFileByUrl("qq.jpg", 0,
+                "Brandon", true, "http://reso2.yiihuu.com/976162-z.jpg");
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }
 }

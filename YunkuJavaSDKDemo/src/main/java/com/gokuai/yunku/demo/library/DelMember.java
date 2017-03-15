@@ -16,7 +16,7 @@ public class DelMember {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().delMember(150998,new int[]{4});
+        String returnString = EntLibraryManagerHelper.getInstance().delMember(1258748,new int[]{52064});
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

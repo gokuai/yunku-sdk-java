@@ -16,7 +16,7 @@ public class AddMembers {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().addMembers(379620,2892,new int[]{125771});
+        String returnString = EntLibraryManagerHelper.getInstance().addMembers(1258748,3330,new int[]{52064});
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

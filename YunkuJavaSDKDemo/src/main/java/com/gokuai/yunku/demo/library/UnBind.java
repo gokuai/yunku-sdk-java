@@ -16,7 +16,7 @@ public class UnBind {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().unBind("0b7bd4e22c1a9eb8e3ddba2b6c37f6e2");
+        String returnString = EntLibraryManagerHelper.getInstance().unBind("XvcFnSj3CT0ukgznK4AnWOTJs0E");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }
