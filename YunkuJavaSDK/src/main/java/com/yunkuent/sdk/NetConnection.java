@@ -144,7 +144,6 @@ final class NetConnection {
                 }
             });
 
-            return httpClient;
         } catch (KeyManagementException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
