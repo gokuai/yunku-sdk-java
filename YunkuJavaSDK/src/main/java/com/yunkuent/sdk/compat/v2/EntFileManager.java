@@ -8,5 +8,7 @@ import com.yunkuent.sdk.HttpEngine;
 public class EntFileManager extends HttpEngine  {
 
 
-
+    public EntFileManager(String clientId, String clientSecret) {
+        super(clientId, clientSecret);
+    }
 }

@@ -5,4 +5,7 @@ package com.yunkuent.sdk.compat.v2;
  */
 public class EntLibManager extends OauthEngine {
 
+    public EntLibManager(String clientId, String clientSecret) {
+        super(clientId, clientSecret);
+    }
 }
