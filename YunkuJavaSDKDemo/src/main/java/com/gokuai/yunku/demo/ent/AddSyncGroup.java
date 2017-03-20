@@ -14,8 +14,7 @@ public class AddSyncGroup {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
-
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntManagerHelper.getInstance().addSyncGroup("ParentGroup", "ParentGroup", "");
         String returnString1 = EntManagerHelper.getInstance().addSyncGroup("GroupTest", "Group", "ParentGroup");

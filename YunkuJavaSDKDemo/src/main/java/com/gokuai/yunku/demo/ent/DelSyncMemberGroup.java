@@ -5,18 +5,18 @@ import com.gokuai.yunku.demo.helper.EntManagerHelper;
 import com.yunkuent.sdk.DebugConfig;
 
 /**
- * Created by qp on 2017/3/2.
+ * Created by qp on 2017/3/20.
  *
- * 修改同步分组
+ * 删除成员的所属部门
  */
-public class DelSyncMember {
+public class DelSyncMemberGroup {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().delSyncMember(new String[]{"MemberTest", "MemberTest1", "MemberTest2"});
+        String returnString = EntManagerHelper.getInstance().delSyncMemberGroup(new String[]{"MemberTest2"});
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

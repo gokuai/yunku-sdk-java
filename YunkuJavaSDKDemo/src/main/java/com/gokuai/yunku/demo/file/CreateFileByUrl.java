@@ -14,7 +14,7 @@ public class CreateFileByUrl {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntFileManagerHelper.getInstance().createFileByUrl("qq.jpg", 0,
                 "Brandon", true, "http://reso2.yiihuu.com/976162-z.jpg");

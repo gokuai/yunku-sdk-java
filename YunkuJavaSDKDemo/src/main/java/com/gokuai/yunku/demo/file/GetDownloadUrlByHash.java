@@ -15,7 +15,7 @@ public class GetDownloadUrlByHash {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByHash("5ef2b3b8449cf3440b8a3b1874da5e4236b06dd8",false, EntFileManager.NetType.DEFAULT);
 

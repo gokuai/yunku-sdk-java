@@ -640,6 +640,16 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
     HTTP 200
 ---
+### 删除成员的所属部门
+	delSyncMemberGroup(String[] members)
+#### 参数 
+| 参数 | 必须 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| members | 是 | string | 成员在外部系统的唯一id数组 |
+#### 返回结果
+
+    HTTP 200
+---
 
 
 ## 企业文件管理（EntFileManager.java）

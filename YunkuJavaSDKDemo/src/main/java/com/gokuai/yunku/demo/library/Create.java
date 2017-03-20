@@ -15,7 +15,7 @@ public class Create {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntLibraryManagerHelper.getInstance().create("aaa", "1073741824", "destroy", "test lib", "");
 
