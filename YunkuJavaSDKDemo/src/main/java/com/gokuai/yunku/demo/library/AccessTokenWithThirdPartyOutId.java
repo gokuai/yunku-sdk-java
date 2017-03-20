@@ -1,23 +1,21 @@
-package com.gokuai.yunku.demo.file;
+package com.gokuai.yunku.demo.library;
 
+import com.gokuai.yunku.demo.Config;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
-import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
+import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
 import com.yunkuent.sdk.DebugConfig;
 
 /**
- * Created by qp on 2017/3/2.
- *
- * 上传文件 文件不得超过50MB
+ * Created by qp on 2017/3/16.
  */
-public class CreateFile {
+public class AccessTokenWithThirdPartyOutId {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntFileManagerHelper.getInstance().createFile("aa.jpg","Brandon",DebugConfig.TEST_FILE_PATH);
-
+        String returnString = EntLibraryManagerHelper.getInstance().accessTokenWithThirdPartyOutId(Config.OUT_ID);
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }
 }

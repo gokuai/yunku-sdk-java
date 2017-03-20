@@ -15,7 +15,8 @@ public class YunkuEntLibTest {
     public static final String CLIENT_ID = "";
     public static final String CLIENT_SECRET = "";
 
-    @Ignore
+    @Ignore("create is ignored")
+    @Test
     public void create() throws Exception {
         EntLibManager entFile = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
         String s = entFile.create("aaa", "1073741824", "destroy", "test lib", "");
@@ -31,6 +32,7 @@ public class YunkuEntLibTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+    @Ignore("getLibList is ignored")
     @Test
     public void getLibList() throws Exception {
         EntLibManager entFile = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
@@ -51,7 +53,7 @@ public class YunkuEntLibTest {
     @Test
     public void getMember() throws Exception {
         EntLibManager entFile = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
-        String s = entFile.getMember(4405, MemberType.ACCOUNT,new String[]{"qwdqwdq1"});
+        String s = entFile.getMember(1258748, MemberType.MEMBER_ID,new String[]{"4"});
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -64,7 +66,8 @@ public class YunkuEntLibTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
-    @Ignore
+    @Ignore("bind is ignored")
+    @Test
     public void bind() throws Exception {
         EntLibManager entFile = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
         String s = entFile.bind(0,"YunkuJavaSDKDemo",null);
@@ -73,7 +76,8 @@ public class YunkuEntLibTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
-    @Ignore
+    @Ignore("unBind is ignored")
+    @Test
     public void unBind() throws Exception {
         EntLibManager entFile = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
         String s = entFile.unBind("");
@@ -145,7 +149,8 @@ public class YunkuEntLibTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
-    @Ignore
+    @Ignore("destroy is ignored")
+    @Test
     public void destroy() throws Exception {
         EntLibManager entFile = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
         String s = entFile.destroy("b2013df96cbc23b4b0dd72f075e5cbf7");

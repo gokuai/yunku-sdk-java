@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.zip.CRC32;
 
 public class UploadRunnable extends HttpEngine implements Runnable {
@@ -47,6 +46,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
     protected UploadRunnable(String apiUrl, String localFullPath, String fullPath,
                              String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite) {
 
+        super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;
         this.mLocalFullPath = localFullPath;
         this.mFullPath = fullPath;
@@ -64,6 +64,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
     protected UploadRunnable(String apiUrl, InputStream inputStream, String fullPath,
                              String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite) {
 
+        super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;
         this.mInputStream = inputStream;
         this.mFullPath = fullPath;
@@ -95,7 +96,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
             if (!TextUtils.isEmpty(mLocalFullPath)) {
                 File file = new File(mLocalFullPath);
                 if (!file.exists()) {
-                    LogPrint.print(Level.WARNING, "'" + mLocalFullPath + "'  file not exist!");
+                    LogPrint.error(LOG_TAG, "'" + mLocalFullPath + "'  file not exist!");
                     return;
                 }
 
@@ -206,7 +207,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                     // upload_sussec
                     if (mCallBack != null) {
                         mCallBack.onProgress(mRId, 1);
-                        mCallBack.onSuccess(mRId, filehash);
+                        mCallBack.onSuccess(mRId, returnResult.getResult());
                     }
                 } else {
                     // 上传失败
@@ -218,7 +219,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
             }
 
         } catch (Exception ex) {
-            LogPrint.print(Level.WARNING, ex.getMessage());
+            LogPrint.warn(LOG_TAG, ex.getMessage());
             upload_abort();
             if (mCallBack != null) {
                 mCallBack.onFail(mRId, ex.getMessage());
@@ -232,7 +233,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                     bis.close();
                 }
             } catch (IOException e) {
-                LogPrint.print(Level.WARNING, "runnable with io exception:msg" + e.getMessage());
+                LogPrint.warn(LOG_TAG, "runnable with io exception:msg" + e.getMessage());
             }
 
             System.gc();
@@ -336,7 +337,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
             returnResult.setStatusCode(response.code());
             response.body().close();
         } catch (Exception e) {
-            LogPrint.print(Level.WARNING, "upload_part(): Exception is: " + e.toString());
+            LogPrint.warn(LOG_TAG, "upload exception:" + e.getMessage());
         }
         return returnResult;
     }

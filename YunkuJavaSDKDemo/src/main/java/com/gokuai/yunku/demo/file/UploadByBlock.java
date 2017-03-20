@@ -17,7 +17,7 @@ public class UploadByBlock {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("tt.zip", "Brandon", 0, "/Users/gokuai/Desktop/tt.zip", true, new UploadCallBack() {
+        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("test.jpg", "Brandon", 0, DebugConfig.TEST_FILE_PATH, true, new UploadCallBack() {
 
             @Override
             public void onSuccess(long threadId, String fileHash) {

@@ -9,7 +9,6 @@ import java.util.*;
  */
 abstract class SignAbility implements HostConfig {
 
-    public abstract String getToken();
 
     /**
      * 根据clientsecret 签名
@@ -58,20 +57,6 @@ abstract class SignAbility implements HostConfig {
         return Util.getHmacSha1(string_sign, secret);
     }
 
-    /**
-     * 重新根据参数进行签名
-     *
-     * @param params
-     * @param secret
-     * @param ignoreKeys
-     */
-    protected void reSignParams(HashMap<String, String> params, String secret,
-                                ArrayList<String> ignoreKeys) {
-        params.remove("token");
-        params.remove("sign");
-        params.put("token", getToken());
-        params.put("sign", generateSign(params, secret, ignoreKeys));
-    }
 
     private Comparator<String> mComparator = new Comparator<String>() {
         public int compare(String p1, String p2) {
