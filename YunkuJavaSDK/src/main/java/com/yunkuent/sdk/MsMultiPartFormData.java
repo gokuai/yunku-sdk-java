@@ -14,6 +14,8 @@ import java.util.List;
  * 表单提交
  */
 class MsMultiPartFormData {
+
+    private static final String TAG = "MsMultiPartFormData";
     private final String boundary;
     private static final String LINE_FEED = "\r\n";
     private HttpURLConnection httpConn;
@@ -27,7 +29,7 @@ class MsMultiPartFormData {
      *
      * @param requestURL
      * @param charset
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public MsMultiPartFormData(String requestURL, String charset)
             throws IOException {
@@ -71,7 +73,7 @@ class MsMultiPartFormData {
      * Adds a upload file section to the request
      *
      * @param fieldName name attribute in <input type="file" name="..." />
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void addFilePart(String fieldName, InputStream inputStream, String fileName)
             throws IOException {
@@ -116,8 +118,8 @@ class MsMultiPartFormData {
      * Completes the request and receives response from the server.
      *
      * @return a list of Strings as response in case the server returned
-     *         status OK, otherwise an exception is thrown.
-     * @throws IOException
+     * status OK, otherwise an exception is thrown.
+     * @throws java.io.IOException
      */
     public String finish() {
         List<String> response = new ArrayList<String>();
@@ -161,7 +163,7 @@ class MsMultiPartFormData {
         }
         ReturnResult returnResult = new ReturnResult(result, code);
         Gson gosn = new Gson();
-        LogPrint.print("createFile:finish");
+        LogPrint.info(TAG, "createFile:finish");
         return gosn.toJson(returnResult);
     }
 

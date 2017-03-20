@@ -17,7 +17,7 @@ public class GetMember {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
 
-        String returnString = EntLibraryManagerHelper.getInstance().getMember(1258748, MemberType.ACCOUNT,new String[]{"BrandonTest"});
+        String returnString = EntLibraryManagerHelper.getInstance().getMember(1258748, MemberType.MEMBER_ID,new String[]{"4"});
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

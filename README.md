@@ -32,6 +32,21 @@ Robots: noindex,nofollow
 | ClientSecret | 是 | string | 申请应用时分配的AppSecret |
 
 ---
+
+###使用合作方 OutID 进行认证
+	accessTokenWithThirdPartyOutId(String outId)
+#### 参数
+| 参数 | 必须 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| outId | 是 | String | 企业在合作方系统中的唯一ID |
+
+#### 返回结果
+	{
+    access_token: 企业token
+    expires_in: token过期时间
+	}
+
+---
 ### 创建库
 	create(String orgName, int orgCapacity, 
 	String storagePointName, String orgDesc) 
@@ -351,6 +366,22 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | ClientSecret | 是 | string | 申请应用时分配的AppSecret |
 
 ---
+
+###使用合作方 OutID 进行认证
+	accessTokenWithThirdPartyOutId(String outId)
+#### 参数
+| 参数 | 必须 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| outId | 是 | String | 企业在合作方系统中的唯一ID |
+
+#### 返回结果
+	{
+    access_token: 企业token
+    expires_in: token过期时间
+	}
+
+---
+
 ###获取角色
 	getRoles() 
 #### 参数
@@ -1028,6 +1059,130 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 ---
 
+##企业合作API（ThirdPartyManager.java）
+###构造方法
+	new ThirdPartyManager(String clientId, String clientSecret, String outId)
+###参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| clientId | 是 | string | 够快分配的client_id |
+| clientSecret | 是 | string | 够快分配的clientSecret |
+| outId | 是 | string | 企业在合作方系统中的唯一ID |
+
+###开通企业
+	createEnt(String entName, String contactName,
+				String contactMobile, String contactEmail, String contactAddress)
+
+####参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| entName | 是 | string | 	企业名称 |
+| contactName | 是 | string | 企业联系人姓名 |
+| contactMobile | 否 | string | 企业联系电话 |
+| contactEmail | 否 | string | 企业联系邮箱 |
+| contactAddress  | 否 | string | 企业联系地址 |
+
+###扩展参数
+	createEnt(HashMap<String, String> map,String entName, String contactName,
+			String contactMobile, String contactEmail, String contactAddress)
+####参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| map | 是 | hashMap| 用于传递一些特殊用途的企业初始数据, 参数前缀为__setting _ , 例如: 	__ setting _ site _ url |
+| entName | 是 | string | 	企业名称 |
+| contactName | 是 | string | 企业联系人姓名 |
+| contactMobile | 否 | string | 企业联系电话 |
+| contactEmail | 否 | string | 企业联系邮箱 |
+| contactAddress  | 否 | string | 企业联系地址 |
+#### 返回结果
+	正常返回 HTTP 200
+
+###获取企业信息
+	getEntInfo()
+#### 参数
+
+(无)
+
+#### 返回结果
+	{
+	  "id": 企业ID,
+	  "name": 企业名称,
+	  "trial": 是否试用, 1表示试用, 0表示正式开通,
+	  "end_dateline": 到期时间, unix时间戳,
+	  "member_limit": 成员数量上限,
+	  "member_count": 成员数量,
+	  "space": 空间上限, 单位字节,
+	  "size": 已使用空间, 单位字节
+	}
+
+###购买
+	orderSubscribe(int memberCount, int space, int month)
+
+####参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| memberCount | 是 | int | 人数（不限是-1） |
+| space | 是 | int | 空间(G) |
+| month | 是 | int | 购买的月数 |
+#### 返回结果
+	正常返回 HTTP 200
+
+###升级
+	orderUpgrade(int memberCount, int space)
+####参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| memberCount | 是 | int | 人数（不限是-1） |
+| space | 是 | int | 空间(G) |
+#### 返回结果
+	正常返回 HTTP 200
+
+###续费
+	orderRenew(int month)
+####参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| month | 是 | int | 购买的月数 |
+#### 返回结果
+	正常返回 HTTP 200
+
+###退订
+	orderUnsubscribe()
+####参数
+
+(无)
+
+#### 返回结果
+	正常返回 HTTP 200
+
+###获取企业token
+	getEntToken()
+
+#### 参数
+
+(无)
+
+#### 返回结果
+	{
+    	access_token: 企业token
+    	expires_in: token过期时间
+	}
+
+###获取单点登录地址
+	getSsoUrl(String ticket)
+####参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| ticket | 是 | string | 	单点登录需要验证的票据 |
+
+#### 返回结果
+	{
+    	url: 单点登录URL
+	}
+
+###[单点登录流程](https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso)
+
+---
 ##常见问题
 ###编码问题
 ####现象

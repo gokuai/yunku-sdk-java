@@ -26,10 +26,11 @@ final class NetConnection {
     public static final String USER_AGENT = "GK_ANDROID" + ";" + System.getProperties().getProperty("http.agent");
     public static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
     public static final int TIMEOUT = 30000;
-    public static final int CONNECT_TIMEOUT = 10000;
+    public static final int CONNECT_TIMEOUT = 30000;
 
     /**
      * 发送请求
+     *
      * @param url
      * @param method
      * @param params
@@ -38,7 +39,7 @@ final class NetConnection {
      */
     public static String sendRequest(String url, RequestMethod method,
                                      HashMap<String, String> params, HashMap<String, String> headParams) {
-        LogPrint.print(LOG_TAG+"method：" + method + ", sendRequest(): url is: " + url + " " + params);
+        LogPrint.info(LOG_TAG, " url is: " + url + " " + params);
         return returnOkHttpClientBundle(url, method, params, headParams);
     }
 
@@ -53,7 +54,7 @@ final class NetConnection {
 
         if (method.equals(RequestMethod.GET) && !TextUtils.isEmpty(paramsString)) {
             url += "?" + paramsString;
-            LogPrint.print(LOG_TAG+"method: " + method + ":" + url);
+            LogPrint.info(LOG_TAG, method + ":" + url);
         }
 
 
@@ -96,7 +97,7 @@ final class NetConnection {
                 response = client.newCall(request).execute();
 
                 if (response.header("X-GOKUAI-DEBUG") != null) {
-                    System.out.println("X-GOKUAI-DEBUG:" + new String(Base64.decode(response.header("X-GOKUAI-DEBUG").getBytes())));
+                    LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(response.header("X-GOKUAI-DEBUG").getBytes())));
                 }
                 ReturnResult returnResult = new ReturnResult(response.body().string(), response.code());
                 Gson gosn = new Gson();
@@ -135,7 +136,7 @@ final class NetConnection {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
             httpClient.setProtocols(list).setSslSocketFactory(sslSocketFactory).setHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {

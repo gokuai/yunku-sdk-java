@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by qp on 2017/3/8.
  */
@@ -66,7 +64,7 @@ public class YunkuEntTest {
     @Test
     public void getGroupMembers() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        String s = ent.getGroupMembers(1086, 0, 3, true);
+        String s = ent.getGroupMembers(71715, 0, 3, true);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -79,15 +77,20 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+//    @Ignore("addSyncMember is ignored")
     @Test
     public void addSyncMember() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
         String s = ent.addSyncMember("MemberTest1", "Member1", "Member1", "1234", "111", "111");
+        String s2 = ent.addSyncMember("MemberTest2", "Member2", "Member2", "", "", "");
         ReturnResult r = ReturnResult.create(s);
+        ReturnResult r2 = ReturnResult.create(s2);
         Assert.assertEquals(200,r.getStatusCode());
+        Assert.assertEquals(200,r2.getStatusCode());
     }
 
-    @Ignore
+//    @Ignore("setSyncMemberState is ignored")
+    @Test
     public void setSyncMemberState() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
         String s = ent.setSyncMemberState("",true);
@@ -95,6 +98,7 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+//    @Ignore("delSyncMember is ignored")
     @Test
     public void delSyncMember() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
@@ -103,6 +107,7 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+//    @Ignore("addSyncGroup is ignored")
     @Test
     public void addSyncGroup() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
@@ -111,6 +116,7 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+//    @Ignore("delSyncGroup is ignored")
     @Test
     public void delSyncGroup() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
@@ -119,6 +125,7 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+//    @Ignore("addSyncGroupMember is ignored")
     @Test
     public void addSyncGroupMember() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
@@ -127,6 +134,7 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+//    @Ignore("delSyncGroupMember is ignored")
     @Test
     public void delSyncGroupMember() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
@@ -135,10 +143,11 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
-    @Ignore
+    @Ignore("delSyncMemberGroup is ignored")
+    @Test
     public void delSyncMemberGroup() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        String s = ent.delSyncMemberGroup(new String[]{""});
+        String s = ent.delSyncMemberGroup(new String[]{"MemberTest2"});
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }

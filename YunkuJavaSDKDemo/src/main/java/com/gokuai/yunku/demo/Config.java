@@ -22,4 +22,9 @@ public class Config {
      * 需要通过 EntLibManager中 bind 获取库授权获取org client secret
      */
     public static final String ORG_CLIENT_SECRET = "";
+
+    /**
+     * 企业在合作方系统中的唯一ID
+     */
+    public static final String OUT_ID = "";
 }
