@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 表单提交
  */
-class MsMultiPartFormData {
+public class MsMultiPartFormData {
 
     private static final String TAG = "MsMultiPartFormData";
     private final String boundary;

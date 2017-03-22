@@ -7,12 +7,13 @@ Robots: noindex,nofollow
 */
 
 #够快云库3.0 Java SDK 使用说明
+**（ps: 够快云库2.0 Java SDK 使用说明见V2.0）**
 
 * 版本：3.0
 * 创建：2016-10-28
 
 ## 引用 
-将`[yunku-java-sdk].jar`文件引用进项目，包括`YunkuJavaSDKlibs`下的jar文件，或者将`YunkuJavaSDK`做为依赖项目。
+将`[yunku-java-sdk].jar`文件引用进项目，或者将`YunkuJavaSDK`做为依赖项目。
 
 ## 初始化
 要使用云库3.0的API，您需要先在 <a href="http://developer.gokuai.com/yk/tutorial#yk3" target="_blank">企业授权</a> 中获取 `client_id` 和 `client_secret`
@@ -23,7 +24,7 @@ Robots: noindex,nofollow
 
 ## 企业库管理（EntLibManager.java）
 
-###构造方法
+### 构造方法
 	new EntLibManager（ClientId, ClientSecret）
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -33,7 +34,7 @@ Robots: noindex,nofollow
 
 ---
 
-###使用合作方 OutID 进行认证
+### 使用合作方 OutID 进行认证
 	accessTokenWithThirdPartyOutId(String outId)
 #### 参数
 | 参数 | 必须 | 类型 | 说明 |
@@ -47,6 +48,7 @@ Robots: noindex,nofollow
 	}
 
 ---
+
 ### 创建库
 	create(String orgName, int orgCapacity, 
 	String storagePointName, String orgDesc) 
@@ -59,7 +61,7 @@ Robots: noindex,nofollow
 | orgDesc | 否 | string | 库描述|
 | orgLogo | 否 | string | 库logo |
 
-####数值参考
+#### 数值参考
 1T="1099511627776" 
 1G＝“1073741824”；
 
@@ -117,7 +119,7 @@ Robots: noindex,nofollow
 #### 返回结果 
    正常返回 HTTP 200 
 
-####数值参考
+#### 数值参考
 1T="1099511627776" 
 1G＝“1073741824”；
 
@@ -355,7 +357,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ## 企业管理（EntManager.java）
 
-###构造方法
+### 构造方法
 
 	new EntManager（ String ClientId, String ClientSecret）
 	
@@ -367,7 +369,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###使用合作方 OutID 进行认证
+### 使用合作方 OutID 进行认证
 	accessTokenWithThirdPartyOutId(String outId)
 #### 参数
 | 参数 | 必须 | 类型 | 说明 |
@@ -382,7 +384,8 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###获取角色
+
+### 获取角色
 	getRoles() 
 #### 参数
 （无） 
@@ -397,7 +400,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###获取成员列表
+### 获取成员列表
 	getMembers(int start, int size)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -492,7 +495,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 
-###获取部门
+### 获取部门
 	getGroups() 
 #### 参数 
 （无）
@@ -539,7 +542,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 
 ---
-###根据成员id获取成员个人库外链
+### 根据成员id获取成员个人库外链
 	getMemberFileLink(int memberId, boolean fileOnly)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -638,13 +641,23 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
     HTTP 200
 ---
+### 删除成员的所属部门
+	delSyncMemberGroup(String[] members)
+#### 参数
+| 参数 | 必须 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| members | 是 | string | 成员在外部系统的唯一id数组 |
+#### 返回结果
+
+    HTTP 200
+---
 
 
 ## 企业文件管理（EntFileManager.java）
 
 `orgClientId`和`orgClientSecret`需要通过`EntLibManager`.`bind`方法获取
 
-###构造方法
+### 构造方法
 
 	new EntFileManager(String orgClientId,String orgClientSecret);
 	
@@ -655,7 +668,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | orgClientSecret | 是 | string | 库授权client_secret  |
 
 ---
-###获取文件列表
+### 获取文件列表
 	getFileList( int start, String fullPath)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -702,7 +715,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | last_dateline | int | 文件最后修改时间戳 |
 
 ---
-###获取更新列表
+### 获取更新列表
 	getUpdateList( boolean isCompare, long fetchDateline)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -731,7 +744,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###文件更新数量
+### 文件更新数量
 	getUpdateCounts( long beginDateline, long endDateline, boolean showDelete)
 	
 #### 参数 
@@ -748,7 +761,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 ---
 
-###获取文件信息
+### 获取文件信息
 	getFileInfo( String fullPath,NetType net)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -791,7 +804,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | thumbnail | string | 文件缩略图地址 |
 
 ---
-###通过文件唯一标识获取下载地址
+### 通过文件唯一标识获取下载地址
      getDownloadUrlByHash(String hash, final boolean isOpen, NetType net)
 #### 参数
 
@@ -807,7 +820,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
      	}
 
 ---
-###通过文件路径获取下载地址
+### 通过文件路径获取下载地址
     getDownloadUrlByFullPath(String fullPath, final boolean isOpen, NetType net)
 #### 参数
 
@@ -823,7 +836,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 
 ---
-###创建文件夹
+### 创建文件夹
 	createFolder( String fullPath,String opName)
 #### 参数 
 
@@ -839,9 +852,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | fullpath | string | 文件夹的路径 |
 
 ---
-###通过文件流上传（50M以内文件，覆盖同名文件）
+### 通过文件流上传（50M以内文件，覆盖同名文件）
 	createFile( String fullPath, String opName, FileInputStream stream)
-###通过文件流上传（50M以内文件）
+### 通过文件流上传（50M以内文件）
 	createFile( String fullPath, String opName, FileInputStream stream, boolean overWrite)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -861,9 +874,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | filesize | long | 文件大小 |
 
 ---
-###通过本地路径上传（50M以内文件，覆盖同名文件）
+### 通过本地路径上传（50M以内文件，覆盖同名文件）
 	createFile( String fullPath, String opName, String localPath)
-###通过本地路径上传（50M以内文件）
+### 通过本地路径上传（50M以内文件）
 	createFile( String fullPath, String opName, String localPath , boolean overWrite)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -883,10 +896,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###文件分块上传 (覆盖同名文件）
+### 文件分块上传 (覆盖同名文件）
 	uploadByBlock( String fullPath, String opName,
 	 int opId, String localFilePath, UploadCallBack callBack)
-###文件分块上传
+### 文件分块上传
 	uploadByBlock( String fullPath, String opName,
 	 int opId, String localFilePath, boolean overWrite, UploadCallBack callBack)
 #### 参数 
@@ -901,10 +914,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###数据流分块上传 (覆盖同名文件）
+### 数据流分块上传 (覆盖同名文件）
 	uploadByBlock( String fullPath, String opName,
 	 int opId, InputStream inputStream, UploadCallBack callBack)
-###数据流分块上传
+### 数据流分块上传
 	uploadByBlock( String fullPath, String opName,
 	 int opId, InputStream inputStream, boolean overWrite, UploadCallBack callBack)
 #### 参数 
@@ -919,7 +932,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 	
-###删除文件
+### 删除文件
 	del( String fullPaths, String opName)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
@@ -929,7 +942,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
-###移动文件
+### 移动文件
 	move( String fullPath, String destFullPath, String opName)
 #### 参数 
 
@@ -942,7 +955,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
-###获取文件链接
+### 获取文件链接
 	link( String fullPath, int deadline, AuthType authType, String password)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
@@ -954,7 +967,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 
 #### 返回结果
-###发送消息
+### 发送消息
 	sendmsg( String title,
 	String text, String image, String linkUrl, String opName) 
 #### 参数 
@@ -969,7 +982,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	正常返回 HTTP 200 
 ---
 
-###获取当前库所有外链
+### 获取当前库所有外链
 	links( boolean fileOnly)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -989,9 +1002,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###通过链接上传文件（覆盖同名文件）
+### 通过链接上传文件（覆盖同名文件）
 	createFileByUrl(String fullpath,int opId,String opName,String url)
-###通过链接上传文件
+### 通过链接上传文件
 	createFileByUrl(String fullpath,int opId,String opName,boolean overwrite,String url)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -1007,7 +1020,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###WEB直接上传文件
+### WEB直接上传文件
 	getUploadServers()
 
 #### 参数 
@@ -1025,7 +1038,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###文件搜索
+### 文件搜索
 	search(String keyWords, String path, int start, int size, ScopeType... scopes)
 
 #### 参数 
@@ -1059,21 +1072,21 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 ---
 
-##企业合作API（ThirdPartyManager.java）
-###构造方法
+## 企业合作API（ThirdPartyManager.java）
+### 构造方法
 	new ThirdPartyManager(String clientId, String clientSecret, String outId)
-###参数
+### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | clientId | 是 | string | 够快分配的client_id |
 | clientSecret | 是 | string | 够快分配的clientSecret |
 | outId | 是 | string | 企业在合作方系统中的唯一ID |
 
-###开通企业
+### 开通企业
 	createEnt(String entName, String contactName,
 				String contactMobile, String contactEmail, String contactAddress)
 
-####参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | entName | 是 | string | 	企业名称 |
@@ -1082,10 +1095,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | contactEmail | 否 | string | 企业联系邮箱 |
 | contactAddress  | 否 | string | 企业联系地址 |
 
-###扩展参数
+### 扩展参数
 	createEnt(HashMap<String, String> map,String entName, String contactName,
 			String contactMobile, String contactEmail, String contactAddress)
-####参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | map | 是 | hashMap| 用于传递一些特殊用途的企业初始数据, 参数前缀为__setting _ , 例如: 	__ setting _ site _ url |
@@ -1097,7 +1110,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 
-###获取企业信息
+### 获取企业信息
 	getEntInfo()
 #### 参数
 
@@ -1115,10 +1128,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	  "size": 已使用空间, 单位字节
 	}
 
-###购买
+### 购买
 	orderSubscribe(int memberCount, int space, int month)
 
-####参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | memberCount | 是 | int | 人数（不限是-1） |
@@ -1127,9 +1140,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 
-###升级
+### 升级
 	orderUpgrade(int memberCount, int space)
-####参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | memberCount | 是 | int | 人数（不限是-1） |
@@ -1137,25 +1150,25 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 
-###续费
+### 续费
 	orderRenew(int month)
-####参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | month | 是 | int | 购买的月数 |
 #### 返回结果
 	正常返回 HTTP 200
 
-###退订
+### 退订
 	orderUnsubscribe()
-####参数
+#### 参数
 
 (无)
 
 #### 返回结果
 	正常返回 HTTP 200
 
-###获取企业token
+### 获取企业token
 	getEntToken()
 
 #### 参数
@@ -1168,9 +1181,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
     	expires_in: token过期时间
 	}
 
-###获取单点登录地址
+### 获取单点登录地址
 	getSsoUrl(String ticket)
-####参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | ticket | 是 | string | 	单点登录需要验证的票据 |
@@ -1180,15 +1193,16 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
     	url: 单点登录URL
 	}
 
-###[单点登录流程](https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso)
+### [单点登录流程](https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso)
 
 ---
-##常见问题
-###编码问题
-####现象
+
+## 常见问题
+### 编码问题
+#### 现象
 * Windows 运行环境，中文文件名参数可能会导致，返回签名的报错信息。
 
-####解决方法
+#### 解决方法
 **方案1:** 更换运行环境，使用 Linux 服务器		
 **方案2:** 如果是命令行执行 jar 文件，终端上执行以下命令即可 
 	

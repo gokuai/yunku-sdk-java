@@ -14,7 +14,7 @@ public class AddMembers {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntLibraryManagerHelper.getInstance().addMembers(1258748,3330,new int[]{52064});
 

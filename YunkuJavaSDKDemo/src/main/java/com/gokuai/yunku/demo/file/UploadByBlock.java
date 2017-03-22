@@ -15,7 +15,7 @@ public class UploadByBlock {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("test.jpg", "Brandon", 0, DebugConfig.TEST_FILE_PATH, true, new UploadCallBack() {
 

@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * http请求
  */
-final class NetConnection {
+public final class NetConnection {
 
     private static final String LOG_TAG = "NetConnection";
     public static final String USER_AGENT = "GK_ANDROID" + ";" + System.getProperties().getProperty("http.agent");

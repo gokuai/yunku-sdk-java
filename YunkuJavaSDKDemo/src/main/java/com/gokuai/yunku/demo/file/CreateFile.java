@@ -14,7 +14,7 @@ public class CreateFile {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntFileManagerHelper.getInstance().createFile("aa.jpg","Brandon",DebugConfig.TEST_FILE_PATH);
 

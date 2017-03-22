@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * “access_token”的有效期，一秒为单位 refresh_token: 用于刷新“access_token” httpcode-: error:
  * 
  */
-class OauthData {
+public class OauthData {
 
 	private final static String ACCESS_TOKEN = "access_token";
 	private final static String EXPIRES_IN = "expires_in";

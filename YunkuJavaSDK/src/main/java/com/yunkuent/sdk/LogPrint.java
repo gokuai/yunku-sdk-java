@@ -12,7 +12,7 @@ import static com.yunkuent.sdk.DebugConfig.*;
 /**
  * 输出日志   System.out.println
  */
-class LogPrint {
+public class LogPrint {
 
     private static final String TAG = "LogPrint";
 

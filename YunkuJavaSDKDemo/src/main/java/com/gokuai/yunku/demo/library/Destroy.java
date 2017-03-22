@@ -14,7 +14,7 @@ public class Destroy {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="D://LogPath";//默认在D盘根目录
+//        DebugConfig.LOG_PATH="LogPath/";
 
         String returnString = EntLibraryManagerHelper.getInstance().destroy("b2013df96cbc23b4b0dd72f075e5cbf7");
 

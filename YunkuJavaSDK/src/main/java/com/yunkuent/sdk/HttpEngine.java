@@ -43,7 +43,7 @@ public abstract class HttpEngine extends SignAbility {
     /**
      * 请求协助类
      */
-    protected class RequestHelper {
+    public class RequestHelper {
         RequestMethod method;
         HashMap<String, String> params;
         HashMap<String, String> headParams;
@@ -52,12 +52,12 @@ public abstract class HttpEngine extends SignAbility {
 
         ArrayList<String> ignoreKeys;
 
-        RequestHelper setMethod(RequestMethod method) {
+        public RequestHelper setMethod(RequestMethod method) {
             this.method = method;
             return this;
         }
 
-        RequestHelper setParams(HashMap<String, String> params) {
+        public RequestHelper setParams(HashMap<String, String> params) {
             this.params = params;
             return this;
         }
@@ -72,7 +72,7 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
-        RequestHelper setUrl(String url) {
+        public RequestHelper setUrl(String url) {
             this.url = url;
             return this;
         }
@@ -87,7 +87,7 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        String executeSync() {
+        public String executeSync() {
             checkNecessaryParams(url, method);
 
             if (!Util.isNetworkAvailableEx()) {
