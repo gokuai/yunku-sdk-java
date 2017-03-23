@@ -13,7 +13,7 @@ Robots: noindex,nofollow
 创建：2014-08-25
 
 ## 引用 
-将**[yunku-java-sdk].jar**文件引用进项目，或者将**YunkuJavaSDK**做为依赖项目。
+将 **[yunku-java-sdk].jar** 文件引用进项目，或者将 **YunkuJavaSDK** 做为依赖项目。
 
 ## 兼用使用
 原2.0导入的包名路径为:
@@ -778,7 +778,6 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-
 | fullPath | 是 | string | 文件路径 |
 | net | 是 | NetType | DEFAULT,返回公网下载地址；IN，返回内网下载地址 |
 
