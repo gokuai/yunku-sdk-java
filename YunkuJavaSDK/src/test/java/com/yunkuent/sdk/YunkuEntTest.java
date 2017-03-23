@@ -143,7 +143,7 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
-    @Ignore("delSyncMemberGroup is ignored")
+//    @Ignore("delSyncMemberGroup is ignored")
     @Test
     public void delSyncMemberGroup() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);

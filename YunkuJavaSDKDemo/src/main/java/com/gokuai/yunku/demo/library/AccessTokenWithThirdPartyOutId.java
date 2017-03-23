@@ -7,6 +7,8 @@ import com.yunkuent.sdk.DebugConfig;
 
 /**
  * Created by qp on 2017/3/16.
+ *
+ * 使用合作方 OutID 进行认证
  */
 public class AccessTokenWithThirdPartyOutId {
 

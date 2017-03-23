@@ -1,23 +1,23 @@
 package com.gokuai.yunku.demo.ent;
 
-import com.gokuai.yunku.demo.Config;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntManagerHelper;
 import com.yunkuent.sdk.DebugConfig;
 
 /**
- * Created by qp on 2017/3/16.
+ * Created by qp on 2017/3/20.
  *
- * 使用合作方 OutID 进行认证
+ * 删除成员的所属部门
  */
-public class AccessTokenWithThirdPartyOutId {
+public class DelSyncMemberGroup {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().accessTokenWithThirdPartyOutId(Config.OUT_ID);
+        String returnString = EntManagerHelper.getInstance().delSyncMemberGroup(new String[]{"MemberTest2"});
+
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }
 }
