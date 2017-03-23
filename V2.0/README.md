@@ -6,25 +6,33 @@ Date: 2014/08/25
 Robots: noindex,nofollow
 */
 
-#够快云库Java SDK使用说明
+# 够快云库Java SDK使用说明
 
 版本：1.0.26
 
 创建：2014-08-25
 
 ## 引用 
-将**[yunku-java-sdk].jar**文件引用进项目，包括YunkuJavaSDKlibs下的jar文件，或者将**YunkuJavaSDK**做为依赖项目。
+将**[yunku-java-sdk].jar**文件引用进项目，或者将**YunkuJavaSDK**做为依赖项目。
 
+## 兼用使用
+原2.0导入的包名路径为:
+
+![](https://ww4.sinaimg.cn/large/006tNc79gy1fdwxbxiv72j30ae02i745.jpg)
+
+现变为:
+
+![](https://ww2.sinaimg.cn/large/006tNc79ly1fdwxcrku93j30ae02ia9y.jpg)
 
 ## 初始化
 要使用云库api，您需要有效的CLIENT_ID和CLIENT_SECRET,和获得云库后台管理账号。
 
-##参数使用
+## 参数使用
 以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传null
 
 ## 企业库管理（**EntLibManager.java** ）
 
-###构造方法
+### 构造方法
 	new EntLibManager（ClientId,ClientSecret,boolean isEnt）
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -71,7 +79,7 @@ Robots: noindex,nofollow
 | orgDesc | 否 | string | 库描述|
 | orgLogo | 否 | string | 库logo |
 
-####数值参考
+#### 数值参考
 1T="1099511627776" 
 1G＝“1073741824”；
 
@@ -129,7 +137,7 @@ Robots: noindex,nofollow
 #### 返回结果 
    正常返回 HTTP 200 
 
-####数值参考
+#### 数值参考
 1T="1099511627776" 
 1G＝“1073741824”；
 
@@ -366,7 +374,7 @@ org_client_secret用于调用库文件相关API签名时的密钥
 
 
 ## 企业管理（**EntManager.java** ）
-###构造方法
+### 构造方法
 	new EntManager（ String ClientId,String ClientSecret,boolean isEnt）
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -401,7 +409,7 @@ org_client_secret用于调用库文件相关API签名时的密钥
 | refresh_token | string | 用于刷新access_token 的 refresh_token，有效期1个月 |
 
 ---
-###获取角色
+### 获取角色
 	getRoles() 
 #### 参数
 （无） 
@@ -416,7 +424,7 @@ org_client_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-###获取成员列表
+### 获取成员列表
 	getMembers(int start, int size)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -511,7 +519,7 @@ org_client_secret用于调用库文件相关API签名时的密钥
 ---
 
 
-###获取分组
+### 获取分组
 	getGroups() 
 #### 参数 
 （无）
@@ -558,7 +566,7 @@ org_client_secret用于调用库文件相关API签名时的密钥
 	}
 
 ---
-###根据成员id获取成员个人库外链
+### 根据成员id获取成员个人库外链
 	getMemberFileLink(int memberId, boolean fileOnly)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -663,7 +671,7 @@ org_client_secret用于调用库文件相关API签名时的密钥
 
 orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
-###构造方法
+### 构造方法
 	new EntFileManager(String orgClientId,String orgClientSecret);
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -672,7 +680,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 | orgClientSecret | 是 | string | 库授权client_secret  |
 
 ---
-###获取文件列表
+### 获取文件列表
 	getFileList( int start, String fullPath)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -719,7 +727,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 | last_dateline | int | 文件最后修改时间戳 |
 
 ---
-###获取更新列表
+### 获取更新列表
 	getUpdateList( boolean isCompare, long fetchDateline)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -748,7 +756,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
 ---
 
-###文件更新数量
+### 文件更新数量
 	getUpdateCounts( long beginDateline, long endDateline, boolean showDelete)
 	
 #### 参数 
@@ -765,7 +773,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 	}
 ---
 
-###获取文件信息
+### 获取文件信息
 	getFileInfo( String fullPath,NetType net)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -808,7 +816,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 | thumbnail | string | 文件缩略图地址 |
 
 ---
-###创建文件夹
+### 创建文件夹
 	createFolder( String fullPath,
 	String opName)
 #### 参数 
@@ -825,7 +833,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 | fullpath | string | 文件夹的路径 |
 
 ---
-###通过文件流上传（50M以内文件）
+### 通过文件流上传（50M以内文件）
 	createFile( String fullPath,
 	String opName, FileInputStream stream)
 #### 参数 
@@ -845,7 +853,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 | filesize | long | 文件大小 |
 
 ---
-###通过本地路径上传（50M以内文件）
+### 通过本地路径上传（50M以内文件）
 	createFile( String fullPath, String opName, String localPath)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -863,7 +871,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 | filesize | long | 文件大小 |
 
 ---
-###文件分块上传
+### 文件分块上传
 	uploadByBlock( String fullPath, String opName,
 	 int opId, String localFilePath,boolean overWrite, UploadCallBack callBack)
 #### 参数 
@@ -878,7 +886,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
 ---
 	
-###删除文件
+### 删除文件
 	del( String fullPaths, String opName)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
@@ -888,7 +896,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 #### 返回结果
 	正常返回 HTTP 200
 ---
-###移动文件
+### 移动文件
 	move( String fullPath, String destFullPath, String opName)
 #### 参数 
 
@@ -901,7 +909,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 #### 返回结果
 	正常返回 HTTP 200
 ---
-###获取文件链接
+### 获取文件链接
 	link( String fullPath, int deadline, AuthType authType, String password)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
@@ -913,7 +921,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
 
 #### 返回结果
-###发送消息
+### 发送消息
 	sendmsg( String title,
 	String text, String image, String linkUrl, String opName) 
 #### 参数 
@@ -928,7 +936,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 	正常返回 HTTP 200 
 ---
 
-###获取当前库所有外链
+### 获取当前库所有外链
 	links( boolean fileOnly)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -948,7 +956,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
 ---
 
-###通过链接上传文件
+### 通过链接上传文件
 	
 	createFileByUrl(String fullpath,int opId,String opName,boolean overwrite,String url)
 
@@ -966,7 +974,7 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
 ---
 
-###WEB直接上传文件
+### WEB直接上传文件
 	getUploadServers()
 
 #### 参数 
