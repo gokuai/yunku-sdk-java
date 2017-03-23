@@ -43,8 +43,8 @@ public class UploadRunnable extends HttpEngine implements Runnable {
     private long mRId;
     private InputStream mInputStream;
 
-    protected UploadRunnable(String apiUrl, String localFullPath, String fullPath,
-                             String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite) {
+    public UploadRunnable(String apiUrl, String localFullPath, String fullPath,
+                          String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite) {
 
         super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;

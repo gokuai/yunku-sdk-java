@@ -5,22 +5,17 @@ import com.gokuai.yunku.demo.helper.EntManagerHelper;
 import com.yunkuent.sdk.DebugConfig;
 
 /**
- * Created by qp on 2017/3/2.
- *
- * 添加同步分组
+ * Created by qp on 2017/3/22.
  */
-public class AddSyncGroup {
+public class SetSyncMemberState {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-
-        String returnString = EntManagerHelper.getInstance().addSyncGroup("ParentGroup", "ParentGroup", "");
-        String returnString1 = EntManagerHelper.getInstance().addSyncGroup("GroupTest", "Group", "ParentGroup");
+        String returnString = EntManagerHelper.getInstance().setSyncMemberState("", true);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
-        DeserializeHelper.getInstance().deserializeReturn(returnString1);
     }
 }

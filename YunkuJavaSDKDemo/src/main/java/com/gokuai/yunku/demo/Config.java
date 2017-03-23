@@ -27,4 +27,15 @@ public class Config {
      * 企业在合作方系统中的唯一ID
      */
     public static final String OUT_ID = "";
+
+    /**
+     * 用户名
+     */
+    public static final String ADMIN = "";
+
+    /**
+     * 密码
+     */
+    public static final String PASSWORD = "";
+
 }

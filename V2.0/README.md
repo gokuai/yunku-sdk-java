@@ -1,54 +1,64 @@
 /*
-Title:够快云库3.0 Java SDK 使用说明
+Title:够快云库Java SDK使用说明
 Description:
 Author: Brandon
-Date: 2016/10/28
+Date: 2014/08/25
 Robots: noindex,nofollow
 */
 
-# 够快云库3.0 Java SDK 使用说明
-**（ps: 够快云库2.0 Java SDK 使用说明见V2.0）**
+#够快云库Java SDK使用说明
 
-* 版本：3.0
-* 创建：2016-10-28
+版本：1.0.26
+
+创建：2014-08-25
 
 ## 引用 
-将`[yunku-java-sdk].jar`文件引用进项目，或者将`YunkuJavaSDK`做为依赖项目。
+将**[yunku-java-sdk].jar**文件引用进项目，包括YunkuJavaSDKlibs下的jar文件，或者将**YunkuJavaSDK**做为依赖项目。
+
 
 ## 初始化
-要使用云库3.0的API，您需要先在 <a href="http://developer.gokuai.com/yk/tutorial#yk3" target="_blank">企业授权</a> 中获取 `client_id` 和 `client_secret`
+要使用云库api，您需要有效的CLIENT_ID和CLIENT_SECRET,和获得云库后台管理账号。
 
-## 参数使用
+##参数使用
+以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传null
 
-以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传`null`
+## 企业库管理（**EntLibManager.java** ）
 
-## 企业库管理（EntLibManager.java）
-
-### 构造方法
-	new EntLibManager（ClientId, ClientSecret）
+###构造方法
+	new EntLibManager（ClientId,ClientSecret,boolean isEnt）
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | ClientId | 是 | string | 申请应用时分配的AppKey |
 | ClientSecret | 是 | string | 申请应用时分配的AppSecret |
+| isEnt | 是 | boolean | 是否是企业帐号登录|
 
 ---
 
-### 使用合作方 OutID 进行认证
-	accessTokenWithThirdPartyOutId(String outId)
-#### 参数
+### 授权
+	accessToken(Username，Password)
+#### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| outId | 是 | String | 企业在合作方系统中的唯一ID |
+| Username | 是 | string | 用户名 |
+| Password | 是 | string | 密码|
+
 
 #### 返回结果
+
 	{
-    access_token: 企业token
-    expires_in: token过期时间
+		access_token:
+		expires_in:
+		refresh_token:
 	}
 
----
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| access_token | string | 用于调用access_token，接口获取授权后的access token |
+| expires_in |int | access_token的有效期，unix时间戳 |
+| refresh_token | string | 用于刷新access_token 的 refresh_token，有效期1个月 |
 
+---
 ### 创建库
 	create(String orgName, int orgCapacity, 
 	String storagePointName, String orgDesc) 
@@ -61,7 +71,7 @@ Robots: noindex,nofollow
 | orgDesc | 否 | string | 库描述|
 | orgLogo | 否 | string | 库logo |
 
-#### 数值参考
+####数值参考
 1T="1099511627776" 
 1G＝“1073741824”；
 
@@ -119,7 +129,7 @@ Robots: noindex,nofollow
 #### 返回结果 
    正常返回 HTTP 200 
 
-#### 数值参考
+####数值参考
 1T="1099511627776" 
 1G＝“1073741824”；
 
@@ -172,7 +182,7 @@ Robots: noindex,nofollow
 | org_client_id | string | 库授权client_id |
 | org_client_secret | string | 库授权client_secret |
 
-org\_client\_secret用于调用库文件相关API签名时的密钥
+org_client_secret用于调用库文件相关API签名时的密钥
 
 ---
 
@@ -227,7 +237,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | --- | --- | --- | --- |
 | memberId | 否 | int | 成员id |
 ---		
-*参数中的member\_id,out\_id和account必须传其中之一*
+*参数中的member_id,out_id和account必须传其中之一*
 
 #### 返回结果
 
@@ -283,7 +293,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	正常返回 HTTP 200
 
 ---
-### 获取库部门列表
+### 获取库分组列表
 	getGroups(int orgId)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -292,34 +302,34 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	{
 		{
-			"id": 部门id
-			"name": 部门名称
-			"role_id": 部门角色id
+			"id": 分组id
+			"name": 分组名称
+			"role_id": 分组角色id, 如果是0 表示分组中的成员使用在该分组上的角色
 		},
 		...
 	}
 
 ---
-### 库上添加部门
+### 库上添加分组
 	addGroup(int orgId, int groupId, int roleId)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | orgId | 是 | int | 库id |
-| groupId | 是 | int | 部门id|
-| roleId | 否 | int | 角色id |
+| groupId | 是 | int | 分组id|
+| roleId | 否 | int | 角色id,  默认0：分组中的成员使用在该分组上的角色 |
 #### 返回结果
 	
 	正常返回 HTTP 200
 
 ---
-### 删除库上的部门
+### 删除库上的分组
 	delGroup(int orgId, int groupId)
 #### 参数 
  参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | orgId | 是 | int | 库id |
-| groupId | 是 | int | 部门id |
+| groupId | 是 | int | 分组id |
 #### 返回结果
 	
 	正常返回 HTTP 200
@@ -327,14 +337,14 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 
-### 修改库上部门的角色
+### 修改库上分组的角色
 	setGroupRole(int orgId, int groupId, int roleId)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | orgId | 是 | int | 库id |
-| groupId | 是 | int | 部门id |
-| roleId | 否 | int | 角色id |
+| groupId | 是 | int | 分组id |
+| roleId | 否 | int | 角色id,  默认0：分组中的成员使用在该分组上的角色 |
 #### 返回结果
 	
 	正常返回 HTTP 200
@@ -355,37 +365,43 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 
 
-## 企业管理（EntManager.java）
-
-### 构造方法
-
-	new EntManager（ String ClientId, String ClientSecret）
-	
+## 企业管理（**EntManager.java** ）
+###构造方法
+	new EntManager（ String ClientId,String ClientSecret,boolean isEnt）
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | ClientId | 是 | string | 申请应用时分配的AppKey |
 | ClientSecret | 是 | string | 申请应用时分配的AppSecret |
+| isEnt | 是 | boolean | 是否是企业帐号登录|
 
 ---
 
-### 使用合作方 OutID 进行认证
-	accessTokenWithThirdPartyOutId(String outId)
-#### 参数
+### 授权
+	accessToken(String Username，String Password)
+#### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| outId | 是 | String | 企业在合作方系统中的唯一ID |
+| Username | 是 | string | 用户名 |
+| Password | 是 | string | 密码|
+
 
 #### 返回结果
+
 	{
-    access_token: 企业token
-    expires_in: token过期时间
+		access_token:
+		expires_in:
+		refresh_token:
 	}
 
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| access_token | string | 用于调用access_token，接口获取授权后的access token |
+| expires_in |int | access_token的有效期，unix时间戳 |
+| refresh_token | string | 用于刷新access_token 的 refresh_token，有效期1个月 |
+
 ---
-
-
-### 获取角色
+###获取角色
 	getRoles() 
 #### 参数
 （无） 
@@ -400,7 +416,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-### 获取成员列表
+###获取成员列表
 	getMembers(int start, int size)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -495,7 +511,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 
-### 获取部门
+###获取分组
 	getGroups() 
 #### 参数 
 （无）
@@ -504,24 +520,24 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 		"list":
 		[
 			{
-				"id": 部门id,
-				"name": 部门名称,
+				"id": 分组id,
+				"name": 分组名称,
 				"out_id": 外部唯一id,
-				"parent_id": 上级部门id, 0为顶级部门
+				"parent_id": 上级分组id, 0为顶级分组
 			}
 		]
 	}	
 
 ---
-### 部门成员列表
+### 分组成员列表
 	getGroupMembers(int groupId, int start, int size, boolean showChild) 
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| groupId | 是 | int | 部门id |
+| groupId | 是 | int | 分组id |
 | start | 是 | int | 记录开始位置 |
 | size | 是 | int | 返回条数 |
-| showChild | 是 | boolean | [0,1] 是否显示子部门内的成员 |
+| showChild | 是 | boolean | [0,1] 是否显示子分组内的成员 |
 #### 返回结果
 	
 	
@@ -542,7 +558,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 
 ---
-### 根据成员id获取成员个人库外链
+###根据成员id获取成员个人库外链
 	getMemberFileLink(int memberId, boolean fileOnly)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
@@ -594,58 +610,48 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-### 添加或修改同步部门
+### 添加或修改同步分组
 	addSyncGroup(String outId,String name,String parentOutId)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| outId | 是 | string | 部门在外部系统的唯一id |
+| outId | 是 | string | 分组在外部系统的唯一id |
 | name | 是 | string | 显示名称 |
-| parentOutId | 否 | string | 如果部门在另一个部门的下级, 需要指定上级部门唯一id, 不传表示在顶层, 修改部门时该字段无效 |
+| parentOutId | 否 | string | 如果分组在另一个分组的下级, 需要指定上级分组唯一id, 不传表示在顶层, 修改分组时该字段无效 |
 
 #### 返回结果
 
     HTTP 200
 
 ---
-### 删除同步部门
+### 删除同步分组
 	delSyncGroup(String[]groups)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| groups | 是 | string | 部门在外部系统的唯一id数组|
+| groups | 是 | string | 分组在外部系统的唯一id数组|
 
 #### 返回结果
 
     HTTP 200
 ---
-### 添加同步部门的成员
+### 添加同步分组的成员
 	addSyncGroupMember(String groupOutId,String[] members)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| groupOutId | 否 | string | 外部部门的唯一id, 不传表示顶层 |
+| groupOutId | 否 | string | 外部分组的唯一id, 不传表示顶层 |
 | members | 是 | array | 成员在外部系统的唯一id数组 |
 #### 返回结果
 
     HTTP 200
 ---
-### 删除同步部门的成员
+### 删除同步分组的成员
 	delSyncGroupMember(String groupOutId, String[] members)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| groupOutId | 否 | string | 外部部门的唯一id, 不传表示顶层 |
-| members | 是 | string | 成员在外部系统的唯一id数组 |
-#### 返回结果
-
-    HTTP 200
----
-### 删除成员的所属部门
-	delSyncMemberGroup(String[] members)
-#### 参数
-| 参数 | 必须 | 类型 | 说明 |
-| --- | --- | --- | --- |
+| groupOutId | 否 | string | 外部分组的唯一id, 不传表示顶层 |
 | members | 是 | string | 成员在外部系统的唯一id数组 |
 #### 返回结果
 
@@ -653,14 +659,12 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 
-## 企业文件管理（EntFileManager.java）
+## 企业文件管理（**EntFileManager.java** ）
 
-`orgClientId`和`orgClientSecret`需要通过`EntLibManager`.`bind`方法获取
+orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 
-### 构造方法
-
+###构造方法
 	new EntFileManager(String orgClientId,String orgClientSecret);
-	
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
@@ -668,7 +672,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | orgClientSecret | 是 | string | 库授权client_secret  |
 
 ---
-### 获取文件列表
+###获取文件列表
 	getFileList( int start, String fullPath)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -715,7 +719,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | last_dateline | int | 文件最后修改时间戳 |
 
 ---
-### 获取更新列表
+###获取更新列表
 	getUpdateList( boolean isCompare, long fetchDateline)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -744,7 +748,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-### 文件更新数量
+###文件更新数量
 	getUpdateCounts( long beginDateline, long endDateline, boolean showDelete)
 	
 #### 参数 
@@ -761,7 +765,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 ---
 
-### 获取文件信息
+###获取文件信息
 	getFileInfo( String fullPath,NetType net)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -804,40 +808,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | thumbnail | string | 文件缩略图地址 |
 
 ---
-### 通过文件唯一标识获取下载地址
-     getDownloadUrlByHash(String hash, final boolean isOpen, NetType net)
-#### 参数
-
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| hash | 是 | string | 文件唯一标识 |
-| isOpen | 是 | boolean | 是否返回能直接在浏览器中打开的文件地址 |
-| net | 是 | NetType | DEFAULT,返回公网下载地址；IN，返回内网下载地址 |
-### 返回结果
-
-     	{
-     		"urls": [文件下载地址数组(可能有多个下载地址)]
-     	}
-
----
-### 通过文件路径获取下载地址
-    getDownloadUrlByFullPath(String fullPath, final boolean isOpen, NetType net)
-#### 参数
-
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| fullPath | 是 | string | 文件路径 |
-| isOpen | 是 | boolean | 是否返回能直接在浏览器中打开的文件地址 |
-| net | 是 | NetType | DEFAULT,返回公网下载地址；IN，返回内网下载地址 |
-### 返回结果
-
-	{
-		"urls": [文件下载地址数组(可能有多个下载地址)]
-	}
-
----
-### 创建文件夹
-	createFolder( String fullPath,String opName)
+###创建文件夹
+	createFolder( String fullPath,
+	String opName)
 #### 参数 
 
 | 参数 | 必须 | 类型 | 说明 |
@@ -852,17 +825,15 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | fullpath | string | 文件夹的路径 |
 
 ---
-### 通过文件流上传（50M以内文件，覆盖同名文件）
-	createFile( String fullPath, String opName, FileInputStream stream)
-### 通过文件流上传（50M以内文件）
-	createFile( String fullPath, String opName, FileInputStream stream, boolean overWrite)
+###通过文件流上传（50M以内文件）
+	createFile( String fullPath,
+	String opName, FileInputStream stream)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 |------|------|------|------|
 | fullPath | 是 | string | 文件路径 |
 | opName | 否 | string | 操作人名称|
 | stream | 是 | stream | 文件流 |
-| overWrite| 否 | boolean| 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识|
 
 
 #### 返回结果
@@ -874,10 +845,8 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | filesize | long | 文件大小 |
 
 ---
-### 通过本地路径上传（50M以内文件，覆盖同名文件）
+###通过本地路径上传（50M以内文件）
 	createFile( String fullPath, String opName, String localPath)
-### 通过本地路径上传（50M以内文件）
-	createFile( String fullPath, String opName, String localPath , boolean overWrite)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 |------|------|------|------|
@@ -885,7 +854,6 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | opName | 否 | string | 操作人名称|
 | localPath | 是 | string | 本地文件路径 |
 | fileName | 是 | string | 文件名 |
-| overWrite| 否 | boolean| 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识|
 #### 返回结果
 | 字段 | 类型 | 说明 |
 |------|------|------|
@@ -895,44 +863,22 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | filesize | long | 文件大小 |
 
 ---
-
-### 文件分块上传 (覆盖同名文件）
+###文件分块上传
 	uploadByBlock( String fullPath, String opName,
-	 int opId, String localFilePath, UploadCallBack callBack)
-### 文件分块上传
-	uploadByBlock( String fullPath, String opName,
-	 int opId, String localFilePath, boolean overWrite, UploadCallBack callBack)
+	 int opId, String localFilePath,boolean overWrite, UploadCallBack callBack)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |	
 |------|------|------|------|
 | fullpath | 是 | string | 文件路径 |
 | opName | 否 | string |  创建人名称, 如果指定了opId, 就不需要opName， |
 | opId | 否 | int | 创建人id, 个人库默认是库拥有人id, 如果创建人不是云库用户, 可以用op_name代替,|
-| localFilePath | 是 | string | 文件本地路径 |
-| overWrite | 否 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识 |
-| callBack | 否 | UploadCallBack | 文件上传回调 |
-
----
-
-### 数据流分块上传 (覆盖同名文件）
-	uploadByBlock( String fullPath, String opName,
-	 int opId, InputStream inputStream, UploadCallBack callBack)
-### 数据流分块上传
-	uploadByBlock( String fullPath, String opName,
-	 int opId, InputStream inputStream, boolean overWrite, UploadCallBack callBack)
-#### 参数 
-| 参数 | 必须 | 类型 | 说明 |	
-|------|------|------|------|
-| fullpath | 是 | string | 文件路径 |
-| opName | 否 | string |  创建人名称, 如果指定了opId, 就不需要opName |
-| opId | 否 | int | 创建人id, 个人库默认是库拥有人id, 如果创建人不是云库用户, 可以用op_name代替,|
-| inputStream | 是 | InputStream | 流数据 |
-| overWrite | 否 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识 |
+| localFilePath | 是 | string | 文件本地路径 |	
+| overWrite | 是 | boolean | 是否覆盖同名文件，true为覆盖 |
 | callBack | 否 | UploadCallBack | 文件上传回调 |
 
 ---
 	
-### 删除文件
+###删除文件
 	del( String fullPaths, String opName)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
@@ -942,7 +888,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
-### 移动文件
+###移动文件
 	move( String fullPath, String destFullPath, String opName)
 #### 参数 
 
@@ -955,7 +901,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
-### 获取文件链接
+###获取文件链接
 	link( String fullPath, int deadline, AuthType authType, String password)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
@@ -967,7 +913,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 
 #### 返回结果
-### 发送消息
+###发送消息
 	sendmsg( String title,
 	String text, String image, String linkUrl, String opName) 
 #### 参数 
@@ -982,7 +928,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	正常返回 HTTP 200 
 ---
 
-### 获取当前库所有外链
+###获取当前库所有外链
 	links( boolean fileOnly)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
@@ -1002,17 +948,17 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-### 通过链接上传文件（覆盖同名文件）
-	createFileByUrl(String fullpath,int opId,String opName,String url)
-### 通过链接上传文件
+###通过链接上传文件
+	
 	createFileByUrl(String fullpath,int opId,String opName,boolean overwrite,String url)
+
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | fullpath | 是 | string | 文件路径 |
 | opId | 否 | int | 创建人id, 个人库默认是库拥有人id, 如果创建人不是云库用户, 可以用op_name代替|
 | opName | 否 | string | 创建人名称, 如果指定了opId, 就不需要opName|
-| overWrite | 否 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识|
+| overwrite | 是 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识|
 | url | 是 | string | 需要服务端获取的文件url|
 
 #### 返回结果
@@ -1020,7 +966,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-### WEB直接上传文件
+###WEB直接上传文件
 	getUploadServers()
 
 #### 参数 
@@ -1038,175 +984,8 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
-### 文件搜索
-	search(String keyWords, String path, int start, int size, ScopeType... scopes)
+## 编码问题
 
-#### 参数 
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| keyWords | 是 | string | 搜索关键字 |
-| path | 是 | string | 需要搜索的文件夹|
-| start | 是 | int | 开始位置|
-| size | 是 | int | 返回条数|
-| scopes | 是 | ScopeType... | 范围，FILENAME-文件名、TAG-标签、CONTENT-全文|
+SDK 运行的环境为 UTF-8，如果在其他环境运行需要制定系统运行的编码属性，例如Windows, 如果是命令行执行使用 java -Dfile.encoding=utf-8 XXX；或者 java options 中设置 -Dfile.encoding=utf-8。如果是编码问题的话会出现，在有中文参数出现时会报"签名错误"
 
-#### 返回结果
-	{
-		count:
-		list:
-		[
-			{
-				hash:
-				dir:
-				fullpath:
-				filename:
-				filehash:
-				filesize:
-				create_member_name:
-				create_dateline:
-				last_member_name:
-				last_dateline:
-			},
-			...
-		]
-	}
----
 
-## 企业合作API（ThirdPartyManager.java）
-### 构造方法
-	new ThirdPartyManager(String clientId, String clientSecret, String outId)
-### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| clientId | 是 | string | 够快分配的client_id |
-| clientSecret | 是 | string | 够快分配的clientSecret |
-| outId | 是 | string | 企业在合作方系统中的唯一ID |
-
-### 开通企业
-	createEnt(String entName, String contactName,
-				String contactMobile, String contactEmail, String contactAddress)
-
-#### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| entName | 是 | string | 	企业名称 |
-| contactName | 是 | string | 企业联系人姓名 |
-| contactMobile | 否 | string | 企业联系电话 |
-| contactEmail | 否 | string | 企业联系邮箱 |
-| contactAddress  | 否 | string | 企业联系地址 |
-
-### 扩展参数
-	createEnt(HashMap<String, String> map,String entName, String contactName,
-			String contactMobile, String contactEmail, String contactAddress)
-#### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| map | 是 | hashMap| 用于传递一些特殊用途的企业初始数据, 参数前缀为__setting _ , 例如: 	__ setting _ site _ url |
-| entName | 是 | string | 	企业名称 |
-| contactName | 是 | string | 企业联系人姓名 |
-| contactMobile | 否 | string | 企业联系电话 |
-| contactEmail | 否 | string | 企业联系邮箱 |
-| contactAddress  | 否 | string | 企业联系地址 |
-#### 返回结果
-	正常返回 HTTP 200
-
-### 获取企业信息
-	getEntInfo()
-#### 参数
-
-(无)
-
-#### 返回结果
-	{
-	  "id": 企业ID,
-	  "name": 企业名称,
-	  "trial": 是否试用, 1表示试用, 0表示正式开通,
-	  "end_dateline": 到期时间, unix时间戳,
-	  "member_limit": 成员数量上限,
-	  "member_count": 成员数量,
-	  "space": 空间上限, 单位字节,
-	  "size": 已使用空间, 单位字节
-	}
-
-### 购买
-	orderSubscribe(int memberCount, int space, int month)
-
-#### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| memberCount | 是 | int | 人数（不限是-1） |
-| space | 是 | int | 空间(G) |
-| month | 是 | int | 购买的月数 |
-#### 返回结果
-	正常返回 HTTP 200
-
-### 升级
-	orderUpgrade(int memberCount, int space)
-#### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| memberCount | 是 | int | 人数（不限是-1） |
-| space | 是 | int | 空间(G) |
-#### 返回结果
-	正常返回 HTTP 200
-
-### 续费
-	orderRenew(int month)
-#### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| month | 是 | int | 购买的月数 |
-#### 返回结果
-	正常返回 HTTP 200
-
-### 退订
-	orderUnsubscribe()
-#### 参数
-
-(无)
-
-#### 返回结果
-	正常返回 HTTP 200
-
-### 获取企业token
-	getEntToken()
-
-#### 参数
-
-(无)
-
-#### 返回结果
-	{
-    	access_token: 企业token
-    	expires_in: token过期时间
-	}
-
-### 获取单点登录地址
-	getSsoUrl(String ticket)
-#### 参数
-| 名称 | 必需 | 类型 | 说明 |
-| --- | --- | --- | --- |
-| ticket | 是 | string | 	单点登录需要验证的票据 |
-
-#### 返回结果
-	{
-    	url: 单点登录URL
-	}
-
-### [单点登录流程](https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso)
-
----
-
-## 常见问题
-### 编码问题
-#### 现象
-* Windows 运行环境，中文文件名参数可能会导致，返回签名的报错信息。
-
-#### 解决方法
-**方案1:** 更换运行环境，使用 Linux 服务器		
-**方案2:** 如果是命令行执行 jar 文件，终端上执行以下命令即可 
-	
-	java -Dfile.encoding=utf-8 XX.jar		
-**方案3:** 如果使用的是 Apache Tomatcat，在 Java Options 上，添加 -Dfile.encoding=utf-8 即可。
-
-<img src="Screenshot/1.png" alt="Apache Tomatcat" title="Apache Tomatcat" width="100%" height="100%" />
