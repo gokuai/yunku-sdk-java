@@ -7,7 +7,7 @@ Robots: noindex,nofollow
 */
 
 # 够快云库3.0 Java SDK 使用说明
-**（ps: 够快云库2.0 Java SDK 使用说明见V2.0）**
+## [够快云库2.0 Java SDK 使用说明](https://github.com/gokuai/yunku-sdk-java-gradle/blob/development/V2.0/README.md)
 
 * 版本：3.0
 * 创建：2016-10-28
