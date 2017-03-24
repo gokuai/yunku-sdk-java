@@ -6,13 +6,14 @@ Date: 2016/10/28
 Robots: noindex,nofollow
 */
 
-#够快云库3.0 Java SDK 使用说明
+# 够快云库3.0 Java SDK 使用说明
+**（ps: 够快云库2.0 Java SDK 使用说明见V2.0）**
 
 * 版本：3.0
 * 创建：2016-10-28
 
 ## 引用 
-将`[yunku-java-sdk].jar`文件引用进项目，包括`YunkuJavaSDKlibs`下的jar文件，或者将`YunkuJavaSDK`做为依赖项目。
+将`[yunku-java-sdk].jar`文件引用进项目，或者将`YunkuJavaSDK`做为依赖项目。
 
 ## 初始化
 要使用云库3.0的API，您需要先在 <a href="http://developer.gokuai.com/yk/tutorial#yk3" target="_blank">企业授权</a> 中获取 `client_id` 和 `client_secret`
@@ -642,7 +643,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 ### 删除成员的所属部门
 	delSyncMemberGroup(String[] members)
-#### 参数 
+#### 参数
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | members | 是 | string | 成员在外部系统的唯一id数组 |
