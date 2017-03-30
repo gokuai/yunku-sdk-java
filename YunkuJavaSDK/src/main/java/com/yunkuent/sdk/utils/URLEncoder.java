@@ -48,24 +48,24 @@ public class URLEncoder {
 
     /**
      * Encode a string accordiNetConnectionng to RFC 1738.
-     * <p/>
-     * <quote> "...Only alphanumerics [0-9a-zA-Z], the special characters "$-_.+!*'()," [not including the quotes - ed], and reserved characters used for their reserved purposes may be used unencoded within a URL."</quote>
-     * <p/>
+     *
+     * "...Only alphanumerics [0-9a-zA-Z], the special characters "$-_.+!*'()," [not including the quotes - ed], and reserved characters used for their reserved purposes may be used unencoded within a URL."
+     *
      * <ul>
      * <li>
-     * <p/>
+     *
      * The ASCII characters 'a' through 'z', 'A' through 'Z', and '0' through '9' remain the same.
-     * <p/>
+   
      * <li>
-     * <p/>
+   
      * The unreserved characters - _ . ! ~ * ' ( ) remain the same.
-     * <p/>
+   
      * <li>
-     * <p/>
+   
      * All other ASCII characters are converted into the 3-character string "%xy", where xy is the two-digit hexadecimal representation of the character code
-     * <p/>
+   
      * <li>
-     * <p/>
+   
      * All non-ASCII characters are encoded in two steps: first to a sequence of 2 or 3 bytes, using the UTF-8 algorithm; secondly each of these bytes is encoded as "%xx".
      * </ul>
      *

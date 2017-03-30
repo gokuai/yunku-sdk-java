@@ -16,6 +16,8 @@
  */
 package com.yunkuent.sdk.utils;
 
+import java.io.IOException;
+
 /**
  * <p>
  * Provides serialization and deserialization between a regular string and a base-64 encoded string.
@@ -542,7 +544,7 @@ public class Base64 {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static String encodeBytes(byte[] source, int off, int len, int options) throws java.io.IOException {
+	public static String encodeBytes(byte[] source, int off, int len, int options) throws IOException {
 		byte[] encoded = encodeBytesToBytes(source, off, len, options);
 
 		// Return value according to relevant encoding.
