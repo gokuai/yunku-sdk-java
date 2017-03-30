@@ -1,5 +1,4 @@
-group 'YunkuJavaSDKDemo'
-version '1.0'
+group 'com.gokuai'
 
 apply plugin: 'java'
 
