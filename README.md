@@ -20,7 +20,7 @@ Robots: noindex,nofollow
 
 或者 Gradle:
 
- ```groovy
+```groovy
 	allprojects {
 		repositories {
 			...
