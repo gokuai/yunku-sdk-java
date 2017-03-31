@@ -11,6 +11,7 @@ Robots: noindex,nofollow
 [![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)](https://jitpack.io/#gokuai/yunku-sdk-java-gradle)
 
 >够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
+>原 yunku-sdk-java 迁移到这里 https://github.com/gokuai/yunku-sdk-java-desperated
 
 * 版本：3.0
 * 创建：2016-10-28
