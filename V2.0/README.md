@@ -12,9 +12,6 @@ Robots: noindex,nofollow
 
 创建：2014-08-25
 
-## 引用 
-将 **[yunku-java-sdk].jar** 文件引用进项目，或者将 **YunkuJavaSDK** 做为依赖项目。
-
 ## 兼用使用
 原2.0导入的包名路径为:
 
