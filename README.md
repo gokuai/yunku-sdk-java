@@ -7,9 +7,10 @@ Robots: noindex,nofollow
 */
 
 # 够快云库 3.0 Java SDK 使用说明
-        [![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)][1]
 
-        >够快云库 2.0 Java SDK 使用说明 [请查看这里][2]
+[![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)](https://jitpack.io/#gokuai/yunku-sdk-java-gradle)
+
+>够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
 
 * 版本：3.0
 * 创建：2016-10-28
@@ -17,17 +18,19 @@ Robots: noindex,nofollow
 ## 引用 
 将`[yunku-java-sdk].jar`文件引用进项目，或者将`YunkuJavaSDK`做为依赖项目。
 
-        或者 Gradle:
+或者 Gradle:
 
-        ```groovy
-        repositories {
-        ...
-        maven { url 'https://jitpack.io' }
-        }
-        ```
-        ```groovy
-        compile 'com.github.gokuai.yunku-sdk-java-gradle:YunkuJavaSDK:3.8'
-        ```
+ ```groovy
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+```
+
+```groovy
+	compile 'com.github.gokuai.yunku-sdk-java-gradle:YunkuJavaSDK:3.8'
+```
+
 ## 初始化
 要使用云库3.0的API，您需要先在 <a href="http://developer.gokuai.com/yk/tutorial#yk3" target="_blank">企业授权</a> 中获取 `client_id` 和 `client_secret`
 
@@ -1206,7 +1209,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
     	url: 单点登录URL
 	}
 
-        ### [单点登录流程][3]
+### [单点登录流程][2]
 
 ---
 
@@ -1222,7 +1225,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	java -Dfile.encoding=utf-8 XX.jar		
 **方案3:** 如果使用的是 Apache Tomatcat，在 Java Options 上，添加 -Dfile.encoding=utf-8 即可。
 
-<img src="Screenshot/1.png" alt="Apache Tomatcat" title="Apache Tomatcat" width="100%" height="100%" />
-        [1]: https://jitpack.io/#gokuai/yunku-sdk-java-gradle
-        [2]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md
-        [3]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
+<img src="Screenshot/1.png" alt="Apache Tomatcat" title="Apache Tomatcat" width="100%" height="100%" />  
+
+[1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
+[2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
