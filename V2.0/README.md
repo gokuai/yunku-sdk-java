@@ -13,13 +13,10 @@ Robots: noindex,nofollow
 创建：2014-08-25
 
 ## 兼用使用
-原2.0导入的包名路径为:
 
-![](https://ww4.sinaimg.cn/large/006tNc79gy1fdwxbxiv72j30ae02i745.jpg)
+<del><font color="brown">package</font> com.yunkuent.sdk</del>
 
-现变为:
-
-![](https://ww2.sinaimg.cn/large/006tNc79ly1fdwxcrku93j30ae02ia9y.jpg)
+<font color="brown">package</font> com.yunkuent.sdk.comat.v2
 
 ## 初始化
 要使用云库api，您需要有效的CLIENT_ID和CLIENT_SECRET,和获得云库后台管理账号。
