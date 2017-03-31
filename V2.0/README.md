@@ -13,7 +13,6 @@ Robots: noindex,nofollow
 创建：2014-08-25
 
 ## 兼用使用
-原2.0导入的包名路径为:
 
 <del><font color="brown">package</font> com.yunkuent.sdk</del>
 
