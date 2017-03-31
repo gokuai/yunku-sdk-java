@@ -8,7 +8,7 @@ Robots: noindex,nofollow
 
 # 够快云库 3.0 Java SDK 使用说明
 
-[![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)](https://jitpack.io/#gokuai/yunku-sdk-java-gradle)
+[![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)](https://jitpack.io/#gokuai/yunku-sdk-java-gradle/3.8)
 
 >够快云库 2.0 Java SDK 使用说明 [请查看这里][1],
 >原 yunku-sdk-java 迁移到[这里][3]
