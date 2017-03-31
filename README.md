@@ -21,14 +21,32 @@ Robots: noindex,nofollow
 或者 Gradle:
 
  ```groovy
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
 	}
 ```
 
 ```groovy
 	compile 'com.github.gokuai.yunku-sdk-java-gradle:YunkuJavaSDK:3.8'
+```
+或者Maven：
+
+```xml
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+```
+
+```xml
+	<dependency>
+	    <groupId>com.github.gokuai.yunku-sdk-java-gradle</groupId>
+	    <artifactId>YunkuJavaSDK</artifactId>
+	    <version>3.8</version>
+	</dependency>
 ```
 
 ## 初始化
