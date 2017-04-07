@@ -10,7 +10,7 @@ Robots: noindex,nofollow
 
 [![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)](https://jitpack.io/#gokuai/yunku-sdk-java-gradle/3.8)
 
->够快云库 2.0 Java SDK 使用说明 [请查看这里][1],
+>够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
 >原 yunku-sdk-java 迁移到[这里][3]
 
 * 版本：3.0
@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai:yunku-sdk-java-gradle:3.8'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.8'
 	}
 ```
 或者Maven：
@@ -48,8 +48,8 @@ Robots: noindex,nofollow
 
 ```xml
 	<dependency>
-	    <groupId>com.github.gokuai</groupId>
-	    <artifactId>yunku-sdk-java-gradle</artifactId>
+	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
+	    <artifactId>YunkuJavaSDK</artifactId>
 	    <version>3.8</version>
 	</dependency>
 ```
@@ -1248,9 +1248,8 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	java -Dfile.encoding=utf-8 XX.jar		
 **方案3:** 如果使用的是 Apache Tomatcat，在 Java Options 上，添加 -Dfile.encoding=utf-8 即可。
 
-<img src="Screenshot/1.png" alt="Apache Tomatcat" title="Apache Tomatcat" width="100%" height="100%" />  
+<img src="Screenshot/1.png" alt="Apache Tomatcat" title="Apache Tomatcat" width="50%" height="50%" />  
 
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
 [3]: https://github.com/gokuai/yunku-sdk-java-desperated
-
