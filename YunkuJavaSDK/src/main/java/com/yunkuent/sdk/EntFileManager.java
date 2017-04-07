@@ -10,7 +10,7 @@ import java.util.HashMap;
 /**
  * Created by Brandon on 2014/8/14.
  */
-public class EntFileManager extends HttpEngine implements HostConfig {
+public class EntFileManager extends HttpEngine {
 
     private static final String TAG = "EntFileManager";
 
