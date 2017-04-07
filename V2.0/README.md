@@ -16,7 +16,7 @@ Robots: noindex,nofollow
 
 <del><font color="brown">package</font> com.yunkuent.sdk</del>
 
-<font color="brown">package</font> com.yunkuent.sdk.comat.v2
+<font color="brown">package</font> com.yunkuent.sdk.compat.v2
 
 ## 初始化
 要使用云库api，您需要有效的CLIENT_ID和CLIENT_SECRET,和获得云库后台管理账号。
