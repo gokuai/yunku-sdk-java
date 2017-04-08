@@ -1,18 +1,22 @@
 package com.yunkuent.sdk;
 
+import org.apache.http.util.TextUtils;
+
 /**
- * Created by Brandon on 2014/8/14.
+ * Created by qp on 2017/4/7.
  */
-interface HostConfig {
+public class HostConfig {
 
-//     String OAUTH_HOST = "http://yk3-api.goukuai.cn";
-      String OAUTH_HOST = "http://yk3-api.gokuai.com";
-//     String API_ENT_HOST = "http://yk3-api-ent.goukuai.cn";
-      String API_ENT_HOST = "http://yk3-api-ent.gokuai.com";
+    //     protected static  String OAUTH_HOST = "http://yk3-api.goukuai.cn";
+    protected static String OAUTH_HOST = "http://yk3-api.gokuai.com";
+    //    protected static  String API_ENT_HOST = "http://yk3-api-ent.goukuai.cn";
+    protected static  String API_ENT_HOST = "http://yk3-api-ent.gokuai.com";
 
-//     String OAUTH_HOST_V2 = "http://zka.goukuai.cn";
-      String OAUTH_HOST_V2 = "http://a.goukuai.cn";
-//     String API_ENT_HOST_V2 = "http://zka-lib.goukuai.cn";
-//     String API_ENT_HOST_V2 = "http://test4a-lib.goukuai.cn";
-      String API_ENT_HOST_V2 = "http://a-lib.goukuai.cn";
+    public static void changeConfig(String oauthHost, String apiHost){
+        if (!TextUtils.isEmpty(oauthHost)){
+            OAUTH_HOST = oauthHost;
+        }else if (!TextUtils.isEmpty(apiHost)){
+            API_ENT_HOST = apiHost;
+        }
+    }
 }

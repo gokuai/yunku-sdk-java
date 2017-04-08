@@ -61,6 +61,10 @@ Robots: noindex,nofollow
 
 以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传`null`
 
+## 修改API域名
+
+要修改API域名，使用前请先调用HostConfig.changeConfig(oauthHost, apiHost)
+
 ## 企业库管理（EntLibManager.java）
 
 ### 构造方法
@@ -802,10 +806,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ### 获取文件信息
 	getFileInfo( String fullPath,NetType net)
-#### 参数 
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-
 | fullPath | 是 | string | 文件路径 |
 | net | 是 | NetType | DEFAULT,返回公网下载地址；IN，返回内网下载地址 |
 

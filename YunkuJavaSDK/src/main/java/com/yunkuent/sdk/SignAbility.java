@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by Brandon on 14/12/16.
  */
-abstract class SignAbility implements HostConfig {
+abstract class SignAbility {
 
 
     /**

@@ -15,7 +15,7 @@ abstract class OauthEngine extends HttpEngine {
 
     private final static String LOG_TAG = HttpEngine.class.getSimpleName();
 
-    protected static final String URL_API_TOKEN = OAUTH_HOST_V2 + "/oauth2/token2";
+    protected static final String URL_API_TOKEN = HostConfig.OAUTH_HOST_V2 + "/oauth2/token2";
 
     protected String mToken;
     protected boolean mIsEnt;
