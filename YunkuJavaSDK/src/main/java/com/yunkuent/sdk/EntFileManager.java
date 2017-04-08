@@ -15,22 +15,22 @@ public class EntFileManager extends HttpEngine {
     private static final String TAG = "EntFileManager";
 
     private static final int UPLOAD_LIMIT_SIZE = 52428800;
-    private static final String URL_API_FILELIST = API_ENT_HOST + "/1/file/ls";
-    private static final String URL_API_UPDATE_LIST = API_ENT_HOST + "/1/file/updates";
-    private static final String URL_API_FILE_INFO = API_ENT_HOST + "/1/file/info";
-    private static final String URL_API_CREATE_FOLDER = API_ENT_HOST + "/1/file/create_folder";
-    private static final String URL_API_CREATE_FILE = API_ENT_HOST + "/1/file/create_file";
-    private static final String URL_API_DEL_FILE = API_ENT_HOST + "/1/file/del";
-    private static final String URL_API_MOVE_FILE = API_ENT_HOST + "/1/file/move";
-    private static final String URL_API_LINK_FILE = API_ENT_HOST + "/1/file/link";
-    private static final String URL_API_SENDMSG = API_ENT_HOST + "/1/file/sendmsg";
-    private static final String URL_API_GET_LINK = API_ENT_HOST + "/1/file/links";
-    private static final String URL_API_UPDATE_COUNT = API_ENT_HOST + "/1/file/updates_count";
-    private static final String URL_API_GET_SERVER_SITE = API_ENT_HOST + "/1/file/servers";
-    private static final String URL_API_CREATE_FILE_BY_URL = API_ENT_HOST + "/1/file/create_file_by_url";
-    private static final String URL_API_UPLOAD_SERVERS = API_ENT_HOST + "/1/file/upload_servers";
-    private static final String URL_API_GET_UPLOAD_URL = API_ENT_HOST + "/1/file/download_url";
-    private static final String URL_API_FILE_SEARCH = API_ENT_HOST + "/1/file/search";
+    private static final String URL_API_FILELIST = HostConfig.API_ENT_HOST + "/1/file/ls";
+    private static final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST + "/1/file/updates";
+    private static final String URL_API_FILE_INFO = HostConfig.API_ENT_HOST + "/1/file/info";
+    private static final String URL_API_CREATE_FOLDER = HostConfig.API_ENT_HOST + "/1/file/create_folder";
+    private static final String URL_API_CREATE_FILE = HostConfig.API_ENT_HOST + "/1/file/create_file";
+    private static final String URL_API_DEL_FILE = HostConfig.API_ENT_HOST + "/1/file/del";
+    private static final String URL_API_MOVE_FILE = HostConfig.API_ENT_HOST + "/1/file/move";
+    private static final String URL_API_LINK_FILE = HostConfig.API_ENT_HOST + "/1/file/link";
+    private static final String URL_API_SENDMSG = HostConfig.API_ENT_HOST + "/1/file/sendmsg";
+    private static final String URL_API_GET_LINK = HostConfig.API_ENT_HOST + "/1/file/links";
+    private static final String URL_API_UPDATE_COUNT = HostConfig.API_ENT_HOST + "/1/file/updates_count";
+    private static final String URL_API_GET_SERVER_SITE = HostConfig.API_ENT_HOST + "/1/file/servers";
+    private static final String URL_API_CREATE_FILE_BY_URL = HostConfig.API_ENT_HOST + "/1/file/create_file_by_url";
+    private static final String URL_API_UPLOAD_SERVERS = HostConfig.API_ENT_HOST + "/1/file/upload_servers";
+    private static final String URL_API_GET_UPLOAD_URL = HostConfig.API_ENT_HOST + "/1/file/download_url";
+    private static final String URL_API_FILE_SEARCH = HostConfig.API_ENT_HOST + "/1/file/search";
 
 
     public EntFileManager(String orgClientId, String orgClientSecret) {

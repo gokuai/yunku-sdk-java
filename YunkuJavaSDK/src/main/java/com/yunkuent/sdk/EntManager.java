@@ -9,22 +9,22 @@ import java.util.HashMap;
  */
 public class EntManager extends OauthEngine {
 
-    private static final String URL_API_GET_GROUPS = API_ENT_HOST + "/1/ent/get_groups";
-    private static final String URL_API_GET_MEMBERS = API_ENT_HOST + "/1/ent/get_members";
-    private static final String URL_API_GET_MEMBER = API_ENT_HOST + "/1/ent/get_member";
-    private static final String URL_API_GET_ROLES = API_ENT_HOST + "/1/ent/get_roles";
-    //    private static final String URL_API_SYNC_MEMBER = API_ENT_HOST + "/1/ent/sync_member";
-    private static final String URL_API_GET_MEMBER_FILE_LINK = API_ENT_HOST + "/1/ent/get_member_file_link";
-//    private static final String URL_API_GET_MEMBER_BY_OUT_ID = API_ENT_HOST + "/1/ent/get_member_by_out_id";
+    private static final String URL_API_GET_GROUPS = HostConfig.API_ENT_HOST + "/1/ent/get_groups";
+    private static final String URL_API_GET_MEMBERS = HostConfig.API_ENT_HOST + "/1/ent/get_members";
+    private static final String URL_API_GET_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/get_member";
+    private static final String URL_API_GET_ROLES = HostConfig.API_ENT_HOST + "/1/ent/get_roles";
+    //    private static final String URL_API_SYNC_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/sync_member";
+    private static final String URL_API_GET_MEMBER_FILE_LINK = HostConfig.API_ENT_HOST + "/1/ent/get_member_file_link";
+//    private static final String URL_API_GET_MEMBER_BY_OUT_ID = HostConfig.API_ENT_HOST + "/1/ent/get_member_by_out_id";
 
-    private static final String URL_API_ADD_SYNC_MEMBER = API_ENT_HOST + "/1/ent/add_sync_member";
-    private static final String URL_API_DEL_SYNC_MEMBER = API_ENT_HOST + "/1/ent/del_sync_member";
-    private static final String URL_API_ADD_SYNC_GROUP = API_ENT_HOST + "/1/ent/add_sync_group";
-    private static final String URL_API_DEL_SYNC_GROUP = API_ENT_HOST + "/1/ent/del_sync_group";
-    private static final String URL_API_ADD_SYNC_GROUP_MEMBER = API_ENT_HOST + "/1/ent/add_sync_group_member";
-    private static final String URL_API_DEL_SYNC_GROUP_MEMBER = API_ENT_HOST + "/1/ent/del_sync_group_member";
-    private static final String URL_API_DEL_SYNC_MEMBER_GROUP = API_ENT_HOST + "/1/ent/del_sync_member_group";
-    private static final String URL_API_GET_GROUP_MEMBERS = API_ENT_HOST + "/1/ent/get_group_members";
+    private static final String URL_API_ADD_SYNC_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/add_sync_member";
+    private static final String URL_API_DEL_SYNC_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/del_sync_member";
+    private static final String URL_API_ADD_SYNC_GROUP = HostConfig.API_ENT_HOST + "/1/ent/add_sync_group";
+    private static final String URL_API_DEL_SYNC_GROUP = HostConfig.API_ENT_HOST + "/1/ent/del_sync_group";
+    private static final String URL_API_ADD_SYNC_GROUP_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/add_sync_group_member";
+    private static final String URL_API_DEL_SYNC_GROUP_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/del_sync_group_member";
+    private static final String URL_API_DEL_SYNC_MEMBER_GROUP = HostConfig.API_ENT_HOST + "/1/ent/del_sync_member_group";
+    private static final String URL_API_GET_GROUP_MEMBERS = HostConfig.API_ENT_HOST + "/1/ent/get_group_members";
 
     public EntManager(String clientId, String clientSecret) {
         super(clientId, clientSecret, true);

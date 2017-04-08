@@ -10,11 +10,11 @@ import java.util.HashMap;
  */
 public class ThirdPartyManager extends HttpEngine {
 
-    private static final String URL_API_CREATE_ENT = OAUTH_HOST + "/1/thirdparty/create_ent";
-    private static final String URL_API_ENT_INFO = OAUTH_HOST + "/1/thirdparty/ent_info";
-    private static final String URL_API_ORDER = OAUTH_HOST + "/1/thirdparty/order";
-    private static final String URL_GET_TOKEN = OAUTH_HOST + "/1/thirdparty/get_token";
-    private static final String URL_GET_SSO_URL = OAUTH_HOST + "/1/thirdparty/get_sso_url";
+    private static final String URL_API_CREATE_ENT = HostConfig.OAUTH_HOST + "/1/thirdparty/create_ent";
+    private static final String URL_API_ENT_INFO = HostConfig.OAUTH_HOST + "/1/thirdparty/ent_info";
+    private static final String URL_API_ORDER = HostConfig.OAUTH_HOST + "/1/thirdparty/order";
+    private static final String URL_GET_TOKEN = HostConfig.OAUTH_HOST + "/1/thirdparty/get_token";
+    private static final String URL_GET_SSO_URL = HostConfig.OAUTH_HOST + "/1/thirdparty/get_sso_url";
 
     public static final String SUBSCRIBE = "orderSubscribe";
     public static final String UPGRADE = "orderUpgrade";
