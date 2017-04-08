@@ -8,7 +8,7 @@ Robots: noindex,nofollow
 
 # 够快云库 3.0 Java SDK 使用说明
 
-[![](https://jitpack.io/v/gokuai/yunku-sdk-java-gradle.svg)](https://jitpack.io/#gokuai/yunku-sdk-java-gradle/3.8)
+[![](https://jitpack.io/v/gokuai/yunku-sdk-java.svg)](https://jitpack.io/#gokuai/yunku-sdk-java)
 
 >够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
 >原 yunku-sdk-java 迁移到[这里][3]
@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.8'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.9'
 	}
 ```
 或者Maven：
@@ -50,7 +50,7 @@ Robots: noindex,nofollow
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.8</version>
+	    <version>3.9</version>
 	</dependency>
 ```
 
