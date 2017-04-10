@@ -9,23 +9,23 @@ import java.util.HashMap;
  */
 public class EntLibManager extends OauthEngine {
 
-    private static final String URL_API_CREATE_LIB = HostConfig.API_ENT_HOST + "/1/org/create";
-    private static final String URL_API_GET_LIB_LIST = HostConfig.API_ENT_HOST + "/1/org/ls";
-    private static final String URL_API_BIND = HostConfig.API_ENT_HOST + "/1/org/bind";
-    private static final String URL_API_UNBIND = HostConfig.API_ENT_HOST + "/1/org/unbind";
+    private final String URL_API_CREATE_LIB = HostConfig.API_ENT_HOST + "/1/org/create";
+    private final String URL_API_GET_LIB_LIST = HostConfig.API_ENT_HOST + "/1/org/ls";
+    private final String URL_API_BIND = HostConfig.API_ENT_HOST + "/1/org/bind";
+    private final String URL_API_UNBIND = HostConfig.API_ENT_HOST + "/1/org/unbind";
 
-    private static final String URL_API_GET_MEMBERS = HostConfig.API_ENT_HOST + "/1/org/get_members";
-    private static final String URL_API_ADD_MEMBERS = HostConfig.API_ENT_HOST + "/1/org/add_member";
-    private static final String URL_API_SET_MEMBER_ROLE = HostConfig.API_ENT_HOST + "/1/org/set_member_role";
-    private static final String URL_API_DEL_MEMBER = HostConfig.API_ENT_HOST + "/1/org/del_member";
-    private static final String URL_API_GET_GROUPS = HostConfig.API_ENT_HOST + "/1/org/get_groups";
-    private static final String URL_API_ADD_GROUP = HostConfig.API_ENT_HOST + "/1/org/add_group";
-    private static final String URL_API_DEL_GROUP = HostConfig.API_ENT_HOST + "/1/org/del_group";
-    private static final String URL_API_SET_GROUP_ROLE = HostConfig.API_ENT_HOST + "/1/org/set_group_role";
-    private static final String URL_API_DESTROY = HostConfig.API_ENT_HOST + "/1/org/destroy";
-    private static final String URL_API_GET_MEMBER = HostConfig.API_ENT_HOST + "/1/org/get_member";
-    private static final String URL_API_SET = HostConfig.API_ENT_HOST + "/1/org/set";
-    private static final String URL_API_GET_INFO = HostConfig.API_ENT_HOST + "/1/org/info";
+    private final String URL_API_GET_MEMBERS = HostConfig.API_ENT_HOST + "/1/org/get_members";
+    private final String URL_API_ADD_MEMBERS = HostConfig.API_ENT_HOST + "/1/org/add_member";
+    private final String URL_API_SET_MEMBER_ROLE = HostConfig.API_ENT_HOST + "/1/org/set_member_role";
+    private final String URL_API_DEL_MEMBER = HostConfig.API_ENT_HOST + "/1/org/del_member";
+    private final String URL_API_GET_GROUPS = HostConfig.API_ENT_HOST + "/1/org/get_groups";
+    private final String URL_API_ADD_GROUP = HostConfig.API_ENT_HOST + "/1/org/add_group";
+    private final String URL_API_DEL_GROUP = HostConfig.API_ENT_HOST + "/1/org/del_group";
+    private final String URL_API_SET_GROUP_ROLE = HostConfig.API_ENT_HOST + "/1/org/set_group_role";
+    private final String URL_API_DESTROY = HostConfig.API_ENT_HOST + "/1/org/destroy";
+    private final String URL_API_GET_MEMBER = HostConfig.API_ENT_HOST + "/1/org/get_member";
+    private final String URL_API_SET = HostConfig.API_ENT_HOST + "/1/org/set";
+    private final String URL_API_GET_INFO = HostConfig.API_ENT_HOST + "/1/org/info";
 
 
     public EntLibManager(String clientId, String clientSecret) {
