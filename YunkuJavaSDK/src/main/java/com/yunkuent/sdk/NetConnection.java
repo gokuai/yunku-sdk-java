@@ -30,11 +30,8 @@ public final class NetConnection {
     public static final int TIMEOUT = 30000;
     public static final int CONNECT_TIMEOUT = 30000;
 
-    public static String HOST_NAME = "";//代理地址
+    public static Proxy proxy = null;
 
-    public static int PORT = 80;//端口号
-
-    public static boolean SETPROXY = false;
     /**
      * 发送请求
      *
@@ -120,13 +117,8 @@ public final class NetConnection {
         ArrayList<Protocol> list = new ArrayList<>();
         list.add(Protocol.HTTP_1_1);
         list.add(Protocol.HTTP_2);
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(HOST_NAME, PORT));
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        if (SETPROXY){
-            builder.proxy(proxy);
-        }else {
-            builder.proxy(Proxy.NO_PROXY);
-        }
+        builder.proxy(proxy);
 
 //        final TrustManager[] trustAllCerts = new TrustManager[]{
 //                new X509TrustManager() {

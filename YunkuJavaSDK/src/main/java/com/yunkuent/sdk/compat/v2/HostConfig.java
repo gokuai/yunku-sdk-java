@@ -3,6 +3,8 @@ package com.yunkuent.sdk.compat.v2;
 import com.yunkuent.sdk.NetConnection;
 import org.apache.http.util.TextUtils;
 
+import java.net.Proxy;
+
 /**
  * Created by qp on 2017/4/7.
  */
@@ -14,8 +16,8 @@ public class HostConfig {
     //    protected static  String API_ENT_HOST_V2 = "http://test4a-lib.goukuai.cn";
     protected static String API_ENT_HOST_V2 = "http://a-lib.goukuai.cn";
 
-    public static void changeConfig(String oauthHost, String apiHost){
-        if (!TextUtils.isEmpty(oauthHost)){
+    public static void changeConfig(String oauthHost, String apiHost) {
+        if (!TextUtils.isEmpty(oauthHost)) {
             OAUTH_HOST_V2 = oauthHost;
         }
         if (!TextUtils.isEmpty(apiHost)) {
@@ -23,15 +25,9 @@ public class HostConfig {
         }
     }
 
-    public static void setProxy(String hostName, int port) {
-
-        NetConnection.SETPROXY = true;
-
-        if (!TextUtils.isEmpty(hostName)) {
-            NetConnection.HOST_NAME = hostName;
-        }
-        if (port > 0) {
-            NetConnection.PORT = port;
+    public static void setProxy(Proxy proxy) {
+        if (!(proxy == null)) {
+            NetConnection.proxy = proxy;
         }
     }
 }

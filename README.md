@@ -67,7 +67,7 @@ Robots: noindex,nofollow
 
 ## 设置代理
 
-要设置代理，使用前请先调用HostConfig.setProxy(hostName, port)
+要设置代理，使用前请先调用HostConfig.setProxy(proxy)
 
 ## 企业库管理（EntLibManager.java）
 
