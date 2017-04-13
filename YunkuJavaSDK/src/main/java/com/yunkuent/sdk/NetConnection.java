@@ -118,7 +118,9 @@ public final class NetConnection {
         list.add(Protocol.HTTP_1_1);
         list.add(Protocol.HTTP_2);
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        builder.proxy(proxy);
+        if(!(proxy == null)){
+            builder.proxy(proxy);
+        }
 
 //        final TrustManager[] trustAllCerts = new TrustManager[]{
 //                new X509TrustManager() {

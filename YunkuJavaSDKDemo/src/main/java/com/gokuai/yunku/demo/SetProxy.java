@@ -18,7 +18,7 @@ public class SetProxy {
 //        DebugConfig.LOG_PATH="LogPath/";
 
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("",80));
-        HostConfig.setProxy(null);
+        HostConfig.setProxy(proxy);
 
         String returnString = EntManagerHelper.getInstance().getMembers(0, 99);
 
