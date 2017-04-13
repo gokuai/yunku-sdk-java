@@ -15,8 +15,21 @@ public class HostConfig {
     public static void changeConfig(String oauthHost, String apiHost){
         if (!TextUtils.isEmpty(oauthHost)){
             OAUTH_HOST = oauthHost;
-        }else if (!TextUtils.isEmpty(apiHost)){
+        }
+        if (!TextUtils.isEmpty(apiHost)){
             API_ENT_HOST = apiHost;
+        }
+    }
+
+    public static void setProxy(String hostName, int port) {
+
+        NetConnection.SETPROXY = true;
+
+        if (!TextUtils.isEmpty(hostName)) {
+            NetConnection.HOST_NAME = hostName;
+        }
+        if (port > 0) {
+            NetConnection.PORT = port;
         }
     }
 }

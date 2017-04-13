@@ -1,12 +1,12 @@
 package com.yunkuent.sdk;
 
-import com.squareup.okhttp.*;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.FileOperationData;
 import com.yunkuent.sdk.data.ReturnResult;
 import com.yunkuent.sdk.upload.UploadCallBack;
 import com.yunkuent.sdk.utils.URLEncoder;
 import com.yunkuent.sdk.utils.Util;
+import okhttp3.*;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 

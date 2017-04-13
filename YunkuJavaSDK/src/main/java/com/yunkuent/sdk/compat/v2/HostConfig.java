@@ -1,6 +1,6 @@
 package com.yunkuent.sdk.compat.v2;
 
-import com.yunkuent.sdk.LogPrint;
+import com.yunkuent.sdk.NetConnection;
 import org.apache.http.util.TextUtils;
 
 /**
@@ -17,8 +17,21 @@ public class HostConfig {
     public static void changeConfig(String oauthHost, String apiHost){
         if (!TextUtils.isEmpty(oauthHost)){
             OAUTH_HOST_V2 = oauthHost;
-        }else if (!TextUtils.isEmpty(apiHost)) {
+        }
+        if (!TextUtils.isEmpty(apiHost)) {
             API_ENT_HOST_V2 = apiHost;
+        }
+    }
+
+    public static void setProxy(String hostName, int port) {
+
+        NetConnection.SETPROXY = true;
+
+        if (!TextUtils.isEmpty(hostName)) {
+            NetConnection.HOST_NAME = hostName;
+        }
+        if (port > 0) {
+            NetConnection.PORT = port;
         }
     }
 }

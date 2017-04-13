@@ -1,23 +1,25 @@
-package com.gokuai.yunku.demo.compat.v2;
+package com.gokuai.yunku.demo;
 
-import com.gokuai.yunku.demo.compat.v2.helper.EntManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
+import com.gokuai.yunku.demo.helper.EntManagerHelper;
 import com.yunkuent.sdk.DebugConfig;
-import com.yunkuent.sdk.compat.v2.HostConfig;
+import com.yunkuent.sdk.HostConfig;
 
 /**
- * Created by qp on 2017/4/8.
+ * Created by qp on 2017/4/13.
  */
-public class ChangeConfig {
+public class SetProxy {
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        HostConfig.changeConfig("","");
+        HostConfig.setProxy("qq",80);
 
         String returnString = EntManagerHelper.getInstance().getMembers(0, 99);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
+
     }
+
 }

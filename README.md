@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.10'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.11'
 	}
 ```
 或者Maven：
@@ -50,7 +50,7 @@ Robots: noindex,nofollow
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.10</version>
+	    <version>3.11</version>
 	</dependency>
 ```
 
@@ -64,6 +64,10 @@ Robots: noindex,nofollow
 ## 修改API域名
 
 要修改API域名，使用前请先调用HostConfig.changeConfig(oauthHost, apiHost)
+
+## 设置代理
+
+要设置代理，使用前请先调用HostConfig.setProxy(hostName, port)
 
 ## 企业库管理（EntLibManager.java）
 

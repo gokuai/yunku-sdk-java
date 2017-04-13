@@ -14,7 +14,7 @@ public class EntFileManager extends HttpEngine {
 
     private static final String TAG = "EntFileManager";
 
-    private final int UPLOAD_LIMIT_SIZE = 52428800;
+    private static final int UPLOAD_LIMIT_SIZE = 52428800;
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST + "/1/file/ls";
     private final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST + "/1/file/updates";
     private final String URL_API_FILE_INFO = HostConfig.API_ENT_HOST + "/1/file/info";
