@@ -1,5 +1,10 @@
 package com.yunkuent.sdk.compat.v2;
 
+import com.gokuai.base.HttpEngine;
+import com.gokuai.base.LogPrint;
+import com.gokuai.base.NetConnection;
+import com.gokuai.base.RequestMethod;
+import com.gokuai.base.data.OauthData;
 import com.yunkuent.sdk.*;
 import com.yunkuent.sdk.data.ReturnResult;
 import com.yunkuent.sdk.utils.Base64;

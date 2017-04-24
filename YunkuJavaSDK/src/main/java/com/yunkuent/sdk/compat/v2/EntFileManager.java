@@ -1,5 +1,8 @@
 package com.yunkuent.sdk.compat.v2;
 
+import com.gokuai.base.HttpEngine;
+import com.gokuai.base.LogPrint;
+import com.gokuai.base.RequestMethod;
 import com.yunkuent.sdk.*;
 import com.yunkuent.sdk.upload.UploadCallBack;
 import com.yunkuent.sdk.utils.Util;
@@ -13,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Brandon on 2017/3/20.
  */
-public class EntFileManager extends HttpEngine  {
+public class EntFileManager extends HttpEngine {
 
     private static final String TAG = "EntFileManager";
 

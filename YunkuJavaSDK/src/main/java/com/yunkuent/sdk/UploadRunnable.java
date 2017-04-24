@@ -1,5 +1,9 @@
 package com.yunkuent.sdk;
 
+import com.gokuai.base.HttpEngine;
+import com.gokuai.base.LogPrint;
+import com.gokuai.base.NetConnection;
+import com.gokuai.base.RequestMethod;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.FileOperationData;
 import com.yunkuent.sdk.data.ReturnResult;

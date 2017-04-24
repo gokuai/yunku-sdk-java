@@ -1,8 +1,8 @@
 package com.gokuai.yunku.demo.compat.v2.lib;
 
+import com.gokuai.base.DebugConfig;
 import com.gokuai.yunku.demo.compat.v2.helper.EntLibraryManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
-import com.yunkuent.sdk.DebugConfig;
 import com.yunkuent.sdk.MemberType;
 
 /**

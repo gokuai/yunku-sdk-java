@@ -1,7 +1,8 @@
 package com.yunkuent.sdk.compat.v2;
 
+import com.gokuai.base.HttpEngine;
+import com.gokuai.base.RequestMethod;
 import com.yunkuent.sdk.MemberType;
-import com.yunkuent.sdk.RequestMethod;
 import com.yunkuent.sdk.utils.Util;
 
 import java.util.HashMap;
@@ -60,7 +61,7 @@ public class EntLibManager extends OauthEngine {
         params.put("org_desc", orgDesc);
         params.put("org_logo", orgLogo);
         params.put("sign", generateSign(params));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+        return new HttpEngine.RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
 
