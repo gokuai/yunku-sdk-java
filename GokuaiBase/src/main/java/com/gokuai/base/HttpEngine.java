@@ -1,12 +1,10 @@
 package com.gokuai.base;
 
-import com.gokuai.base.data.OauthData;
-import com.gokuai.base.data.ReturnResult;
 import com.gokuai.base.utils.Util;
 import org.apache.http.util.TextUtils;
 
-import java.net.HttpURLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by qp on 2017/4/21.
@@ -15,13 +13,7 @@ public abstract class HttpEngine extends SignAbility {
 
     private final static String LOG_TAG = "HttpEngine";
 
-    public final static int API_ID_GET_FILE_INFO = 50;
-    public final static int API_ID_GET_URL_BY_HASH = 49;
-
     protected String URL_OAUTH;
-
-    protected String token;
-    protected String refreshToken;
 
     protected String mClientSecret;
     protected String mClientId;
@@ -32,18 +24,6 @@ public abstract class HttpEngine extends SignAbility {
         mClientSecret = clientSecret;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-
-    public boolean isTokenAvailable() {
-        return !TextUtils.isEmpty(token);
-    }
 
     public static final int ERRORID_NETDISCONNECT = 1;
 
@@ -75,24 +55,6 @@ public abstract class HttpEngine extends SignAbility {
         return generateSign(params, mClientSecret, ignoreKeys);
     }
 
-    /**
-     * 重新根据参数进行签名
-     *
-     * @param params
-     * @param secret
-     * @param ignoreKeys
-     */
-    protected void reSignParams(HashMap<String, String> params, String secret,
-                                ArrayList<String> ignoreKeys) {
-        params.remove("token");
-        params.remove("sign");
-        params.put("token", getToken());
-        params.put("sign", generateSign(params, secret, ignoreKeys));
-    }
-
-    private void reSignParams(HashMap<String, String> params, ArrayList<String> ignoreKeys) {
-        reSignParams(params, mClientSecret, ignoreKeys);
-    }
 
     /**
      * 请求协助类
@@ -150,7 +112,7 @@ public abstract class HttpEngine extends SignAbility {
 
             if (checkAuth) {
                 if (this instanceof IAuthRequest) {
-                    return sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
+                    return ((IAuthRequest) this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
                 }
 
             }
@@ -179,7 +141,13 @@ public abstract class HttpEngine extends SignAbility {
                     String returnString;
 
                     if (checkAuth) {
-                        returnString = sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
+                        if (HttpEngine.this instanceof IAuthRequest) {
+                            returnString = ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
+                        } else {
+                            returnString = "";
+                            LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
+                        }
+
                     } else {
                         returnString = NetConnection.sendRequest(url, method, params, headParams);
                     }
@@ -207,50 +175,6 @@ public abstract class HttpEngine extends SignAbility {
         }
     }
 
-    private String sendRequestWithAuth(String url, RequestMethod method, HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys) {
-        String returnString = NetConnection.sendRequest(url, method, params, headParams);
-        ReturnResult returnResult = ReturnResult.create(returnString);
-        if (returnResult != null) {
-            if (returnResult.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                refreshToken();
-                reSignParams(params, ignoreKeys);
-                returnString = NetConnection.sendRequest(url, method, params, headParams);
-            }
-        }
-        return returnString;
-    }
-
-    /**
-     * 重新获得 token
-     */
-    private boolean refreshToken() {
-        if (TextUtils.isEmpty(refreshToken)) {
-            return false;
-        }
-        HashMap<String, String> params = new HashMap<>();
-        params.put("grant_type", "refresh_token");
-        params.put("refresh_token", refreshToken);
-        params.put("client_id", mClientId);
-        params.put("sign", generateSign(params));
-
-        String returnString = new RequestHelper().setUrl(URL_OAUTH).setMethod(RequestMethod.POST).setParams(params).executeSync();
-        ReturnResult returnResult = ReturnResult.create(returnString);
-        if (returnResult != null) {
-            OauthData data = OauthData.create(returnResult.getResult());
-            if (data != null) {
-                data.setCode(returnResult.getStatusCode());
-                if (data.getCode() == HttpURLConnection.HTTP_OK) {
-                    token = data.getToken();
-                    refreshToken = data.getRefresh_token();
-                    return true;
-                }
-
-                LogPrint.info(LOG_TAG, "token:" + token + "_refreshToken:" + refreshToken);
-            }
-
-        }
-        return false;
-    }
 
     interface RequestHelperCallBack {
         Object getReturnData(String returnString);
