@@ -1,8 +1,8 @@
 package com.yunkuent.sdk;
 
 import com.gokuai.base.*;
-import com.gokuai.base.data.OauthData;
-import com.gokuai.base.data.ReturnResult;
+import com.yunkuent.sdk.data.OauthData;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
 import org.apache.http.HttpStatus;

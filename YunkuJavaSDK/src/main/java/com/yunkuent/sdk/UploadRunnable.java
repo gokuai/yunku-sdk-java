@@ -4,12 +4,13 @@ import com.gokuai.base.HttpEngine;
 import com.gokuai.base.LogPrint;
 import com.gokuai.base.NetConnection;
 import com.gokuai.base.RequestMethod;
-import com.gokuai.base.data.FileInfo;
-import com.gokuai.base.data.FileOperationData;
-import com.gokuai.base.data.ReturnResult;
+import com.yunkuent.sdk.data.FileInfo;
+import com.yunkuent.sdk.data.FileOperationData;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.URLEncoder;
 import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.upload.UploadCallBack;
+import com.yunkuent.sdk.utils.YKUtils;
 import okhttp3.*;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
@@ -110,7 +111,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
 
             if (mInputStream != null) {
                 mInputStream = Util.cloneInputStream(mInputStream);
-                FileInfo fileInfo = Util.getFileSha1(mInputStream, false);
+                FileInfo fileInfo = YKUtils.getFileSha1(mInputStream, false);
                 filehash = fileInfo.fileHash;
                 filesize = fileInfo.fileSize;
             }

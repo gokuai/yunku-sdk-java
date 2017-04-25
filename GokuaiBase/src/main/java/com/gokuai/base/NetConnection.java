@@ -1,6 +1,5 @@
 package com.gokuai.base;
 
-import com.gokuai.base.data.ReturnResult;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;

@@ -1,4 +1,4 @@
-package com.gokuai.base.data;
+package com.yunkuent.sdk.data;
 
 /**
  * Created by Brandon on 2017/2/27.

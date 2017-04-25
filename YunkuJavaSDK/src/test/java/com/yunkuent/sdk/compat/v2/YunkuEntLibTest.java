@@ -1,6 +1,6 @@
 package com.yunkuent.sdk.compat.v2;
 
-import com.gokuai.base.data.ReturnResult;
+import com.gokuai.base.ReturnResult;
 import com.yunkuent.sdk.MemberType;
 import org.junit.Assert;
 import org.junit.Ignore;
