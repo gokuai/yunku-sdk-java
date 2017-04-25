@@ -2,8 +2,8 @@ package com.yunkuent.sdk.compat.v2;
 
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.MemberType;
-import com.yunkuent.sdk.utils.Util;
 
 import java.util.HashMap;
 

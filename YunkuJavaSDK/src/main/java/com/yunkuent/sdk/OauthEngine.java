@@ -2,9 +2,9 @@ package com.yunkuent.sdk;
 
 import com.gokuai.base.*;
 import com.gokuai.base.data.OauthData;
-import com.yunkuent.sdk.data.ReturnResult;
-import com.yunkuent.sdk.utils.Base64;
-import com.yunkuent.sdk.utils.Util;
+import com.gokuai.base.data.ReturnResult;
+import com.gokuai.base.utils.Base64;
+import com.gokuai.base.utils.Util;
 import org.apache.http.HttpStatus;
 import org.apache.http.util.TextUtils;
 
@@ -30,7 +30,6 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
     public OauthEngine(String clientId, String clientSecret, boolean isEnt) {
         super(clientId, clientSecret);
         mIsEnt = isEnt;
-        URL_OAUTH = URL_API_TOKEN;
         mTokenType = isEnt ? "ent" : "";
     }
 

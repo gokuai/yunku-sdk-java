@@ -5,10 +5,9 @@ import com.gokuai.base.LogPrint;
 import com.gokuai.base.NetConnection;
 import com.gokuai.base.RequestMethod;
 import com.gokuai.base.data.OauthData;
-import com.yunkuent.sdk.*;
-import com.yunkuent.sdk.data.ReturnResult;
-import com.yunkuent.sdk.utils.Base64;
-import com.yunkuent.sdk.utils.Util;
+import com.gokuai.base.data.ReturnResult;
+import com.gokuai.base.utils.Base64;
+import com.gokuai.base.utils.Util;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;

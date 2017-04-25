@@ -3,9 +3,9 @@ package com.yunkuent.sdk;
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.LogPrint;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import com.yunkuent.sdk.upload.UploadCallBack;
-import com.yunkuent.sdk.utils.Util;
 
 import java.io.*;
 import java.util.HashMap;

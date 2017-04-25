@@ -3,9 +3,9 @@ package com.yunkuent.sdk.compat.v2;
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.LogPrint;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.*;
 import com.yunkuent.sdk.upload.UploadCallBack;
-import com.yunkuent.sdk.utils.Util;
 
 import java.io.File;
 import java.io.FileInputStream;

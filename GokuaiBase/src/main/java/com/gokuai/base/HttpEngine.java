@@ -13,8 +13,6 @@ public abstract class HttpEngine extends SignAbility {
 
     private final static String LOG_TAG = "HttpEngine";
 
-    protected String URL_OAUTH;
-
     protected String mClientSecret;
     protected String mClientId;
 
@@ -172,6 +170,18 @@ public abstract class HttpEngine extends SignAbility {
             if (method == null) {
                 throw new IllegalArgumentException("method must not be null");
             }
+        }
+
+        Thread executeAsyncTask(Thread task, final DataListener listener, final int apiId) {
+            if (listener != null) {
+                if (!Util.isNetworkAvailableEx()) {
+                    listener.onReceivedData(apiId, null, ERRORID_NETDISCONNECT);
+                    return null;
+                }
+            }
+
+            task.start();
+            return task;
         }
     }
 
