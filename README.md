@@ -1259,4 +1259,4 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
-[3]: https://github.com/gokuai/yunku-sdk-java-desperated
+[3]: https://github.com/gokuai/yunku-sdk-java-deprecated
