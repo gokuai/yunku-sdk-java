@@ -31,30 +31,26 @@ abstract class SignAbility {
     protected String generateSign(HashMap<String, String> params, String secret, ArrayList<String> ignoreKeys) {
         ArrayList<String> keys = new ArrayList<>(params.keySet());
         Collections.sort(keys, mComparator);
-        String string_sign = "";
-
-        //移除对应为null的参数
-        Iterator it = params.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            if (pair.getValue() == null||
-                    (ignoreKeys != null
-                            && ignoreKeys.contains(pair.getKey().toString()))) {
-                keys.remove(pair.getKey().toString());
-                it.remove();
-            }
-        }
-
         int size = params.size();
+        String string_to_sign = "";
+
         if (size > 0) {
             for (int i = 0; i < size - 1; i++) {
                 String key = keys.get(i);
+                if (ignoreKeys != null && ignoreKeys.contains(key)) {
+                    continue;
+                }
+
                 String value = params.get(key);
-                string_sign += value + "\n";
+                if (value == null) {
+                    continue;
+                }
+
+                string_to_sign += value + "\n";
             }
-            string_sign += params.get(keys.get(size - 1));
+            string_to_sign += params.get(keys.get(size - 1));
         }
-        return Util.getHmacSha1(string_sign, secret);
+        return Util.getHmacSha1(string_to_sign, secret);
     }
 
 
