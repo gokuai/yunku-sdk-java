@@ -1,6 +1,6 @@
 package com.yunkuent.sdk;
 
-import com.yunkuent.sdk.data.ReturnResult;
+import com.gokuai.base.ReturnResult;
 import com.yunkuent.sdk.upload.UploadCallBack;
 import org.junit.Assert;
 import org.junit.Ignore;

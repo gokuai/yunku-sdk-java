@@ -1,3 +1,4 @@
 include 'YunkuJavaSDK'
 include 'YunkuJavaSDKDemo'
+include 'GokuaiBase'
 

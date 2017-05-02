@@ -1,4 +1,4 @@
-package com.yunkuent.sdk.data;
+package com.gokuai.base;
 
 import org.json.JSONObject;
 

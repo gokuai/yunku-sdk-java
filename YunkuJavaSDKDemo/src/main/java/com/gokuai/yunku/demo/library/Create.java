@@ -1,8 +1,8 @@
 package com.gokuai.yunku.demo.library;
 
+import com.gokuai.base.DebugConfig;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
-import com.yunkuent.sdk.DebugConfig;
 
 /**
  * Created by qp on 2017/3/2.

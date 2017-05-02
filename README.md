@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.11'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.12'
 	}
 ```
 或者Maven：
@@ -50,7 +50,7 @@ Robots: noindex,nofollow
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.11</version>
+	    <version>3.12</version>
 	</dependency>
 ```
 
@@ -1259,4 +1259,4 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
-[3]: https://github.com/gokuai/yunku-sdk-java-desperated
+[3]: https://github.com/gokuai/yunku-sdk-java-deprecated

@@ -1,19 +1,13 @@
-package com.yunkuent.sdk;
+package com.gokuai.base;
 
+import com.gokuai.base.utils.Base64;
+import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
-import com.yunkuent.sdk.data.ReturnResult;
-import com.yunkuent.sdk.utils.Base64;
-import com.yunkuent.sdk.utils.Util;
 import okhttp3.*;
 import org.apache.http.util.TextUtils;
 
-import javax.net.ssl.*;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;

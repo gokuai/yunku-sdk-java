@@ -1,4 +1,4 @@
-package com.yunkuent.sdk;
+package com.yunkuent.sdk.data;
 
 import org.json.JSONObject;
 

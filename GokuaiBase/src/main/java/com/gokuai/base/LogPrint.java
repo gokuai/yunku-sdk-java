@@ -1,4 +1,4 @@
-package com.yunkuent.sdk;
+package com.gokuai.base;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,8 +6,7 @@ import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.builder.api.*;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
-
-import static com.yunkuent.sdk.DebugConfig.*;
+import static com.gokuai.base.DebugConfig.*;
 
 /**
  * 输出日志   System.out.println

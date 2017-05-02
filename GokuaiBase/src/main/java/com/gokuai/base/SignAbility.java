@@ -1,6 +1,6 @@
-package com.yunkuent.sdk;
+package com.gokuai.base;
 
-import com.yunkuent.sdk.utils.Util;
+import com.gokuai.base.utils.Util;
 
 import java.util.*;
 

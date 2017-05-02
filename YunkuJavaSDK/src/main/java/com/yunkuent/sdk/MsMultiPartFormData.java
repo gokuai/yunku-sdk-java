@@ -1,7 +1,8 @@
 package com.yunkuent.sdk;
 
+import com.gokuai.base.LogPrint;
+import com.gokuai.base.ReturnResult;
 import com.google.gson.Gson;
-import com.yunkuent.sdk.data.ReturnResult;
 
 import java.io.*;
 import java.net.HttpURLConnection;

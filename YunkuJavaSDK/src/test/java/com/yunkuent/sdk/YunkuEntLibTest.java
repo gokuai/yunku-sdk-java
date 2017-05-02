@@ -1,11 +1,9 @@
 package com.yunkuent.sdk;
 
-import com.yunkuent.sdk.data.ReturnResult;
+import com.gokuai.base.ReturnResult;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by qp on 2017/3/8.

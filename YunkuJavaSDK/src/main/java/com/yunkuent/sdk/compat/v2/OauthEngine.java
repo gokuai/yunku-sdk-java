@@ -1,9 +1,13 @@
 package com.yunkuent.sdk.compat.v2;
 
-import com.yunkuent.sdk.*;
-import com.yunkuent.sdk.data.ReturnResult;
-import com.yunkuent.sdk.utils.Base64;
-import com.yunkuent.sdk.utils.Util;
+import com.gokuai.base.HttpEngine;
+import com.gokuai.base.LogPrint;
+import com.gokuai.base.NetConnection;
+import com.gokuai.base.RequestMethod;
+import com.yunkuent.sdk.data.OauthData;
+import com.gokuai.base.ReturnResult;
+import com.gokuai.base.utils.Base64;
+import com.gokuai.base.utils.Util;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;

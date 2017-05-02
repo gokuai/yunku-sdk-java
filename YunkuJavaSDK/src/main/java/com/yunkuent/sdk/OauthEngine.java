@@ -1,8 +1,10 @@
 package com.yunkuent.sdk;
 
-import com.yunkuent.sdk.data.ReturnResult;
-import com.yunkuent.sdk.utils.Base64;
-import com.yunkuent.sdk.utils.Util;
+import com.gokuai.base.*;
+import com.yunkuent.sdk.data.OauthData;
+import com.gokuai.base.ReturnResult;
+import com.gokuai.base.utils.Base64;
+import com.gokuai.base.utils.Util;
 import org.apache.http.HttpStatus;
 import org.apache.http.util.TextUtils;
 
@@ -109,20 +111,18 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
 
         String returnString = new RequestHelper().setUrl(URL_API_TOKEN).setMethod(RequestMethod.POST).setParams(params).executeSync();
         ReturnResult returnResult = ReturnResult.create(returnString);
-        if (returnResult != null) {
-            OauthData data = OauthData.create(returnResult.getResult());
-            if (data != null) {
-                data.setCode(returnResult.getStatusCode());
-                if (data.getCode() == HttpURLConnection.HTTP_OK) {
-                    mToken = data.getToken();
-                    refreshToken = data.getRefresh_token();
-                    return true;
-                }
-
-                LogPrint.info(LOG_TAG, "token:" + mToken + "_refreshToken:" + refreshToken);
+        OauthData data = OauthData.create(returnResult.getResult());
+        if (data != null) {
+            data.setCode(returnResult.getStatusCode());
+            if (data.getCode() == HttpURLConnection.HTTP_OK) {
+                mToken = data.getToken();
+                refreshToken = data.getRefresh_token();
+                return true;
             }
 
+            LogPrint.info(LOG_TAG, "token:" + mToken + "_refreshToken:" + refreshToken);
         }
+
         return false;
     }
 
@@ -140,12 +140,10 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
                                       HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys) {
         String returnString = NetConnection.sendRequest(url, method, params, headParams);
         ReturnResult returnResult = ReturnResult.create(returnString);
-        if (returnResult != null) {
-            if (returnResult.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                refreshToken();
-                reSignParams(params, ignoreKeys);
-                returnString = NetConnection.sendRequest(url, method, params, headParams);
-            }
+        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            refreshToken();
+            reSignParams(params, ignoreKeys);
+            returnString = NetConnection.sendRequest(url, method, params, headParams);
         }
         return returnString;
     }

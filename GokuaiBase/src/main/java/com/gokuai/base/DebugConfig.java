@@ -1,4 +1,4 @@
-package com.yunkuent.sdk;
+package com.gokuai.base;
 
 /**
  * 调试配置

@@ -1,8 +1,8 @@
 package com.gokuai.yunku.demo.helper;
 
+import com.gokuai.base.ReturnResult;
+import com.gokuai.base.utils.Util;
 import com.gokuai.yunku.demo.model.BaseData;
-import com.yunkuent.sdk.data.ReturnResult;
-import com.yunkuent.sdk.utils.Util;
 
 import java.net.HttpURLConnection;
 

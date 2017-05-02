@@ -1,4 +1,4 @@
-package com.yunkuent.sdk;
+package com.gokuai.base;
 
 import java.util.ArrayList;
 import java.util.HashMap;

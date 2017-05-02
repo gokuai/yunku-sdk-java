@@ -1,5 +1,6 @@
 package com.yunkuent.sdk;
 
+import com.gokuai.base.NetConnection;
 import org.apache.http.util.TextUtils;
 
 import java.net.Proxy;

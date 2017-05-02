@@ -1,15 +1,17 @@
-package com.yunkuent.sdk;
+package com.gokuai.base;
 
-import com.yunkuent.sdk.utils.Util;
+import com.gokuai.base.utils.Util;
 import org.apache.http.util.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by qp on 2017/2/13.
+ * Created by qp on 2017/4/21.
  */
 public abstract class HttpEngine extends SignAbility {
+
+    private final static String LOG_TAG = "HttpEngine";
 
     protected String mClientSecret;
     protected String mClientId;
@@ -18,6 +20,18 @@ public abstract class HttpEngine extends SignAbility {
     public HttpEngine(String clientId, String clientSecret) {
         mClientId = clientId;
         mClientSecret = clientSecret;
+    }
+
+
+    public static final int ERRORID_NETDISCONNECT = 1;
+
+    /**
+     * 从服务器获得数据后的回调
+     *
+     * @author Administrator
+     */
+    public interface DataListener {
+        void onReceivedData(int apiId, Object object, int errorId);
     }
 
     /**
@@ -62,7 +76,7 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
-        RequestHelper setHeadParams(HashMap<String, String> headParams) {
+        public RequestHelper setHeadParams(HashMap<String, String> headParams) {
             this.headParams = headParams;
             return this;
         }
@@ -103,6 +117,51 @@ public abstract class HttpEngine extends SignAbility {
             return NetConnection.sendRequest(url, method, params, headParams);
         }
 
+        /**
+         * 异步执行
+         *
+         * @return
+         */
+        Thread executeAsync(final DataListener listener, final int apiId, final RequestHelperCallBack callBack) {
+
+            checkNecessaryParams(url, method);
+
+            if (listener != null) {
+                if (!Util.isNetworkAvailableEx()) {
+                    listener.onReceivedData(apiId, null, ERRORID_NETDISCONNECT);
+                    return null;
+                }
+            }
+
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    String returnString;
+
+                    if (checkAuth) {
+                        if (HttpEngine.this instanceof IAuthRequest) {
+                            returnString = ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
+                        } else {
+                            returnString = "";
+                            LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
+                        }
+
+                    } else {
+                        returnString = NetConnection.sendRequest(url, method, params, headParams);
+                    }
+
+                    if (callBack != null) {
+                        if (listener != null) {
+                            Object object = callBack.getReturnData(returnString);
+                            listener.onReceivedData(apiId, object, -1);
+                        }
+                    }
+                }
+            };
+            thread.start();
+            return thread;
+        }
+
         private void checkNecessaryParams(String url, RequestMethod method) {
             if (TextUtils.isEmpty(url)) {
                 throw new IllegalArgumentException("url must not be null");
@@ -112,5 +171,23 @@ public abstract class HttpEngine extends SignAbility {
                 throw new IllegalArgumentException("method must not be null");
             }
         }
+
+        Thread executeAsyncTask(Thread task, final DataListener listener, final int apiId) {
+            if (listener != null) {
+                if (!Util.isNetworkAvailableEx()) {
+                    listener.onReceivedData(apiId, null, ERRORID_NETDISCONNECT);
+                    return null;
+                }
+            }
+
+            task.start();
+            return task;
+        }
     }
+
+
+    interface RequestHelperCallBack {
+        Object getReturnData(String returnString);
+    }
+
 }

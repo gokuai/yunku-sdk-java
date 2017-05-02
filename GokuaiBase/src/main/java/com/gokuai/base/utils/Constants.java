@@ -1,4 +1,4 @@
-package com.yunkuent.sdk.utils;
+package com.gokuai.base.utils;
 
 /**
  * Created by Brandon on 2014/8/6.
