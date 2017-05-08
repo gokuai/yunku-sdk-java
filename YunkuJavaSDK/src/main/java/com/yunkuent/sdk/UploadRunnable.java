@@ -127,6 +127,12 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                         // 服务器上没有，上传文件
                         mServer = data.getServer();
 
+                        if (TextUtils.isEmpty(mServer)) {
+                            throw new Exception(" The server is empty ");
+                        }else {
+                            LogPrint.info(LOG_TAG, "The server is " + mServer);
+                        }
+
                         // upload_init
                         upload_init(data.getHash(), filename, fullpath, filehash, filesize);
 
@@ -225,7 +231,10 @@ public class UploadRunnable extends HttpEngine implements Runnable {
 
         } catch (Exception ex) {
             LogPrint.warn(LOG_TAG, ex.getMessage());
-            upload_abort();
+
+            if (!TextUtils.isEmpty(mServer)) {
+                upload_abort();
+            }
             if (mCallBack != null) {
                 mCallBack.onFail(mRId, ex.getMessage());
             }
