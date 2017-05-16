@@ -319,7 +319,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
             JSONObject json = new JSONObject(result.getResult());
             mSession = json.optString("session");
             return result.getStatusCode();
-        } else if (result.getStatusCode() >= HttpURLConnection.HTTP_ACCEPTED) {
+        } else if (result.getStatusCode() == HttpURLConnection.HTTP_ACCEPTED) {
             return result.getStatusCode();
         } else if (result.getStatusCode() >= HttpURLConnection.HTTP_INTERNAL_ERROR) {
             upload_server(filesize, filehash, fullpath);
