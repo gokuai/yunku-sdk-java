@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.14'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.15'
 	}
 ```
 或者Maven：
