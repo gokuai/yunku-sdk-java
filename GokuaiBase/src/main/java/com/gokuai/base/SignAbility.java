@@ -29,6 +29,15 @@ abstract class SignAbility {
      * @return
      */
     protected String generateSign(HashMap<String, String> params, String secret, ArrayList<String> ignoreKeys) {
+        //移除 null 参数
+        Iterator it = params.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (pair.getValue() == null) {
+                it.remove();
+            }
+        }
+
         ArrayList<String> keys = new ArrayList<>(params.keySet());
         Collections.sort(keys, mComparator);
         int size = params.size();
@@ -42,11 +51,8 @@ abstract class SignAbility {
                 }
 
                 String value = params.get(key);
-                if (value == null) {
-                    continue;
-                }
-
                 string_to_sign += value + "\n";
+
             }
             string_to_sign += params.get(keys.get(size - 1));
         }

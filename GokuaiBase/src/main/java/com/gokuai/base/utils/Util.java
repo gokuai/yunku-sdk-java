@@ -542,9 +542,7 @@ public class Util {
 
             for (String key : keys) {
                 String value = params.get(key);
-                if (value != null) {
-                    paramsString += key + "=" + URLEncoder.encodeUTF8(value + "") + "&";
-                }
+                paramsString += key + "=" + URLEncoder.encodeUTF8(value + "") + "&";
             }
             if (paramsString.endsWith("&")) {
                 paramsString = paramsString.substring(0, paramsString.length() - 1);
