@@ -2,6 +2,7 @@ package com.yunkuent.sdk;
 
 import com.gokuai.base.RequestMethod;
 import com.gokuai.base.utils.Util;
+import org.apache.http.util.TextUtils;
 
 import java.util.HashMap;
 
@@ -26,6 +27,8 @@ public class EntManager extends OauthEngine {
     private final String URL_API_DEL_SYNC_GROUP_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/del_sync_group_member";
     private final String URL_API_DEL_SYNC_MEMBER_GROUP = HostConfig.API_ENT_HOST + "/1/ent/del_sync_member_group";
     private final String URL_API_GET_GROUP_MEMBERS = HostConfig.API_ENT_HOST + "/1/ent/get_group_members";
+    private final String ADD_SYNC_ADMIN = HostConfig.API_ENT_HOST + "/1/ent/add_sync_admin";
+    private final String MEMBER_LOGIN_REPORT = HostConfig.API_ENT_HOST + "/1/ent/member_login_report";
 
     public EntManager(String clientId, String clientSecret) {
         super(clientId, clientSecret, true);
@@ -190,7 +193,7 @@ public class EntManager extends OauthEngine {
     /**
      * 添加或修改同步成员
      *
-     * @param oudId
+     * @param outId
      * @param memberName
      * @param account
      * @param memberEmail
@@ -198,11 +201,11 @@ public class EntManager extends OauthEngine {
      * @param password    如果需要由够快验证帐号密码,密码为必须参数
      * @return
      */
-    public String addSyncMember(String oudId, String memberName, String account, String memberEmail, String memberPhone, String password) {
+    public String addSyncMember(String outId, String memberName, String account, String memberEmail, String memberPhone, String password) {
         String url = URL_API_ADD_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<>();
         addAuthParams(params);
-        params.put("out_id", oudId);
+        params.put("out_id", outId);
         params.put("member_name", memberName);
         params.put("account", account);
         params.put("member_email", memberEmail);
@@ -347,6 +350,41 @@ public class EntManager extends OauthEngine {
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
+    /**
+     * 添加管理员
+     *
+     * @param outId
+     * @param memberEmail
+     * @param isSuperAdmin
+     * @return
+     */
+    public String addSyncAdmin(String outId, String memberEmail, boolean isSuperAdmin) {
+        String url = ADD_SYNC_ADMIN;
+        HashMap<String, String> params = new HashMap<>();
+        addAuthParams(params);
+        params.put("out_id", outId);
+        params.put("member_email", memberEmail);
+        params.put("type", (isSuperAdmin ? 1 : 0) + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 成员登录情况统计
+     *
+     * @param startDate
+     * @param enDdate
+     * @return
+     */
+    public String memberLoginReport(String startDate, String enDdate) {
+        String url = MEMBER_LOGIN_REPORT;
+        HashMap<String, String> params = new HashMap<>();
+        addAuthParams(params);
+        params.put("start_date", startDate);
+        params.put("end_date", enDdate);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    }
 
     /**
      * 复制一个EntManager对象

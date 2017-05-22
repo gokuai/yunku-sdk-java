@@ -1,23 +1,22 @@
-package com.gokuai.yunku.demo.library;
+package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
-import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
 
 /**
  * Created by qp on 2017/3/2.
- *
- * 修改库信息
- * 1T="1099511627776" 1G＝“1073741824”；
+ * <p>
+ * 文件搜索
  */
-public class Set {
+public class Search {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().set(1258748, "ttt", "1073741824", "");
+        String returnString = EntFileManagerHelper.getInstance().search("tes", "", 0, 100);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

@@ -44,17 +44,15 @@ public class EntLibManager extends OauthEngine {
      * @param orgName
      * @param orgCapacity
      * @param storagePointName
-     * @param orgDesc
      * @return
      */
-    public String create(String orgName, String orgCapacity, String storagePointName, String orgDesc, String orgLogo) {
+    public String create(String orgName, String orgCapacity, String storagePointName, String orgLogo) {
         String url = URL_API_CREATE_LIB;
         HashMap<String, String> params = new HashMap<>();
         addAuthParams(params);
         params.put("org_name", orgName);
         params.put("org_capacity", orgCapacity);
         params.put("storage_point_name", storagePointName);
-        params.put("org_desc", orgDesc);
         params.put("org_logo", orgLogo);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
@@ -67,7 +65,7 @@ public class EntLibManager extends OauthEngine {
      * @return
      */
     public String getLibList() {
-        return this.getLibList(0);
+        return this.getLibList(0, 0);
     }
 
     /**
@@ -76,13 +74,14 @@ public class EntLibManager extends OauthEngine {
      * @param memberId
      * @return
      */
-    public String getLibList(int memberId) {
+    public String getLibList(int memberId, int type) {
         String url = URL_API_GET_LIB_LIST;
         HashMap<String, String> params = new HashMap<>();
         addAuthParams(params);
         if (memberId > 0) {
             params.put("member_id", memberId + "");
         }
+        params.put("type", type + "");
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
@@ -287,11 +286,10 @@ public class EntLibManager extends OauthEngine {
      * @param orgId
      * @param orgName
      * @param orgCapacity
-     * @param orgDes
      * @param orgLogo
      * @return
      */
-    public String set(int orgId, String orgName, String orgCapacity, String orgDes, String orgLogo) {
+    public String set(int orgId, String orgName, String orgCapacity, String orgLogo) {
         String url = URL_API_SET;
         HashMap<String, String> params = new HashMap<>();
         addAuthParams(params);
@@ -302,11 +300,7 @@ public class EntLibManager extends OauthEngine {
         if (orgCapacity != null && !orgCapacity.isEmpty()) {
             params.put("org_capacity", orgCapacity + "");
         }
-        if (orgDes != null && !orgDes.isEmpty()) {
-            params.put("org_desc", orgDes);
-        }
-
-        if (orgDes != null && !orgDes.isEmpty()) {
+        if (orgLogo != null && !orgLogo.isEmpty()) {
             params.put("org_logo", orgLogo);
         }
         params.put("sign", generateSign(params));

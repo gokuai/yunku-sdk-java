@@ -17,7 +17,7 @@ public class Set {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().set(1262696, "ttt", "1073741824", "", "");
+        String returnString = EntLibraryManagerHelper.getInstance().set(1262696, "ttt", "1073741824", "");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

@@ -1,6 +1,7 @@
 package com.yunkuent.sdk.compat.v2;
 
 import com.gokuai.base.ReturnResult;
+import com.yunkuent.sdk.FilePermissions;
 import com.yunkuent.sdk.upload.UploadCallBack;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -41,7 +42,7 @@ public class YunkuEntFileTest {
     @Test
     public void getFileInfo() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.getFileInfo("test.jpg", EntFileManager.NetType.DEFAULT);
+        String s = entFile.getFileInfo("test.jpg", EntFileManager.NetType.DEFAULT, false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -74,7 +75,7 @@ public class YunkuEntFileTest {
     @Test
     public void uploadByBlock() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
         entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, false, new UploadCallBack() {
             @Override
@@ -172,6 +173,54 @@ public class YunkuEntFileTest {
     public void del() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         String s = entFile.del("test.jpg","Brandon");
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
+
+    @Test
+    public void AddTag() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        String s = entFile.addTag("test", new String[]{"test","test1"});
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
+
+    @Test
+    public void delTag() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        String s = entFile.delTag("test", new String[]{"test","test1"});
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
+
+    @Test
+    public void getPermission() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        String s = entFile.getPermission("test", 216144);
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
+
+    @Test
+    public void history() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        String s = entFile.history("test", 0, 100);
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
+
+    @Test
+    public void search() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        String s = entFile.search("tes", "", 0, 100);
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
+
+    @Test
+    public void setPermission() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        String s = entFile.setPermission("test", FilePermissions.FILE_PREVIEW,FilePermissions.FILE_DELETE,FilePermissions.FILE_READ);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }

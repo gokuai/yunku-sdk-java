@@ -4,8 +4,11 @@ import com.gokuai.base.HttpEngine;
 import com.gokuai.base.LogPrint;
 import com.gokuai.base.RequestMethod;
 import com.gokuai.base.utils.Util;
+import com.google.gson.Gson;
 import com.yunkuent.sdk.*;
 import com.yunkuent.sdk.upload.UploadCallBack;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +32,7 @@ public class EntFileManager extends HttpEngine {
     private final String URL_API_CREATE_FILE = HostConfig.API_ENT_HOST_V2 + "/1/file/create_file";
     private final String URL_API_DEL_FILE = HostConfig.API_ENT_HOST_V2 + "/1/file/del";
     private final String URL_API_MOVE_FILE = HostConfig.API_ENT_HOST_V2 + "/1/file/move";
+    private final String URL_API_HISTORY_FILE = HostConfig.API_ENT_HOST_V2 + "/1/file/history";
     private final String URL_API_LINK_FILE = HostConfig.API_ENT_HOST_V2 + "/1/file/link";
     private final String URL_API_SENDMSG = HostConfig.API_ENT_HOST_V2 + "/1/file/sendmsg";
     private final String URL_API_GET_LINK = HostConfig.API_ENT_HOST_V2 + "/1/file/links";
@@ -36,6 +40,11 @@ public class EntFileManager extends HttpEngine {
     private final String URL_API_GET_SERVER_SITE = HostConfig.API_ENT_HOST_V2 + "/1/file/servers";
     private final String URL_API_CREATE_FILE_BY_URL = HostConfig.API_ENT_HOST_V2 + "/1/file/create_file_by_url";
     private final String URL_API_UPLOAD_SERVERS = HostConfig.API_ENT_HOST_V2 + "/1/file/upload_servers";
+    private final String URL_API_FILE_SEARCH = HostConfig.API_ENT_HOST_V2 + "/1/file/search";
+    private final String URL_API_GET_PERMISSION = HostConfig.API_ENT_HOST_V2 + "/1/file/get_permission";
+    private final String URL_API_SET_PERMISSION = HostConfig.API_ENT_HOST_V2 + "/1/file/file_permission";
+    private final String URL_API_ADD_TAG = HostConfig.API_ENT_HOST_V2 + "/1/file/add_tag";
+    private final String URL_API_DEL_TAG = HostConfig.API_ENT_HOST_V2 + "/1/file/del_tag";
 
     public EntFileManager(String clientId, String clientSecret) {
         super(clientId, clientSecret);
@@ -66,7 +75,6 @@ public class EntFileManager extends HttpEngine {
      * @param fullPath 路径, 空字符串表示根目录
      * @param start    起始下标, 分页显示
      * @param size     返回文件/文件夹数量限制
-     * @param dirOnly  只返回文件夹
      * @return
      */
     public String getFileList(String fullPath, int start, int size, boolean dirOnly) {
@@ -111,12 +119,13 @@ public class EntFileManager extends HttpEngine {
      * @param net
      * @return
      */
-    public String getFileInfo(String fullPath, EntFileManager.NetType net) {
+    public String getFileInfo(String fullPath, EntFileManager.NetType net, boolean getAttribute) {
         String url = URL_API_FILE_INFO;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
+        params.put("attribute", (getAttribute ? 1 : 0) + "");
         switch (net) {
             case DEFAULT:
                 break;
@@ -276,6 +285,26 @@ public class EntFileManager extends HttpEngine {
     }
 
     /**
+     * 获取文件历史
+     *
+     * @param fullPath
+     * @param start
+     * @param size
+     * @return
+     */
+    public String history(String fullPath, int start, int size) {
+        String url = URL_API_HISTORY_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("start", start + "");
+        params.put("size", size + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
      * 获取文件链接
      *
      * @param fullPath
@@ -422,6 +451,108 @@ public class EntFileManager extends HttpEngine {
         params.put("org_client_id", mClientId);
         params.put("type", type);
         params.put("dateline", Util.getUnixDateline() + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 文件搜索
+     *
+     * @param keyWords
+     * @param path
+     * @param start
+     * @param size
+     * @return
+     */
+    public String search(String keyWords, String path, int start, int size) {
+        String url = URL_API_FILE_SEARCH;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("keywords", keyWords);
+        params.put("path", path);
+        params.put("start", start + "");
+        params.put("size", size + "");
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    }
+
+    /**
+     * 获取文件夹权限
+     *
+     * @param fullPath
+     * @param memberId
+     * @return
+     */
+    public String getPermission(String fullPath, int memberId) {
+        String url = URL_API_GET_PERMISSION;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("member_id", memberId + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 修改文件夹权限
+     *
+     * @param fullPath
+     * @param permissions
+     * @return
+     */
+    public String setPermission(String fullPath, FilePermissions... permissions) {
+        String url = URL_API_SET_PERMISSION;
+        HashMap<String, String> params = new HashMap<>();
+        if (permissions != null) {
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            for (FilePermissions p : permissions) {
+                jsonArray.put(p);
+            }
+            jsonObject.put("member_id", jsonArray);
+            params.put("permissions", jsonObject.toString().toLowerCase());
+        }
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 添加标签
+     *
+     * @param fullPath
+     * @param tags
+     * @return
+     */
+    public String addTag(String fullPath, String[] tags) {
+        String url = URL_API_ADD_TAG;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("tag", Util.strArrayToString(tags, ";") + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 删除标签
+     *
+     * @param fullPath
+     * @param tags
+     * @return
+     */
+    public String delTag(String fullPath, String[] tags) {
+        String url = URL_API_DEL_TAG;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("tag", Util.strArrayToString(tags, ";") + "");
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }

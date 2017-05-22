@@ -151,4 +151,11 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getStatusCode());
     }
 
+    @Test
+    public void addSyncAdmin () throws Exception {
+        EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
+        String s = ent.addSyncAdmin("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==", "", false);
+        ReturnResult r = ReturnResult.create(s);
+        Assert.assertEquals(200,r.getStatusCode());
+    }
 }

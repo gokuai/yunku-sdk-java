@@ -33,7 +33,7 @@ Robots: noindex,nofollow
 | --- | --- | --- | --- |
 | ClientId | 是 | string | 申请应用时分配的AppKey |
 | ClientSecret | 是 | string | 申请应用时分配的AppSecret |
-| isEnt | 是 | boolean | 是否是企业帐号登录|
+| isEnt | 是 | boolean | 是否是企业帐号登录 |
 
 ---
 
@@ -43,7 +43,7 @@ Robots: noindex,nofollow
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | Username | 是 | string | 用户名 |
-| Password | 是 | string | 密码|
+| Password | 是 | string | 密码 |
 
 
 #### 返回结果
@@ -63,14 +63,13 @@ Robots: noindex,nofollow
 ---
 ### 创建库
 	create(String orgName, int orgCapacity, 
-	String storagePointName, String orgDesc) 
+	String storagePointName) 
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| orgName | 是 | string | 库名称|
-| orgCapacity | 否 | int | 库容量上限, 单位字节, 默认无上限|
-| storagePointName | 否 | string | 库归属存储点名称, 默认使用够快存储|
-| orgDesc | 否 | string | 库描述|
+| orgName | 是 | string | 库名称 |
+| orgCapacity | 否 | int | 库容量上限, 单位字节, 默认无上限 |
+| storagePointName | 否 | string | 库归属存储点名称, 默认使用够快存储 |
 | orgLogo | 否 | string | 库logo |
 
 #### 数值参考
@@ -95,7 +94,7 @@ Robots: noindex,nofollow
 #### 参数
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| memberId | 否 | int | 只返回该成员参与的库，传0则返回所有库|
+| memberId | 否 | int | 只返回该成员参与的库，传0则返回所有库 |
 
 #### 返回结果
 
@@ -118,14 +117,13 @@ Robots: noindex,nofollow
 
 ### 修改库信息
 
-	set(int orgId, String orgName, String orgCapacity, String orgDesc, String orgLogo) 
+	set(int orgId, String orgName, String orgCapacity, String orgLogo) 
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | orgId | 是 | int | 库id |
 | orgName | 否 | string | 库名称 |
 | orgCapacity | 否 | string | 库容量限制，单位B |
-| orgDesc | 否 | string | 库描述 |
 | orgLogo | 否 | string | 库logo |
 
 #### 返回结果 
@@ -768,12 +766,13 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 ---
 
 ### 获取文件信息
-	getFileInfo( String fullPath,NetType net)
+	getFileInfo( String fullPath,NetType net, boolean getAttribute)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | fullPath | 是 | string | 文件路径 |
 | net | 是 | NetType | DEFAULT,返回公网下载地址；IN，返回内网下载地址 |
+| attribute | 否 | boolean | 是否获取额外属性(子文件数量、大小，子文件夹数量) |
 
 #### 返回结果
 
@@ -902,6 +901,93 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 #### 返回结果
 	正常返回 HTTP 200
 ---
+
+### 获取文件历史
+	history(String fullPath, int start, int size)
+#### 参数 
+
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| fullPath | 是 | string | 要移动文件的路径 |
+| start | 否 | int | 开始位置,默认0 |
+| size | 否 | int | 返回条数,默认20 |
+
+#### 返回结果
+```	
+{
+  count:
+  list:[
+      {
+            hid:
+            act:
+            act_name:
+            dir:
+            hash:
+            fullpath:
+            filehash:
+            filesize:
+            member_id:
+            member_name:
+            dateline:
+            property:
+      }
+      ...
+    ]
+}
+```
+
+---
+
+### 获取文件夹权限
+	getPermission(String fullPath, int memberId)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 消息标题 |
+| memberId | 是 | int | 用户ID |
+
+#### 返回结果
+	{
+    	["file_read","file_preview","file_write","file_delete"]
+	}
+	
+---
+
+### 修改文件夹权限
+	setPermission(String fullPath, FilePermissions... permissions)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 消息标题 |
+| permissions | 是 | FilePermissions | 权限,如 {member_id:["file_read","file_preview","file_write","file_delete"],...} |
+
+#### 返回结果
+	正常返回 HTTP 200 
+	
+---
+
+### 添加标签
+	addTag(String fullPath, String[] tags)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 文件的路径 |
+| tags | 是 | string | 标签 |
+#### 返回结果
+	正常返回 HTTP 200 
+---
+
+### 删除标签
+	delTag(String fullPath, String[] tags)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 文件的路径 |
+| tags | 是 | string | 标签 |
+#### 返回结果
+	正常返回 HTTP 200 
+---
+
 ### 获取文件链接
 	link( String fullPath, int deadline, AuthType authType, String password)
 #### 参数 

@@ -6,6 +6,8 @@ import com.gokuai.base.RequestMethod;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import com.yunkuent.sdk.upload.UploadCallBack;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.HashMap;
@@ -23,8 +25,13 @@ public class EntFileManager extends HttpEngine {
     private final String URL_API_FILE_INFO = HostConfig.API_ENT_HOST + "/1/file/info";
     private final String URL_API_CREATE_FOLDER = HostConfig.API_ENT_HOST + "/1/file/create_folder";
     private final String URL_API_CREATE_FILE = HostConfig.API_ENT_HOST + "/1/file/create_file";
+    private final String URL_API_COPY_FILE = HostConfig.API_ENT_HOST + "/1/file/copy";
     private final String URL_API_DEL_FILE = HostConfig.API_ENT_HOST + "/1/file/del";
+    private final String URL_API_RECYCLE_FILE = HostConfig.API_ENT_HOST + "/1/file/recycle";
+    private final String URL_API_RECOVER_FILE = HostConfig.API_ENT_HOST + "/1/file/recover";
+    private final String URL_API_DEL_COMPLETELY_FILE = HostConfig.API_ENT_HOST + "/1/file/del_completely";
     private final String URL_API_MOVE_FILE = HostConfig.API_ENT_HOST + "/1/file/move";
+    private final String URL_API_HISTORY_FILE = HostConfig.API_ENT_HOST + "/1/file/history";
     private final String URL_API_LINK_FILE = HostConfig.API_ENT_HOST + "/1/file/link";
     private final String URL_API_SENDMSG = HostConfig.API_ENT_HOST + "/1/file/sendmsg";
     private final String URL_API_GET_LINK = HostConfig.API_ENT_HOST + "/1/file/links";
@@ -34,6 +41,11 @@ public class EntFileManager extends HttpEngine {
     private final String URL_API_UPLOAD_SERVERS = HostConfig.API_ENT_HOST + "/1/file/upload_servers";
     private final String URL_API_GET_UPLOAD_URL = HostConfig.API_ENT_HOST + "/1/file/download_url";
     private final String URL_API_FILE_SEARCH = HostConfig.API_ENT_HOST + "/1/file/search";
+    private final String URL_API_PREVIEW_URL = HostConfig.API_ENT_HOST + "/1/file/preview_url";
+    private final String URL_API_GET_PERMISSION = HostConfig.API_ENT_HOST + "/1/file/get_permission";
+    private final String URL_API_SET_PERMISSION = HostConfig.API_ENT_HOST + "/1/file/file_permission";
+    private final String URL_API_ADD_TAG = HostConfig.API_ENT_HOST + "/1/file/add_tag";
+    private final String URL_API_DEL_TAG = HostConfig.API_ENT_HOST + "/1/file/del_tag";
 
 
     public EntFileManager(String orgClientId, String orgClientSecret) {
@@ -110,12 +122,13 @@ public class EntFileManager extends HttpEngine {
      * @param net
      * @return
      */
-    public String getFileInfo(String fullPath, NetType net) {
+    public String getFileInfo(String fullPath, NetType net, boolean getAttribute) {
         String url = URL_API_FILE_INFO;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
+        params.put("attribute", (getAttribute ? 1 : 0) + "");
         switch (net) {
             case DEFAULT:
                 break;
@@ -316,6 +329,26 @@ public class EntFileManager extends HttpEngine {
     }
 
     /**
+     * 复制文件
+     *
+     * @param originFullPath
+     * @param targetFullPath
+     * @param opName
+     * @return
+     */
+    public String copy(String originFullPath, String targetFullPath, String opName) {
+        String url = URL_API_COPY_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("from_fullpath", originFullPath);
+        params.put("fullpath", targetFullPath);
+        params.put("op_name", opName);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
      * 删除文件
      *
      * @param fullPaths
@@ -328,6 +361,60 @@ public class EntFileManager extends HttpEngine {
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpaths", fullPaths);
+        params.put("op_name", opName);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 回收站
+     *
+     * @param start
+     * @param size
+     * @return
+     */
+    public String recycle(int start, int size) {
+        String url = URL_API_RECYCLE_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("start", start + "");
+        params.put("size", size + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 恢复删除文件
+     *
+     * @param fullpaths
+     * @param opName
+     * @return
+     */
+    public String recover(String fullpaths, String opName) {
+        String url = URL_API_RECOVER_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpaths", fullpaths);
+        params.put("op_name", opName);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 彻底删除文件（夹）
+     *
+     * @param fullpaths
+     * @param opName
+     * @return
+     */
+    public String delCompletely(String[] fullpaths, String opName) {
+        String url = URL_API_DEL_COMPLETELY_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpaths", Util.strArrayToString(fullpaths, "|") + "");
         params.put("op_name", opName);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
@@ -349,6 +436,26 @@ public class EntFileManager extends HttpEngine {
         params.put("fullpath", fullPath);
         params.put("dest_fullpath", destFullPath);
         params.put("op_name", opName);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 获取文件历史
+     *
+     * @param fullPath
+     * @param start
+     * @param size
+     * @return
+     */
+    public String history(String fullPath, int start, int size) {
+        String url = URL_API_HISTORY_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("start", start + "");
+        params.put("size", size + "");
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
@@ -563,7 +670,7 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String getDownloadUrlByHash(String hash, final boolean isOpen, NetType net) {
-        return getDownloadUrl(hash, null, isOpen, net);
+        return getDownloadUrl(hash, null, isOpen, net, "");
     }
 
     /**
@@ -575,7 +682,7 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String getDownloadUrlByFullPath(String fullPath, final boolean isOpen, NetType net) {
-        return getDownloadUrl(null, fullPath, isOpen, net);
+        return getDownloadUrl(null, fullPath, isOpen, net, "");
     }
 
     /**
@@ -587,13 +694,14 @@ public class EntFileManager extends HttpEngine {
      * @param net
      * @return
      */
-    private String getDownloadUrl(String hash, String fullPath, final boolean isOpen, NetType net) {
+    private String getDownloadUrl(String hash, String fullPath, final boolean isOpen, NetType net, String fileName) {
         String url = URL_API_GET_UPLOAD_URL;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("hash", hash);
         params.put("fullpath", fullPath);
+        params.put("filename", fileName);
         params.put("open", (isOpen ? 1 : 0) + "");
         switch (net) {
             case DEFAULT:
@@ -604,6 +712,106 @@ public class EntFileManager extends HttpEngine {
         }
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    }
+
+    /**
+     * 文件预览地址
+     *
+     * @param fullPath
+     * @param showWaterMark
+     * @param memberName
+     * @return
+     */
+    public String previewUrl(String fullPath, final boolean showWaterMark, String memberName) {
+        String url = URL_API_PREVIEW_URL;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("member_name", memberName);
+        params.put("watermark", (showWaterMark ? 1 : 0) + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    }
+
+    /**
+     * 获取文件夹权限
+     *
+     * @param fullPath
+     * @param memberId
+     * @return
+     */
+    public String getPermission(String fullPath, int memberId) {
+        String url = URL_API_GET_PERMISSION;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("member_id", memberId + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 修改文件夹权限
+     *
+     * @param fullPath
+     * @param permissions
+     * @return
+     */
+    public String setPermission(String fullPath, FilePermissions... permissions) {
+        String url = URL_API_SET_PERMISSION;
+        HashMap<String, String> params = new HashMap<>();
+        if (permissions != null) {
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            for (FilePermissions p : permissions) {
+                jsonArray.put(p);
+            }
+            jsonObject.put("member_id", jsonArray);
+            params.put("permissions", jsonObject.toString().toLowerCase());
+        }
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 添加标签
+     *
+     * @param fullPath
+     * @param tags
+     * @return
+     */
+    public String addTag(String fullPath, String[] tags) {
+        String url = URL_API_ADD_TAG;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("tag", Util.strArrayToString(tags, ";") + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 删除标签
+     *
+     * @param fullPath
+     * @param tags
+     * @return
+     */
+    public String delTag(String fullPath, String[] tags) {
+        String url = URL_API_DEL_TAG;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("fullpath", fullPath);
+        params.put("tag", Util.strArrayToString(tags, ";") + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
     public enum AuthType {

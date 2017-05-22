@@ -21,7 +21,7 @@ public class YunkuEntLibTest {
     public void create() throws Exception {
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
         entLib.accessToken(ADMIN, PASSWORD);
-        String s = entLib.create("aaa", "1073741824", "destroy", "test lib", "");
+        String s = entLib.create("aaa", "1073741824", "destroy", "test lib");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -30,7 +30,7 @@ public class YunkuEntLibTest {
     public void set() throws Exception {
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
         entLib.accessToken(ADMIN, PASSWORD);
-        String s = entLib.set(1262696, "ttt", "1073741824", "", "");
+        String s = entLib.set(1262696, "ttt", "1073741824", "");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }

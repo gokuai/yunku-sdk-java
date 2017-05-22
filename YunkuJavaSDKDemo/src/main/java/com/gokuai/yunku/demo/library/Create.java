@@ -17,7 +17,7 @@ public class Create {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().create("aaa", "1073741824", "destroy", "test lib", "");
+        String returnString = EntLibraryManagerHelper.getInstance().create("test", "1073741824", "destroy", "test lib");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

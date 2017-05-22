@@ -5,18 +5,16 @@ import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 
 /**
- * Created by qp on 2017/3/2.
- *
- * 删除文件
+ * Created by qp on 2017/5/18.
  */
-public class Del {
+public class Recover {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().del("test/qq.jpg","qp");
+        String returnString = EntFileManagerHelper.getInstance().recover("qq.jpg", "qp");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

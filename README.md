@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.15'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.16'
 	}
 ```
 或者Maven：
@@ -50,7 +50,7 @@ Robots: noindex,nofollow
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.14</version>
+	    <version>3.16</version>
 	</dependency>
 ```
 
@@ -98,14 +98,13 @@ Robots: noindex,nofollow
 
 ### 创建库
 	create(String orgName, int orgCapacity, 
-	String storagePointName, String orgDesc) 
+	            String storagePointName, String orgLogo) 
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | orgName | 是 | string | 库名称|
 | orgCapacity | 否 | int | 库容量上限, 单位字节, 默认无上限|
 | storagePointName | 否 | string | 库归属存储点名称, 默认使用够快存储|
-| orgDesc | 否 | string | 库描述|
 | orgLogo | 否 | string | 库logo |
 
 #### 数值参考
@@ -130,7 +129,8 @@ Robots: noindex,nofollow
 #### 参数
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| memberId | 否 | int | 只返回该成员参与的库，传0则返回所有库|
+| memberId | 否 | int | 只返回该成员参与的库，传0则返回所有库 |
+| type | 否 | int | 1返回非个人文件库, 2返回个人文件库, 默认0返回所有 |
 
 #### 返回结果
 
@@ -153,14 +153,13 @@ Robots: noindex,nofollow
 
 ### 修改库信息
 
-	set(int orgId, String orgName, String orgCapacity, String orgDesc, String orgLogo) 
+	set(int orgId, String orgName, String orgCapacity, String orgLogo) 
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | orgId | 是 | int | 库id |
 | orgName | 否 | string | 库名称 |
 | orgCapacity | 否 | string | 库容量限制，单位B |
-| orgDesc | 否 | string | 库描述 |
 | orgLogo | 否 | string | 库logo |
 
 #### 返回结果 
@@ -611,11 +610,11 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 ### 添加或修改同步成员
-	addSyncMember(String oudId,String memberName,String account,String memberEmail,String memberPhone,String password)
+	addSyncMember(String outId,String memberName,String account,String memberEmail,String memberPhone,String password)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| oudId | 是 | string | 成员在外部系统的唯一id |
+| outId | 是 | string | 成员在外部系统的唯一id |
 | memberName | 是 | string | 显示名称 |
 | account | 是 | string | 成员在外部系统的登录帐号 |
 | memberEmail | 否 | string | 邮箱 |
@@ -694,6 +693,18 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | members | 是 | string | 成员在外部系统的唯一id数组 |
+#### 返回结果
+
+    HTTP 200
+---  
+### 添加管理员
+	addSyncAdmin(String outId, String memberEmail, boolean isSuperAdmin)
+#### 参数
+| 参数 | 必须 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| outId | 是 | string | 成员在外部系统的唯一id数组 |
+| memberEmail | 是 | string | 成员邮箱 |
+| isSuperAdmin | 是 | boolean | 是否为超级管理员，否表示管理员 |
 #### 返回结果
 
     HTTP 200
@@ -809,12 +820,13 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 ### 获取文件信息
-	getFileInfo( String fullPath,NetType net)
+	getFileInfo( String fullPath,NetType net,boolean getAttribute)
 #### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | fullPath | 是 | string | 文件路径 |
 | net | 是 | NetType | DEFAULT,返回公网下载地址；IN，返回内网下载地址 |
+| getAttribute | 否 | boolean | 是否获取额外属性(子文件数量、大小，子文件夹数量) |
 
 #### 返回结果
 
@@ -976,7 +988,18 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | overWrite | 否 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识 |
 | callBack | 否 | UploadCallBack | 文件上传回调 |
 
----
+---  
+### 复制文件
+	copy(String originFullPath, String targetFullPath, String opName)
+#### 参数 
+
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| originFullPath | 是 | string | 源文件路径 |
+| targetFullPath | 是 | string | 目标文件路径(含文件名称) |
+| opName | 否 | string | 操作人名称 |
+
+---  
 	
 ### 删除文件
 	del( String fullPaths, String opName)
@@ -988,6 +1011,41 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
+### 回收站
+	recycle(int start, int size)
+#### 参数 
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| start | 否 | int | 开始位置,默认0 |
+| size | 否 | int | 返回条数,默认100 |
+#### 返回结果
+	正常返回 HTTP 200
+	
+---
+### 恢复删除文件
+	recover(String fullpaths, String opName)
+#### 参数 
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| fullpaths | 是 | string | 要恢复文件的路径 |
+| opName | 否 | string | 操作人名称 |
+#### 返回结果
+	正常返回 HTTP 200
+	
+---
+
+### 彻底删除文件
+	delCompletely(String[] fullpaths, String opName)
+#### 参数 
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| fullpaths | 是 | string[] | 要彻底删除文件的路径 |
+| opName | 否 | string | 操作人名称 |
+#### 返回结果
+	正常返回 HTTP 200
+	
+---
+
 ### 移动文件
 	move( String fullPath, String destFullPath, String opName)
 #### 参数 
@@ -1001,6 +1059,43 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
+
+### 获取文件历史
+	history(String fullPath, int start, int size)
+#### 参数 
+
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| fullPath | 是 | string | 要移动文件的路径 |
+| start | 否 | int | 开始位置,默认0 |
+| size | 否 | int | 返回条数,默认20 |
+
+#### 返回结果
+```	
+{
+  count:
+  list:[
+      {
+            hid:
+            act:
+            act_name:
+            dir:
+            hash:
+            fullpath:
+            filehash:
+            filesize:
+            member_id:
+            member_name:
+            dateline:
+            property:
+      }
+      ...
+    ]
+}
+```
+
+---
+
 ### 获取文件链接
 	link( String fullPath, int deadline, AuthType authType, String password)
 #### 参数 
@@ -1013,9 +1108,78 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 
 #### 返回结果
+
+---
+
+### 文件预览地址
+	previewUrl(String fullPath, final boolean showWaterMark, String memberName)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 消息标题 |
+| showWaterMark | 是 | boolean | 是否显示水印 |
+| memberName | 否 | string | 在水印中显示的文档查看人姓名 |
+
+#### 返回结果
+	{
+    	"url" : 文档预览地址(10分钟有效)
+	}
+	
+---
+
+### 获取文件夹权限
+	getPermission(String fullPath, int memberId)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 消息标题 |
+| memberId | 是 | int | 用户ID |
+
+#### 返回结果
+	{
+    	["file_read","file_preview","file_write","file_delete"]
+	}
+	
+---
+
+### 修改文件夹权限
+	setPermission(String fullPath, FilePermissions... permissions)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 消息标题 |
+| permissions | 是 | FilePermissions | 权限,如 {member_id:["file_read","file_preview","file_write","file_delete"],...} |
+
+#### 返回结果
+	正常返回 HTTP 200 
+	
+---
+
+### 添加标签
+	addTag(String fullPath, String[] tags)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 文件的路径 |
+| tags | 是 | string | 标签 |
+#### 返回结果
+	正常返回 HTTP 200 
+---
+
+### 删除标签
+	delTag(String fullPath, String[] tags)
+#### 参数 
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| fullPath | 是 | string | 文件的路径 |
+| tags | 是 | string | 标签 |
+#### 返回结果
+	正常返回 HTTP 200 
+---
+
 ### 发送消息
-	sendmsg( String title,
-	String text, String image, String linkUrl, String opName) 
+	sendmsg( String title,String text, 
+					String image, String linkUrl, String opName) 
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
@@ -1023,7 +1187,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | text | 是 | string | 消息正文 |
 | image | 否 | string | 图片url |
 | linkUrl | 否 | string | 链接 |
-| opName | 否 | string | 操作人名称|
+| opName | 否 | string | 操作人名称 |
 #### 返回结果
 	正常返回 HTTP 200 
 ---

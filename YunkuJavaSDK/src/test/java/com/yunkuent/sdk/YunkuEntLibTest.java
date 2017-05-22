@@ -17,7 +17,7 @@ public class YunkuEntLibTest {
     @Test
     public void create() throws Exception {
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
-        String s = entLib.create("aaa", "1073741824", "destroy", "test lib", "");
+        String s = entLib.create("aaa", "1073741824", "destroy", "test lib");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -25,7 +25,7 @@ public class YunkuEntLibTest {
     @Test
     public void set() throws Exception {
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
-        String s = entLib.set(1258748, "ttt", "1073741824", "", "");
+        String s = entLib.set(1258748, "ttt", "1073741824", "");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -43,7 +43,7 @@ public class YunkuEntLibTest {
     public void getLibListById() throws Exception {
 
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
-        String s = entLib.getLibList(1258748);
+        String s = entLib.getLibList(1258748,0);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
