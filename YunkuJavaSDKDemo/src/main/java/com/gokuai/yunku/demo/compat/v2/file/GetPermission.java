@@ -16,7 +16,7 @@ public class GetPermission {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getPermission("test", 504482);
+        String returnString = EntFileManagerHelper.getInstance().getPermission("test", 4);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

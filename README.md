@@ -1413,13 +1413,22 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 * Windows 运行环境，中文文件名参数可能会导致，返回签名的报错信息。
 
 #### 解决方法
-**方案1:** 更换运行环境，使用 Linux 服务器		
+**方案1:** 更换运行环境，使用 Linux 服务器  
+
 **方案2:** 如果是命令行执行 jar 文件，终端上执行以下命令即可 
 	
 	java -Dfile.encoding=utf-8 XX.jar		
 **方案3:** 如果使用的是 Apache Tomatcat，在 Java Options 上，添加 -Dfile.encoding=utf-8 即可。
 
 <img src="Screenshot/1.png" alt="Apache Tomatcat" title="Apache Tomatcat" width="50%" height="50%" />  
+
+### 引用问题
+#### 现象
+* 引用最新项目，出现旧版本代码
+
+#### 解决办法
+* 删除下载到本地项目缓存文件
+* 执行clean操作、重新拉取
 
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso

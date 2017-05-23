@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -759,17 +760,17 @@ public class EntFileManager extends HttpEngine {
      * @param permissions
      * @return
      */
-    public String setPermission(String fullPath, FilePermissions... permissions) {
+    public String setPermission(String fullPath, int memberId, FilePermissions... permissions) {
         String url = URL_API_SET_PERMISSION;
         HashMap<String, String> params = new HashMap<>();
         if (permissions != null) {
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonObject = new JSONObject();
+            HashMap<Integer, ArrayList<String>> map = new HashMap<>();
+            ArrayList<String> list = new ArrayList<>();
             for (FilePermissions p : permissions) {
-                jsonArray.put(p);
+                list.add(p.toString().toLowerCase());
             }
-            jsonObject.put("member_id", jsonArray);
-            params.put("permissions", jsonObject.toString().toLowerCase());
+            map.put(memberId, list);
+            params.put("permissions", new Gson().toJson(map));
         }
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
