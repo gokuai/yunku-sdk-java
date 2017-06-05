@@ -1424,11 +1424,16 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ### 引用问题
 #### 现象
-* 引用最新项目，出现旧版本代码
+* 在引用最新版本的项目时，出现本地代码未能更新
 
 #### 解决办法
-* 删除下载到本地项目缓存文件
+* 将下载到本地的项目缓存文件删除
+
+<img src=https://repo.gokuai.cn/app/ImageResourceForMD/raw/master/YunkuJavaSDK/delete.jpg alt="Delete" title="Delete" width="50%" height="50%"/>
+
 * 执行clean操作、重新拉取
+
+<img src=https://repo.gokuai.cn/app/ImageResourceForMD/raw/master/YunkuJavaSDK/clean.jpg alt="Clean" title="Clean" width="50%" height="50%"/>
 
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
