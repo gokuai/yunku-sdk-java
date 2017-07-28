@@ -233,8 +233,8 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, localFilePath, true, callBack);
+                                       int rangSize, UploadCallBack callBack) {
+        return uploadByBlock(fullPath, opName, opId, localFilePath, true, rangSize, callBack);
     }
 
     /**
@@ -248,8 +248,11 @@ public class EntFileManager extends HttpEngine {
      * @param callBack
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        boolean overWrite, UploadCallBack callBack) {
-        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath, opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite);
+                                        boolean overWrite, int rangSize, UploadCallBack callBack) {
+
+        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath,
+                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize);
+
         Thread thread = new Thread(uploadRunnable);
         thread.start();
         return uploadRunnable;
@@ -267,8 +270,8 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
-                                        UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, inputStream, true, callBack);
+                                        int rangSize, UploadCallBack callBack) {
+        return uploadByBlock(fullPath, opName, opId, inputStream, true, rangSize, callBack);
     }
 
     /**
@@ -283,8 +286,11 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream localFilePath,
-                                        boolean overWrite, UploadCallBack callBack) {
-        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath, opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite);
+                                        boolean overWrite, int rangSize, UploadCallBack callBack) {
+
+        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath, opName,
+                opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize);
+
         Thread thread = new Thread(uploadRunnable);
         thread.start();
         return uploadRunnable;

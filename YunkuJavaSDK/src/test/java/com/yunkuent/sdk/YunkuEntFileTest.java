@@ -94,7 +94,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, false, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, false, 524288, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();
@@ -121,7 +121,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, 524288, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();
@@ -149,7 +149,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
         final CountDownLatch Latch = new CountDownLatch(1);
-        entFile.uploadByBlock("test.jpg", "Brandon",0, inputStream, false, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "Brandon",0, inputStream, false, 524288, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 Latch.countDown();
@@ -177,7 +177,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon",0, inputStream, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "Brandon",0, inputStream, 524288, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();

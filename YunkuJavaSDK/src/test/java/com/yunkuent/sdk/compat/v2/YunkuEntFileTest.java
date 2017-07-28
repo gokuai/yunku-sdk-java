@@ -77,7 +77,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, false, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, false, 524288, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();

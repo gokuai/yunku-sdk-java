@@ -956,10 +956,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ### 文件分块上传 (覆盖同名文件）
 	uploadByBlock( String fullPath, String opName,
-	 int opId, String localFilePath, UploadCallBack callBack)
+	 int opId, String localFilePath, int rangSize, UploadCallBack callBack)
 ### 文件分块上传
 	uploadByBlock( String fullPath, String opName,
-	 int opId, String localFilePath, boolean overWrite, UploadCallBack callBack)
+	 int opId, String localFilePath, boolean overWrite, int rangSize, UploadCallBack callBack)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |	
 |------|------|------|------|
@@ -974,10 +974,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ### 数据流分块上传 (覆盖同名文件）
 	uploadByBlock( String fullPath, String opName,
-	 int opId, InputStream inputStream, UploadCallBack callBack)
+	 int opId, InputStream inputStream, int rangSize, UploadCallBack callBack)
 ### 数据流分块上传
 	uploadByBlock( String fullPath, String opName,
-	 int opId, InputStream inputStream, boolean overWrite, UploadCallBack callBack)
+	 int opId, InputStream inputStream, boolean overWrite, int rangSize, UploadCallBack callBack)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |	
 |------|------|------|------|
