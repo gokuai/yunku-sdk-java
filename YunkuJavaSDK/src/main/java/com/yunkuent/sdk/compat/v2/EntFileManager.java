@@ -25,6 +25,7 @@ public class EntFileManager extends HttpEngine {
     private static final String TAG = "EntFileManager";
 
     private static final int UPLOAD_LIMIT_SIZE = 52428800;
+    private static final int RANG_SIZE = 524288;
 
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST_V2 + "/1/file/ls";
     private final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST_V2 + "/1/file/updates";
@@ -214,6 +215,12 @@ public class EntFileManager extends HttpEngine {
      * @param overWrite
      * @param callBack
      */
+
+    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
+                  boolean overWrite, UploadCallBack callBack){
+        return uploadByBlock(fullPath, opName, opId, localFilePath, overWrite, RANG_SIZE, callBack);
+    }
+
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
                                         boolean overWrite, int rangSize, UploadCallBack callBack) {
 

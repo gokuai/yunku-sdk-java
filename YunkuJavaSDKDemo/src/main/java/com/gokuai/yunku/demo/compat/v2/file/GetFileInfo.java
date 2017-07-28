@@ -17,7 +17,7 @@ public class GetFileInfo {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getFileInfo("testRangSize.jpg", EntFileManager.NetType.DEFAULT, false);
+        String returnString = EntFileManagerHelper.getInstance().getFileInfo("testRangSize2.jpg", EntFileManager.NetType.DEFAULT, false);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

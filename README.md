@@ -957,6 +957,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ### 文件分块上传 (覆盖同名文件）
 	uploadByBlock( String fullPath, String opName,
 	 int opId, String localFilePath, int rangSize, UploadCallBack callBack)
+### 文件分块上传 (默认分块上传大小为512K）	 
+	 uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
+                                             boolean overWrite, UploadCallBack callBack)
 ### 文件分块上传
 	uploadByBlock( String fullPath, String opName,
 	 int opId, String localFilePath, boolean overWrite, int rangSize, UploadCallBack callBack)
@@ -968,6 +971,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | opId | 否 | int | 创建人id, 个人库默认是库拥有人id, 如果创建人不是云库用户, 可以用op_name代替,|
 | localFilePath | 是 | string | 文件本地路径 |
 | overWrite | 否 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识 |
+| rangSize | 否 | int | 文件分块上传大小，不传默认为512K |
 | callBack | 否 | UploadCallBack | 文件上传回调 |
 
 ---
@@ -975,6 +979,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ### 数据流分块上传 (覆盖同名文件）
 	uploadByBlock( String fullPath, String opName,
 	 int opId, InputStream inputStream, int rangSize, UploadCallBack callBack)
+### 数据流分块上传 (默认分块上传大小为512K）	 
+	 uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
+                                             boolean overWrite, UploadCallBack callBack)
 ### 数据流分块上传
 	uploadByBlock( String fullPath, String opName,
 	 int opId, InputStream inputStream, boolean overWrite, int rangSize, UploadCallBack callBack)
@@ -986,6 +993,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | opId | 否 | int | 创建人id, 个人库默认是库拥有人id, 如果创建人不是云库用户, 可以用op_name代替,|
 | inputStream | 是 | InputStream | 流数据 |
 | overWrite | 否 | boolean | 是否覆盖同名文件, true覆盖(默认) false不覆盖,文件名后增加数字标识 |
+| rangSize | 否 | int | 文件分块上传大小，不传默认为512K |
 | callBack | 否 | UploadCallBack | 文件上传回调 |
 
 ---  
