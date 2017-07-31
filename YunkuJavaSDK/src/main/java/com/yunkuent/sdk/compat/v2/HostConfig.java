@@ -27,7 +27,7 @@ public class HostConfig {
 
     public static void setProxy(Proxy proxy) {
         if (!(proxy == null)) {
-            NetConnection.proxy = proxy;
+            NetConnection.setProxy(proxy);
         }
     }
 }

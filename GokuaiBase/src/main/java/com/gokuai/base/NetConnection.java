@@ -24,7 +24,11 @@ public final class NetConnection {
     public static final int TIMEOUT = 30000;
     public static final int CONNECT_TIMEOUT = 30000;
 
-    public static Proxy proxy = null;
+    private static Proxy mProxy = null;
+
+    public static void setProxy(Proxy proxy) {
+        NetConnection.mProxy = proxy;
+    }
 
     /**
      * 发送请求
@@ -112,8 +116,8 @@ public final class NetConnection {
         list.add(Protocol.HTTP_1_1);
         list.add(Protocol.HTTP_2);
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        if(!(proxy == null)){
-            builder.proxy(proxy);
+        if(!(mProxy == null)){
+            builder.proxy(mProxy);
         }
 
 //        final TrustManager[] trustAllCerts = new TrustManager[]{
@@ -153,4 +157,6 @@ public final class NetConnection {
         OkHttpClient httpClient = builder.build();
         return httpClient;
     }
+
+
 }
