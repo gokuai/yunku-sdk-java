@@ -6,6 +6,7 @@ import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.builder.api.*;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
+
 import static com.gokuai.base.DebugConfig.*;
 
 /**
@@ -24,6 +25,7 @@ public class LogPrint {
     private static DebugConfig.LogDetector mDetector;
 
     public static void setLogDetector(DebugConfig.LogDetector detector) {
+        PRINT_LOG_TYPE = LOG_TYPE_DETECTOR;
         mDetector = detector;
     }
 
@@ -65,6 +67,16 @@ public class LogPrint {
 
     private static void print(String logTag, String level, String log) {
         if (DebugConfig.PRINT_LOG) {
+
+            if (PRINT_LOG_TYPE == LOG_TYPE_DETECTOR) {
+                if (mDetector != null) {
+                    mDetector.getLog(level, log);
+                } else {
+                    print(TAG, ERROR, "DebugConfig.setListener should call when PRINT_LOG_TYPE=LOG_TYPE_DETECTOR");
+                }
+                return;
+            }
+
             Logger logger = LogManager.getLogger(logTag);
             switch (level) {
                 case INFO:
@@ -77,14 +89,6 @@ public class LogPrint {
                     logger.warn(log);
                     break;
             }
-
-            if (PRINT_LOG_TYPE == LOG_TYPE_DETECTOR) {
-                if (mDetector != null) {
-                    mDetector.getLog(level, log);
-                } else {
-                    print(TAG, ERROR, "DebugConfig.setListener should call when PRINT_LOG_TYPE=LOG_TYPE_DETECTOR");
-                }
-            }
         }
 
     }
@@ -93,7 +97,8 @@ public class LogPrint {
      * 日志打印配置信息
      */
     private static void logConfiguration() {
-        if (DebugConfig.PRINT_LOG) {
+        if (DebugConfig.PRINT_LOG && PRINT_LOG_TYPE != LOG_TYPE_DETECTOR) {
+
             ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
             builder.setStatusLevel(org.apache.logging.log4j.Level.INFO);
             builder.setConfigurationName("RollingBuilder");

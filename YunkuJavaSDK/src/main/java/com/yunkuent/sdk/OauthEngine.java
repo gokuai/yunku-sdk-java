@@ -1,10 +1,9 @@
 package com.yunkuent.sdk;
 
 import com.gokuai.base.*;
-import com.yunkuent.sdk.data.OauthData;
-import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
+import com.yunkuent.sdk.data.OauthData;
 import org.apache.http.HttpStatus;
 import org.apache.http.util.TextUtils;
 
@@ -73,6 +72,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
 
     /**
      * 使用第三方API OUTID 登录
+     *
      * @param outId
      * @return
      */
@@ -137,8 +137,8 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      * @return
      */
     public String sendRequestWithAuth(String url, RequestMethod method,
-                                      HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys) {
-        String returnString = NetConnection.sendRequest(url, method, params, headParams);
+                                      HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys, String postType) {
+        String returnString = NetConnection.sendRequest(url, method, params, headParams, postType);
         ReturnResult returnResult = ReturnResult.create(returnString);
         if (returnResult.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
             refreshToken();

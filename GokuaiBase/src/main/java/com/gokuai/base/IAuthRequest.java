@@ -9,5 +9,5 @@ import java.util.HashMap;
 public interface IAuthRequest {
 
     String sendRequestWithAuth(String url, RequestMethod method,
-                               HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys);
+                               HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys,String postType);
 }
