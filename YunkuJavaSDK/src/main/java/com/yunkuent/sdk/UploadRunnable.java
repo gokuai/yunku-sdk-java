@@ -24,7 +24,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
     private static final String URL_UPLOAD_ABORT = "/upload_abort";
     private static final String URL_UPLOAD_FINISH = "/upload_finish";
 
-    private  int mRangSize = 524288;// 上传分块大小-512K
+    private final int mRangSize;// 上传分块大小
 
     private String mServer = "";// 上传服务器地址
     private String mSession = "";// 上传session
