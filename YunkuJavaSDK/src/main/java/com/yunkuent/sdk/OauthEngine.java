@@ -73,11 +73,25 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
 
     /**
      * 使用第三方API OUTID 登录
+     *
      * @param outId
      * @return
      */
     public String accessTokenWithThirdPartyOutId(String outId) {
         return new ThirdPartyManager(mClientId, mClientSecret, outId).getEntToken();
+    }
+
+    /**
+     * 交换企业token
+     *
+     * @param token
+     */
+    public void exchangeEntToken(String token) {
+
+        if (!TextUtils.isEmpty(token)) {
+            mToken = token;
+        }
+
     }
 
     /**
