@@ -133,9 +133,9 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                         }
 
                         // upload_init
-                        int errorCode = upload_init(data.getHash(), filename, fullpath, filehash, filesize);
+                        int initErrorCode = upload_init(data.getHash(), filename, fullpath, filehash, filesize);
 
-                        if (errorCode == HttpURLConnection.HTTP_OK) {
+                        if (initErrorCode == HttpURLConnection.HTTP_OK) {
                             // upload_part
                             if (mInputStream != null) {
                                 in = mInputStream;
@@ -211,18 +211,19 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                             }
                         }
 
+                        int finishErrorCode;
                         // upload_check
                         do {
                             //大文件数据没有存储完毕，需要等一会再检查一遍
-                            errorCode = upload_check();
+                            finishErrorCode = upload_check();
 
-                            if (errorCode == HttpURLConnection.HTTP_OK) {
+                            if (finishErrorCode == HttpURLConnection.HTTP_OK) {
                                 break;
                             }
 
                             Thread.sleep(3000);
 
-                        } while (errorCode == HttpURLConnection.HTTP_ACCEPTED);
+                        } while (finishErrorCode == HttpURLConnection.HTTP_ACCEPTED);
                     }
 
                     // upload_sussec
