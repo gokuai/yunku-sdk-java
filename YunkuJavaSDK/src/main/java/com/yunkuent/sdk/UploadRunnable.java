@@ -133,9 +133,9 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                         }
 
                         // upload_init
-                        int initErrorCode = upload_init(data.getHash(), filename, fullpath, filehash, filesize);
+                        int initCode = upload_init(data.getHash(), filename, fullpath, filehash, filesize);
 
-                        if (initErrorCode == HttpURLConnection.HTTP_OK) {
+                        if (initCode == HttpURLConnection.HTTP_OK) {
                             // upload_part
                             if (mInputStream != null) {
                                 in = mInputStream;
@@ -211,19 +211,22 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                             }
                         }
 
-                        int finishErrorCode;
-                        // upload_check
-                        do {
-                            //大文件数据没有存储完毕，需要等一会再检查一遍
-                            finishErrorCode = upload_check();
+                        if (initCode != HttpURLConnection.HTTP_ACCEPTED) {
+                            int finishErrorCode;
+                            // upload_check
+                            do {
+                                //大文件数据没有存储完毕，需要等一会再检查一遍
+                                finishErrorCode = upload_check();
 
-                            if (finishErrorCode == HttpURLConnection.HTTP_OK) {
-                                break;
-                            }
+                                if (finishErrorCode == HttpURLConnection.HTTP_OK) {
+                                    break;
+                                }
 
-                            Thread.sleep(3000);
+                                Thread.sleep(3000);
 
-                        } while (finishErrorCode == HttpURLConnection.HTTP_ACCEPTED);
+                            } while (finishErrorCode == HttpURLConnection.HTTP_ACCEPTED);
+                        }
+
                     }
 
                     // upload_sussec
