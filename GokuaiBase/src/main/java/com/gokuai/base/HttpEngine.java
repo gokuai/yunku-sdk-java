@@ -1,7 +1,7 @@
 package com.gokuai.base;
 
 import com.gokuai.base.utils.Util;
-import org.apache.http.util.TextUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +63,8 @@ public abstract class HttpEngine extends SignAbility {
         HashMap<String, String> headParams;
         String url;
         boolean checkAuth;
+        String postType = NetConfig.POST_DEFAULT_FORM_TYPE;
+        IAsyncTarget target;
 
         ArrayList<String> ignoreKeys;
 
@@ -86,6 +88,11 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
+        public RequestHelper setPostType(String postType) {
+            this.postType = postType;
+            return this;
+        }
+
         public RequestHelper setUrl(String url) {
             this.url = url;
             return this;
@@ -93,6 +100,11 @@ public abstract class HttpEngine extends SignAbility {
 
         public RequestHelper setIgnoreKeys(ArrayList<String> ignoreKeys) {
             this.ignoreKeys = ignoreKeys;
+            return this;
+        }
+
+        public RequestHelper setTarget(IAsyncTarget target) {
+            this.target = target;
             return this;
         }
 
@@ -104,17 +116,20 @@ public abstract class HttpEngine extends SignAbility {
         public String executeSync() {
             checkNecessaryParams(url, method);
 
-            if (!Util.isNetworkAvailableEx()) {
-                return "";
+            if (!isNetworkAvailableEx()) {
+                ReturnResult returnResult = new ReturnResult("", ERRORID_NETDISCONNECT);
+                return new Gson().toJson(returnResult);
             }
 
             if (checkAuth) {
-                if (this instanceof IAuthRequest) {
-                    return ((IAuthRequest) this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
+                if (HttpEngine.this instanceof IAuthRequest) {
+                    return ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys, postType);
+                } else {
+                    LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
                 }
 
             }
-            return NetConnection.sendRequest(url, method, params, headParams);
+            return NetConnection.sendRequest(url, method, params, headParams, postType);
         }
 
         /**
@@ -122,48 +137,29 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        Thread executeAsync(final DataListener listener, final int apiId, final RequestHelperCallBack callBack) {
+        IAsyncTarget executeAsync(DataListener listener, int apiId, RequestHelperCallBack callBack) {
 
             checkNecessaryParams(url, method);
 
-            if (listener != null) {
-                if (!Util.isNetworkAvailableEx()) {
-                    listener.onReceivedData(apiId, null, ERRORID_NETDISCONNECT);
-                    return null;
-                }
+            if (target != null) {
+                return target.execute(listener, this, callBack, apiId);
+
             }
-
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    String returnString;
-
-                    if (checkAuth) {
-                        if (HttpEngine.this instanceof IAuthRequest) {
-                            returnString = ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys);
-                        } else {
-                            returnString = "";
-                            LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
-                        }
-
-                    } else {
-                        returnString = NetConnection.sendRequest(url, method, params, headParams);
-                    }
-
-                    if (callBack != null) {
-                        if (listener != null) {
-                            Object object = callBack.getReturnData(returnString);
-                            listener.onReceivedData(apiId, object, -1);
-                        }
-                    }
-                }
-            };
-            thread.start();
-            return thread;
+            return new DefaultAsyncTarget().execute(listener, this, callBack, apiId);
         }
 
+        /**
+         * 异步执行
+         *
+         * @return
+         */
+        IAsyncTarget executeAsync(DataListener listener, int apiId) {
+            return executeAsync(listener, apiId, null);
+        }
+
+
         private void checkNecessaryParams(String url, RequestMethod method) {
-            if (TextUtils.isEmpty(url)) {
+            if (Util.isEmpty(url)) {
                 throw new IllegalArgumentException("url must not be null");
             }
 
@@ -172,17 +168,7 @@ public abstract class HttpEngine extends SignAbility {
             }
         }
 
-        Thread executeAsyncTask(Thread task, final DataListener listener, final int apiId) {
-            if (listener != null) {
-                if (!Util.isNetworkAvailableEx()) {
-                    listener.onReceivedData(apiId, null, ERRORID_NETDISCONNECT);
-                    return null;
-                }
-            }
 
-            task.start();
-            return task;
-        }
     }
 
 
@@ -190,4 +176,11 @@ public abstract class HttpEngine extends SignAbility {
         Object getReturnData(String returnString);
     }
 
+
+    /**
+     * @return
+     */
+    protected boolean isNetworkAvailableEx() {
+        return true;
+    }
 }

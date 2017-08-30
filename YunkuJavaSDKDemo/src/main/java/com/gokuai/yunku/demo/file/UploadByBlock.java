@@ -17,7 +17,7 @@ public class UploadByBlock {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testRangSize2.jpg", "Brandon", 0, DebugConfig.TEST_FILE_PATH, true, 524288, new UploadCallBack() {
+        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testRangSize.jpg", "Brandon", 0, DebugConfig.TEST_FILE_PATH, true, 524288, new UploadCallBack() {
 
             @Override
             public void onSuccess(long threadId, String fileHash) {

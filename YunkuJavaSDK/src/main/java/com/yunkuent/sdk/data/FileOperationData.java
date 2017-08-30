@@ -1,7 +1,8 @@
 package com.yunkuent.sdk.data;
 
-import org.apache.http.HttpStatus;
 import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
 
 /**
  * 新建/重命名/删除 文件/文件夹 的返回数据
@@ -40,7 +41,7 @@ public class FileOperationData {
 
         FileOperationData data = new FileOperationData();
         data.setCode(code);
-        if (code == HttpStatus.SC_OK) {
+        if (code == HttpURLConnection.HTTP_OK) {
             data.setState(json.optInt(KEY_STATE));
             data.setHash(json.optString(KEY_HASH));
             data.setVersion(json.optInt(KEY_VERSION));
