@@ -85,7 +85,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      */
     public void exchangeEntToken(String token) {
 
-        if (!TextUtils.isEmpty(token)) {
+        if (!Util.isEmpty(token)) {
             mToken = token;
         }
 
