@@ -125,7 +125,7 @@ public final class NetConnection {
                 returnResult.setStatusCode(response.code());
                 returnResult.setResult(response.body().string());
             } catch (IOException | NullPointerException e) {
-                if (e.getCause().equals(SocketTimeoutException.class)) {
+                if (e.getCause() != null && e.getCause().equals(SocketTimeoutException.class)) {
                     returnResult.setStatusCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT);
                 }
                 LogPrint.error(LOG_TAG, e.getMessage());

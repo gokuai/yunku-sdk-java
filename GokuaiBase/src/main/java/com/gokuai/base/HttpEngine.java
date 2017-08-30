@@ -137,7 +137,7 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        IAsyncTarget executeAsync(DataListener listener, int apiId, RequestHelperCallBack callBack) {
+        public IAsyncTarget executeAsync(DataListener listener, int apiId, RequestHelperCallBack callBack) {
 
             checkNecessaryParams(url, method);
 
@@ -153,7 +153,7 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        IAsyncTarget executeAsync(DataListener listener, int apiId) {
+        public IAsyncTarget executeAsync(DataListener listener, int apiId) {
             return executeAsync(listener, apiId, null);
         }
 
