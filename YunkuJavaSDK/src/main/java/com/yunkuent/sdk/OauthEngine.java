@@ -79,6 +79,19 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
     }
 
     /**
+     * 交换企业token
+     *
+     * @param token
+     */
+    public void exchangeEntToken(String token) {
+
+        if (!TextUtils.isEmpty(token)) {
+            mToken = token;
+        }
+
+    }
+
+    /**
      * 添加认证参数
      *
      * @param params
