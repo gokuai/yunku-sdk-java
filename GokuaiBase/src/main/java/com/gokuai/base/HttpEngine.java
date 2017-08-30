@@ -1,7 +1,7 @@
 package com.gokuai.base;
 
+import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
-import org.apache.http.util.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +64,7 @@ public abstract class HttpEngine extends SignAbility {
         String url;
         boolean checkAuth;
         String postType = NetConfig.POST_DEFAULT_FORM_TYPE;
+        IAsyncTarget target;
 
         ArrayList<String> ignoreKeys;
 
@@ -102,6 +103,11 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
+        public RequestHelper setTarget(IAsyncTarget target) {
+            this.target = target;
+            return this;
+        }
+
         /**
          * 同步执行
          *
@@ -131,33 +137,29 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        IAsyncTarget executeAsync(final DataListener listener, final int apiId, final RequestHelperCallBack callBack) {
+        IAsyncTarget executeAsync(DataListener listener, int apiId, RequestHelperCallBack callBack) {
 
             checkNecessaryParams(url, method);
 
-            return new IAsyncTarget() {
-                @Override
-                public void cancel() {
+            if (target != null) {
+                return target.execute(listener, this, callBack, apiId);
 
-                }
-
-                @Override
-                public IAsyncTarget execute() {
-                    String returnString = executeSync();
-
-                    if (callBack != null) {
-                        if (listener != null) {
-                            Object object = callBack.getReturnData(returnString);
-                            listener.onReceivedData(apiId, object, -1);
-                        }
-                    }
-                    return this;
-                }
-            };
+            }
+            return new DefaultAsyncTarget().execute(listener, this, callBack, apiId);
         }
 
+        /**
+         * 异步执行
+         *
+         * @return
+         */
+        IAsyncTarget executeAsync(DataListener listener, int apiId) {
+            return executeAsync(listener, apiId, null);
+        }
+
+
         private void checkNecessaryParams(String url, RequestMethod method) {
-            if (TextUtils.isEmpty(url)) {
+            if (Util.isEmpty(url)) {
                 throw new IllegalArgumentException("url must not be null");
             }
 
@@ -166,10 +168,7 @@ public abstract class HttpEngine extends SignAbility {
             }
         }
 
-        IAsyncTarget executeAsyncTask(IAsyncTarget task) {
-            task.execute();
-            return task;
-        }
+
     }
 
 

@@ -373,5 +373,12 @@ public class Util {
         return paramsString;
     }
 
+    public static boolean isEmpty(final CharSequence s) {
+        if (s == null) {
+            return true;
+        }
+        return s.length() == 0;
+    }
+
 
 }

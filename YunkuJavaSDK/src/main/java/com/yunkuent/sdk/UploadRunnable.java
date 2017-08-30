@@ -8,7 +8,6 @@ import com.yunkuent.sdk.data.FileOperationData;
 import com.yunkuent.sdk.upload.UploadCallBack;
 import com.yunkuent.sdk.utils.YKUtils;
 import okhttp3.*;
-import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -24,7 +23,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
     private static final String URL_UPLOAD_ABORT = "/upload_abort";
     private static final String URL_UPLOAD_FINISH = "/upload_finish";
 
-    private  int mRangSize = 524288;// 上传分块大小-512K
+    private int mRangSize = 524288;// 上传分块大小-512K
 
     private String mServer = "";// 上传服务器地址
     private String mSession = "";// 上传session
@@ -97,7 +96,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
 
             String filehash = "";
             long filesize = 0;
-            if (!TextUtils.isEmpty(mLocalFullPath)) {
+            if (!Util.isEmpty(mLocalFullPath)) {
                 File file = new File(mLocalFullPath);
                 if (!file.exists()) {
                     LogPrint.error(LOG_TAG, "'" + mLocalFullPath + "'  file not exist!");
@@ -126,7 +125,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                         // 服务器上没有，上传文件
                         mServer = data.getServer();
 
-                        if (TextUtils.isEmpty(mServer)) {
+                        if (Util.isEmpty(mServer)) {
                             throw new Exception(" The server is empty ");
                         } else {
                             LogPrint.info(LOG_TAG, "The server is " + mServer);
@@ -242,7 +241,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
         } catch (Exception ex) {
             LogPrint.warn(LOG_TAG, ex.getMessage());
 
-            if (!TextUtils.isEmpty(mServer)) {
+            if (!Util.isEmpty(mServer)) {
                 upload_abort();
             }
             if (mCallBack != null) {

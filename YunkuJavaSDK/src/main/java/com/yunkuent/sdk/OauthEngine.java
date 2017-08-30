@@ -4,8 +4,6 @@ import com.gokuai.base.*;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.data.OauthData;
-import org.apache.http.HttpStatus;
-import org.apache.http.util.TextUtils;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
         ReturnResult returnResult = ReturnResult.create(result);
         LogPrint.info(LOG_TAG, "accessToken:==>result:" + result);
 
-        if (returnResult.getStatusCode() == HttpStatus.SC_OK) {
+        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
             LogPrint.info(LOG_TAG, "accessToken:==>StatusCode:200");
             OauthData data = OauthData.create(returnResult.getResult());
             mToken = data.getToken();
@@ -100,7 +98,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      * 重新获得 token
      */
     private boolean refreshToken() {
-        if (TextUtils.isEmpty(refreshToken)) {
+        if (Util.isEmpty(refreshToken)) {
             return false;
         }
         HashMap<String, String> params = new HashMap<>();

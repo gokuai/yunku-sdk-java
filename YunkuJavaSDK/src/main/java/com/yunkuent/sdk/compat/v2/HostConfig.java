@@ -1,7 +1,7 @@
 package com.yunkuent.sdk.compat.v2;
 
 import com.gokuai.base.NetConnection;
-import org.apache.http.util.TextUtils;
+import com.gokuai.base.utils.Util;
 
 import java.net.Proxy;
 
@@ -17,10 +17,10 @@ public class HostConfig {
     protected static String API_ENT_HOST_V2 = "http://a-lib.goukuai.cn";
 
     public static void changeConfig(String oauthHost, String apiHost) {
-        if (!TextUtils.isEmpty(oauthHost)) {
+        if (!Util.isEmpty(oauthHost)) {
             OAUTH_HOST_V2 = oauthHost;
         }
-        if (!TextUtils.isEmpty(apiHost)) {
+        if (!Util.isEmpty(apiHost)) {
             API_ENT_HOST_V2 = apiHost;
         }
     }

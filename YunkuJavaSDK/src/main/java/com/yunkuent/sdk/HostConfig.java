@@ -1,7 +1,7 @@
 package com.yunkuent.sdk;
 
 import com.gokuai.base.NetConnection;
-import org.apache.http.util.TextUtils;
+import com.gokuai.base.utils.Util;
 
 import java.net.Proxy;
 
@@ -16,10 +16,10 @@ public class HostConfig {
     protected static String API_ENT_HOST = "http://yk3-api-ent.gokuai.com";
 
     public static void changeConfig(String oauthHost, String apiHost) {
-        if (!TextUtils.isEmpty(oauthHost)) {
+        if (!Util.isEmpty(oauthHost)) {
             OAUTH_HOST = oauthHost;
         }
-        if (!TextUtils.isEmpty(apiHost)) {
+        if (!Util.isEmpty(apiHost)) {
             API_ENT_HOST = apiHost;
         }
     }

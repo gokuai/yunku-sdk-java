@@ -4,7 +4,6 @@ import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import okhttp3.*;
-import org.apache.http.util.TextUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -83,7 +82,7 @@ public final class NetConnection {
             contentType = MediaType.parse(JSON_STRING);
         }
 
-        if (method.equals(RequestMethod.GET) && !TextUtils.isEmpty(paramsString)) {
+        if (method.equals(RequestMethod.GET) && !Util.isEmpty(paramsString)) {
             url += "?" + paramsString;
             LogPrint.info(LOG_TAG, method + ":" + url);
         }
