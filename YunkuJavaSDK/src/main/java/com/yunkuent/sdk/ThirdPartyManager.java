@@ -3,7 +3,6 @@ package com.yunkuent.sdk;
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.RequestMethod;
 import com.gokuai.base.utils.Util;
-import org.apache.http.util.TextUtils;
 
 import java.util.HashMap;
 
@@ -158,7 +157,7 @@ public class ThirdPartyManager extends HttpEngine {
         HashMap<String, String> params = new HashMap<>();
         params.put("client_id", mClientId);
         params.put("out_id", OUT_ID);
-        if (!TextUtils.isEmpty(type)) {
+        if (!Util.isEmpty(type)) {
             params.put("type", type);
             switch (type) {
                 case SUBSCRIBE:

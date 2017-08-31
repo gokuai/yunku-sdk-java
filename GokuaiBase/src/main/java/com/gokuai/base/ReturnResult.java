@@ -51,8 +51,8 @@ public class ReturnResult {
         int statusCode = 0;
         try {
             json = new JSONObject(jsonString);
-            result = json.getString("result");
-            statusCode = json.getInt("statusCode");
+            result = json.optString("result");
+            statusCode = json.optInt("statusCode");
         } catch (Exception e) {
             e.printStackTrace();
             json = null;

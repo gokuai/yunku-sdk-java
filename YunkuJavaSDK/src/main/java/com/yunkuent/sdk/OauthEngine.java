@@ -1,12 +1,9 @@
 package com.yunkuent.sdk;
 
 import com.gokuai.base.*;
-import com.yunkuent.sdk.data.OauthData;
-import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
-import org.apache.http.HttpStatus;
-import org.apache.http.util.TextUtils;
+import com.yunkuent.sdk.data.OauthData;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -63,7 +60,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
         ReturnResult returnResult = ReturnResult.create(result);
         LogPrint.info(LOG_TAG, "accessToken:==>result:" + result);
 
-        if (returnResult.getStatusCode() == HttpStatus.SC_OK) {
+        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
             LogPrint.info(LOG_TAG, "accessToken:==>StatusCode:200");
             OauthData data = OauthData.create(returnResult.getResult());
             mToken = data.getToken();
@@ -88,7 +85,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      */
     public void exchangeEntToken(String token) {
 
-        if (!TextUtils.isEmpty(token)) {
+        if (!Util.isEmpty(token)) {
             mToken = token;
         }
 
@@ -114,7 +111,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      * 重新获得 token
      */
     private boolean refreshToken() {
-        if (TextUtils.isEmpty(refreshToken)) {
+        if (Util.isEmpty(refreshToken)) {
             return false;
         }
         HashMap<String, String> params = new HashMap<>();
@@ -151,8 +148,8 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      * @return
      */
     public String sendRequestWithAuth(String url, RequestMethod method,
-                                      HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys) {
-        String returnString = NetConnection.sendRequest(url, method, params, headParams);
+                                      HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys, String postType) {
+        String returnString = NetConnection.sendRequest(url, method, params, headParams, postType);
         ReturnResult returnResult = ReturnResult.create(returnString);
         if (returnResult.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
             refreshToken();

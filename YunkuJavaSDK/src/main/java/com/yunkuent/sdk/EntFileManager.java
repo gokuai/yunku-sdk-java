@@ -21,8 +21,6 @@ public class EntFileManager extends HttpEngine {
     private static final String TAG = "EntFileManager";
 
     private static final int UPLOAD_LIMIT_SIZE = 52428800;
-    private static final int RANG_SIZE = 524288;
-
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST + "/1/file/ls";
     private final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST + "/1/file/updates";
     private final String URL_API_FILE_INFO = HostConfig.API_ENT_HOST + "/1/file/info";
@@ -223,20 +221,6 @@ public class EntFileManager extends HttpEngine {
         return "";
     }
 
-    /**
-     * 文件分块上传 (覆盖同名文件,默认分块上传大小为512K)
-     *
-     * @param fullPath
-     * @param opName
-     * @param opId
-     * @param localFilePath
-     * @param callBack
-     * @return
-     */
-    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                         UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, localFilePath, true, RANG_SIZE, callBack);
-    }
 
     /**
      * 文件分块上传 (覆盖同名文件)
@@ -249,24 +233,8 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        int rangSize, UploadCallBack callBack) {
+                                       int rangSize, UploadCallBack callBack) {
         return uploadByBlock(fullPath, opName, opId, localFilePath, true, rangSize, callBack);
-    }
-
-    /**
-     * 文件分块上传 (默认分块上传大小为512K)
-     *
-     * @param fullPath
-     * @param opName
-     * @param opId
-     * @param localFilePath
-     * @param overWrite
-     * @param callBack
-     * @return
-     */
-    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        boolean overWrite, UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, localFilePath, overWrite, RANG_SIZE, callBack);
     }
 
     /**
@@ -304,37 +272,6 @@ public class EntFileManager extends HttpEngine {
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
                                         int rangSize, UploadCallBack callBack) {
         return uploadByBlock(fullPath, opName, opId, inputStream, true, rangSize, callBack);
-    }
-
-    /**
-     * 文件分块上传 (默认分块上传大小为512K)
-     *
-     * @param fullPath
-     * @param opName
-     * @param opId
-     * @param inputStream
-     * @param overWrite
-     * @param callBack
-     * @return
-     */
-    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
-                                        boolean overWrite, UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, inputStream, overWrite, RANG_SIZE, callBack);
-    }
-
-    /**
-     * 通过文件流分块上传 (覆盖同名文件,默认分块上传大小为512K)
-     *
-     * @param fullPath
-     * @param opName
-     * @param opId
-     * @param inputStream
-     * @param callBack
-     * @return
-     */
-    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
-                                        UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, inputStream, true, RANG_SIZE, callBack);
     }
 
     /**
