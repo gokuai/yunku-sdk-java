@@ -83,7 +83,7 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
-        RequestHelper setCheckAuth(boolean checkAuth) {
+        public RequestHelper setCheckAuth(boolean checkAuth) {
             this.checkAuth = checkAuth;
             return this;
         }
