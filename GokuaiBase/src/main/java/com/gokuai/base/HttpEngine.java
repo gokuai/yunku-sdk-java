@@ -172,7 +172,7 @@ public abstract class HttpEngine extends SignAbility {
     }
 
 
-    interface RequestHelperCallBack {
+    public interface RequestHelperCallBack {
         Object getReturnData(String returnString);
     }
 
