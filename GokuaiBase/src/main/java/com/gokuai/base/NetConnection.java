@@ -107,10 +107,17 @@ public final class NetConnection {
                 request = requestBuilder.url(url).headers(headerBuilder.build()).get().build();
                 break;
             case POST:
+                RequestBody postBody = RequestBody.create(contentType, paramsString);
+                request = requestBuilder.url(url).post(postBody).headers(headerBuilder.build()).build();
+                break;
             case DELETE:
+                RequestBody deleteBody = RequestBody.create(contentType, paramsString);
+                request = requestBuilder.url(url).delete(deleteBody).headers(headerBuilder.build()).build();
+
+                break;
             case PUT:
-                RequestBody body = RequestBody.create(contentType, paramsString);
-                request = requestBuilder.url(url).post(body).headers(headerBuilder.build()).build();
+                RequestBody putBody = RequestBody.create(contentType, paramsString);
+                request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
                 break;
         }
 
