@@ -328,7 +328,7 @@ public class EntFileManager extends HttpEngine {
             params.put("deadline", deadline + "");
         }
 
-        if (!authType.equals(com.yunkuent.sdk.EntFileManager.AuthType.DEFAULT)) {
+        if (!authType.equals(AuthType.DEFAULT)) {
             params.put("auth", authType.toString().toLowerCase());
         }
         params.put("password", password);

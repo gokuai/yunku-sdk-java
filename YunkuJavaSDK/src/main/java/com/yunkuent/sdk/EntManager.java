@@ -46,7 +46,6 @@ public class EntManager extends OauthEngine {
         String url = URL_API_GET_ROLES;
         HashMap<String, String> params = new HashMap<>();
         addAuthParams(params);
-        params.put("dateline", Util.getUnixDateline() + "");
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
