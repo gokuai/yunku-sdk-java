@@ -4,10 +4,11 @@ import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import okhttp3.*;
-import org.apache.http.util.TextUtils;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.Proxy;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -41,19 +42,47 @@ public final class NetConnection {
      */
     public static String sendRequest(String url, RequestMethod method,
                                      HashMap<String, String> params, HashMap<String, String> headParams) {
-        LogPrint.info(LOG_TAG, " url is: " + url + " " + params);
-        return returnOkHttpClientBundle(url, method, params, headParams);
+
+        return sendRequest(url, method, params, headParams, NetConfig.POST_DEFAULT_FORM_TYPE);
     }
 
-    private static final MediaType URL_ENCODE = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
+    private static final String URL_ENCODE = "application/x-www-form-urlencoded; charset=utf-8";
 
-    private static String returnOkHttpClientBundle(String url, RequestMethod method,
-                                                   HashMap<String, String> params, HashMap<String, String> headParams) {
+    private static final String JSON_STRING = "application/json; charset=utf-8";
+
+
+    /**
+     * 获取http请求返回的数据,组成bundle
+     *
+     * @param url
+     * @param method
+     * @param params
+     * @param headParams
+     * @return
+     */
+    public static String sendRequest(String url, RequestMethod method,
+                                     HashMap<String, String> params, HashMap<String, String> headParams, String postType) {
+        LogPrint.info(LOG_TAG, "sendRequest(): url is: " + url + " " + params);
+
 
         OkHttpClient client = getOkHttpClient();
-        String paramsString = Util.getParamsStringFromHashMapParams(params);
 
-        if (method.equals(RequestMethod.GET) && !TextUtils.isEmpty(paramsString)) {
+        String paramsString = "";
+
+        MediaType contentType = null;
+
+        ReturnResult returnResult = new ReturnResult();
+
+        if (postType.equals(NetConfig.POST_DEFAULT_FORM_TYPE)) {
+            paramsString = Util.getParamsStringFromHashMapParams(params);
+            contentType = MediaType.parse(URL_ENCODE);
+
+        } else if (postType.equals(NetConfig.POST_JSON_TYPE)) {
+            paramsString = new Gson().toJson(params);
+            contentType = MediaType.parse(JSON_STRING);
+        }
+
+        if (method.equals(RequestMethod.GET) && !Util.isEmpty(paramsString)) {
             url += "?" + paramsString;
             LogPrint.info(LOG_TAG, method + ":" + url);
         }
@@ -69,7 +98,7 @@ public final class NetConnection {
 
         headerBuilder.add("User-Agent", USER_AGENT);
 
-        headerBuilder.add("Accept-Language",ACCEPT_LANGUAGE);
+        headerBuilder.add("Accept-Language", ACCEPT_LANGUAGE);
 
         Request.Builder requestBuilder = new Request.Builder();
         Request request = null;
@@ -78,16 +107,16 @@ public final class NetConnection {
                 request = requestBuilder.url(url).headers(headerBuilder.build()).get().build();
                 break;
             case POST:
-                RequestBody postBody = RequestBody.create(URL_ENCODE, paramsString);
+                RequestBody postBody = RequestBody.create(contentType, paramsString);
                 request = requestBuilder.url(url).post(postBody).headers(headerBuilder.build()).build();
                 break;
             case DELETE:
-                RequestBody deleteBody = RequestBody.create(URL_ENCODE, paramsString);
+                RequestBody deleteBody = RequestBody.create(contentType, paramsString);
                 request = requestBuilder.url(url).delete(deleteBody).headers(headerBuilder.build()).build();
 
                 break;
             case PUT:
-                RequestBody putBody = RequestBody.create(URL_ENCODE, paramsString);
+                RequestBody putBody = RequestBody.create(contentType, paramsString);
                 request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
                 break;
         }
@@ -100,14 +129,17 @@ public final class NetConnection {
                 if (response.header("X-GOKUAI-DEBUG") != null) {
                     LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(response.header("X-GOKUAI-DEBUG").getBytes())));
                 }
-                ReturnResult returnResult = new ReturnResult(response.body().string(), response.code());
-                Gson gosn = new Gson();
-                return gosn.toJson(returnResult);
+                returnResult.setStatusCode(response.code());
+                returnResult.setResult(response.body().string());
             } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
+                if (e.getCause() != null && e.getCause().equals(SocketTimeoutException.class)) {
+                    returnResult.setStatusCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT);
+                }
+                LogPrint.error(LOG_TAG, e.getMessage());
+
             }
         }
-        return "";
+        return new Gson().toJson(returnResult);
     }
 
     public static OkHttpClient getOkHttpClient() {
@@ -116,46 +148,13 @@ public final class NetConnection {
         list.add(Protocol.HTTP_1_1);
         list.add(Protocol.HTTP_2);
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        if(!(mProxy == null)){
+        if (mProxy != null) {
             builder.proxy(mProxy);
         }
 
-//        final TrustManager[] trustAllCerts = new TrustManager[]{
-//                new X509TrustManager() {
-//                    @Override
-//                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-//                    }
-//
-//                    @Override
-//                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-//                    }
-//
-//                    @Override
-//                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-//                        return null;
-//                    }
-//                }
-//        };
-//
-//
-//        try {
-//            SSLContext sslContext = SSLContext.getInstance("SSL");
-//            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-//            final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-//            builder.protocols(list).socketFactory(sslSocketFactory).hostnameVerifier(new HostnameVerifier() {
-//                @Override
-//                public boolean verify(String s, SSLSession sslSession) {
-//                    return true;
-//                }
-//            });
-//
-//        } catch (KeyManagementException | NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
         builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
         builder.readTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
-        OkHttpClient httpClient = builder.build();
-        return httpClient;
+        return builder.build();
     }
 
 

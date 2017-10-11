@@ -2,7 +2,6 @@ package com.yunkuent.sdk;
 
 import com.gokuai.base.RequestMethod;
 import com.gokuai.base.utils.Util;
-import org.apache.http.util.TextUtils;
 
 import java.util.HashMap;
 

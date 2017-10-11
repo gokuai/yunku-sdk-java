@@ -47,7 +47,5 @@ public class DeserializeHelper {
         }
         System.out.println(returnResult.getResult());
 
-        //复制到剪贴板
-        Util.copyToClipboard(returnResult.getResult());
     }
 }

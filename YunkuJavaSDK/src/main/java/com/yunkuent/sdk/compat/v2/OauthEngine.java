@@ -1,15 +1,11 @@
 package com.yunkuent.sdk.compat.v2;
 
-import com.gokuai.base.HttpEngine;
-import com.gokuai.base.LogPrint;
-import com.gokuai.base.NetConnection;
-import com.gokuai.base.RequestMethod;
-import com.yunkuent.sdk.data.OauthData;
-import com.gokuai.base.ReturnResult;
+import com.gokuai.base.*;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
-import org.apache.http.HttpStatus;
+import com.yunkuent.sdk.data.OauthData;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 
 /**
@@ -61,7 +57,7 @@ abstract class OauthEngine extends HttpEngine {
         ReturnResult returnResult = ReturnResult.create(result);
         LogPrint.info(LOG_TAG, "accessToken:==>result:" + result);
 
-        if (returnResult.getStatusCode() == HttpStatus.SC_OK) {
+        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
             LogPrint.info(LOG_TAG, "accessToken:==>StatusCode:200");
             OauthData data = OauthData.create(returnResult.getResult());
             mToken = data.getToken();
@@ -75,7 +71,7 @@ abstract class OauthEngine extends HttpEngine {
      * @param params
      */
     protected void addAuthParams(HashMap<String, String> params) {
-            params.put("token", mToken);
-            params.put("token_type", mTokenType);
+        params.put("token", mToken);
+        params.put("token_type", mTokenType);
     }
 }
