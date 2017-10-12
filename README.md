@@ -1006,7 +1006,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
 | originFullPaths | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
-| targetFullPaths | 是 | string | 目标文件夹(不包含文件名), 如果复制多份使用竖号 "|" 分隔 |
+| targetFullPaths | 是 | string | 目标文件夹(不包含文件名), 如果复制多份用“｜”符号隔开  |
 
 
 #### 返回结果
