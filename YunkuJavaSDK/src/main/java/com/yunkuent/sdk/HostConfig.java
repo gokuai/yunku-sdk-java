@@ -8,6 +8,7 @@ import java.net.Proxy;
 /**
  * Created by qp on 2017/4/7.
  */
+@Deprecated
 public class HostConfig {
 
     //     protected static  String OAUTH_HOST = "http://yk3-api.goukuai.cn";
