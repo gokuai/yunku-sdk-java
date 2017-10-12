@@ -984,29 +984,29 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---  
 ### 复制文件	
 	
-	copy(String originFullPaths, String targetFullPath, String opName)
+	copy(String originFullPath, String targetFullPath, String opName)
 
 	
 #### 参数 
 
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
-| originFullPaths | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
-| targetFullPath | 是 | string | 目标文件路径(不含文件名称) |
+| originFullPath | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
+| targetFullPath | 是 | string | 目标文件路径(含文件名称) |
 | opName | 否 | string | 操作人名称|
  
 #### 返回结果
 	正常返回 HTTP 200
 ---
 ### 复制文件	(拷贝 tag 与操作人属性)
-	copyAll(String originFullPaths, String targetFullPath)
+	copyAll(String originFullPaths, String targetFullPaths)
 	
 #### 参数 
 
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
 | originFullPaths | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
-| targetFullPath | 是 | string | 目标文件路径(不含文件名称) |
+| targetFullPaths | 是 | string | 目标文件夹(不包含文件名), 如果复制多份使用竖号 "|" 分隔 |
 
 
 #### 返回结果
@@ -1440,11 +1440,11 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	new ConfigHelper()
 	
 ### 修改认证地址
-	authHost(String authHost)
+	oauthHost(String oauthHost)
 #### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| authHost | 是 | string | 认证使用的地址 |
+| oauthHost | 是 | string | 认证使用的地址 |
 
 ---
 
@@ -1453,7 +1453,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| apiHost | 是 | string | API 使用的地址 |
+| authHost | 是 | string | API 使用的地址 |
 
 ---
 
