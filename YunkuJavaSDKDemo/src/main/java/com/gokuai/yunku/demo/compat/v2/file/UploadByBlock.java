@@ -3,6 +3,7 @@ package com.gokuai.yunku.demo.compat.v2.file;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.UploadRunnable;
+import com.yunkuent.sdk.compat.v2.ConfigHelper;
 import com.yunkuent.sdk.upload.UploadCallBack;
 
 /**
@@ -13,6 +14,14 @@ import com.yunkuent.sdk.upload.UploadCallBack;
 public class UploadByBlock {
 
     public static void main(String[] args) {
+
+        //-------- 如果想改编上传基础配置，可以进行以几种配置------
+        new ConfigHelper()
+                .uploadOpname("[Default Name]")
+                .uploadRootPath("default/custom/upload/path")
+                .uploadTags("[tag1]|[tag2]").config();
+
+        //---------------------------------------------------
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";

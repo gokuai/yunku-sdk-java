@@ -1030,7 +1030,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
 | opName | 否 | string | 操作人名称|
-| tag | 是 | string | 根据 tag 删除对应的文件|
+| tag | 是 | string | 根据 tag 删除对应的文件, 如果是多个用 ; 号隔开|
 #### 返回结果
 	正常返回 HTTP 200
 ---
@@ -1144,7 +1144,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| fullPath | 是 | string | 消息标题 |
+| fullPath | 是 | string | 文件路径 |
 | showWaterMark | 是 | boolean | 是否显示水印 |
 | memberName | 否 | string | 在水印中显示的文档查看人姓名 |
 

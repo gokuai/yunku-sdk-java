@@ -3,6 +3,7 @@ package com.gokuai.yunku.demo.compat.v2.file;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
+import com.yunkuent.sdk.compat.v2.ConfigHelper;
 
 /**
  * Created by qp on 2017/3/2.
@@ -12,6 +13,14 @@ import com.gokuai.yunku.demo.helper.DeserializeHelper;
 public class CreateFile {
 
     public static void main(String[] args) {
+
+        //-------- 如果想改编上传基础配置，可以进行以几种配置------
+        new ConfigHelper()
+                .uploadOpname("[Default Name]")
+                .uploadRootPath("default/custom/upload/path")
+                .uploadTags("[tag1]|[tag2]").config();
+
+        //---------------------------------------------------
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";

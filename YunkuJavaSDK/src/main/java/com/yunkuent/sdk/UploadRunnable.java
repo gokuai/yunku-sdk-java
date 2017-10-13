@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.zip.CRC32;
 
-public class UploadRunnable extends HttpEngine implements Runnable {
+public class UploadRunnable<T> extends HttpEngine implements Runnable {
     private static final String LOG_TAG = "UploadRunnable ";
 
     private static final String URL_UPLOAD_INIT = "/upload_init";
@@ -43,9 +43,10 @@ public class UploadRunnable extends HttpEngine implements Runnable {
     private UploadCallBack mCallBack;
     private long mRId;
     private InputStream mInputStream;
+    private T mManager;
 
     public UploadRunnable(String apiUrl, String localFullPath, String fullPath,
-                          String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite, int rangSize) {
+                          String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite, int rangSize, T manager) {
 
         super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;
@@ -60,11 +61,12 @@ public class UploadRunnable extends HttpEngine implements Runnable {
         this.overWrite = overWrite;
         this.mRId = nextThreadID();
         this.mRangSize = rangSize;
+        this.mManager = manager;
     }
 
 
     protected UploadRunnable(String apiUrl, InputStream inputStream, String fullPath,
-                             String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite, int rangSize) {
+                             String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite, int rangSize, T manager) {
 
         super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;
@@ -79,6 +81,7 @@ public class UploadRunnable extends HttpEngine implements Runnable {
         this.overWrite = overWrite;
         this.mRId = nextThreadID();
         this.mRangSize = rangSize;
+        this.mManager = manager;
     }
 
     private static synchronized long nextThreadID() {
@@ -216,6 +219,30 @@ public class UploadRunnable extends HttpEngine implements Runnable {
                             errorCode = upload_check();
 
                             if (errorCode == HttpURLConnection.HTTP_OK) {
+
+                                if (!Util.isEmpty(EntFileManager.DEFAULT_UPLOAD_TAGS)) {
+                                    if (mManager != null) {
+                                        String returnString = "";
+                                        if (mManager instanceof EntFileManager) {
+                                            returnString = ((EntFileManager) mManager).addUploadTags(fullpath);
+
+                                        } else if (mManager instanceof com.yunkuent.sdk.compat.v2.EntFileManager) {
+                                            returnString = ((com.yunkuent.sdk.compat.v2.EntFileManager) mManager).addUploadTags(fullpath);
+                                        }
+
+                                        ReturnResult uploadResult = ReturnResult.create(returnString);
+                                        if (uploadResult == null || uploadResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
+                                            if (mCallBack != null) {
+                                                mCallBack.onFail(mRId, "add tag fail:" + returnResult.getStatusCode());
+                                                LogPrint.error(LOG_TAG, returnResult.getResult());
+                                            }
+                                            return;
+                                        }
+
+                                    }
+
+                                }
+
                                 break;
                             }
 

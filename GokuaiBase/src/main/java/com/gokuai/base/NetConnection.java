@@ -20,16 +20,41 @@ import java.util.concurrent.TimeUnit;
 public final class NetConnection {
 
     private static final String LOG_TAG = "NetConnection";
-    public static final String USER_AGENT = "GK_ANDROID" + ";" + System.getProperties().getProperty("http.agent");
-    public static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
-    public static final int TIMEOUT = 30000;
-    public static final int CONNECT_TIMEOUT = 30000;
+    private static final String USER_AGENT = "GK_ANDROID" + ";" + System.getProperties().getProperty("http.agent");
+    private static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
+    private static final int TIMEOUT = 30000;
+    private static final int CONNECT_TIMEOUT = 30000;
 
     private static Proxy mProxy = null;
+    private static String mUserAgent = null;
+    private static String mAcceptLanguage = null;
+    private static long mTimeOut = 0;
+    private static long mConnectTimeOut = 0;
+
+
+    public static void setUserAgent(String userAgent) {
+        NetConnection.mUserAgent = userAgent;
+    }
+
+
+    public static void setAcceptLanguage(String acceptLanguage) {
+        NetConnection.mAcceptLanguage = acceptLanguage;
+    }
+
+    public static void setTimeOut(long timeOut) {
+        NetConnection.mTimeOut = timeOut;
+    }
+
+
+    public static void setConnectTimeOut(long connectTimeOut) {
+        NetConnection.mConnectTimeOut = connectTimeOut;
+    }
+
 
     public static void setProxy(Proxy proxy) {
         NetConnection.mProxy = proxy;
     }
+
 
     /**
      * 发送请求
@@ -96,9 +121,12 @@ public final class NetConnection {
             }
         }
 
-        headerBuilder.add("User-Agent", USER_AGENT);
+        String userAgent = Util.isEmpty(mUserAgent) ? USER_AGENT : USER_AGENT + ";" + mUserAgent;
+        String language = Util.isEmpty(mAcceptLanguage) ? ACCEPT_LANGUAGE : mAcceptLanguage;
 
-        headerBuilder.add("Accept-Language", ACCEPT_LANGUAGE);
+        headerBuilder.add("User-Agent", userAgent);
+
+        headerBuilder.add("Accept-Language", language);
 
         Request.Builder requestBuilder = new Request.Builder();
         Request request = null;
@@ -152,8 +180,11 @@ public final class NetConnection {
             builder.proxy(mProxy);
         }
 
-        builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
-        builder.readTimeout(TIMEOUT, TimeUnit.MILLISECONDS);
+        long readTimeOut = mTimeOut > 0 ? mTimeOut : TIMEOUT;
+        long connectTimeOut = mConnectTimeOut > 0 ? mConnectTimeOut : CONNECT_TIMEOUT;
+
+        builder.connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS);
+        builder.readTimeout(readTimeOut, TimeUnit.MILLISECONDS);
         return builder.build();
     }
 

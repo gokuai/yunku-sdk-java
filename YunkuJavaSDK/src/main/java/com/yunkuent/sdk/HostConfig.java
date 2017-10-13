@@ -7,8 +7,11 @@ import java.net.Proxy;
 
 /**
  * Created by qp on 2017/4/7.
+ *
+ * use {@link ConfigHelper.class} instead
+ *
  */
-@Deprecated
+
 public class HostConfig {
 
     //     protected static  String OAUTH_HOST = "http://yk3-api.goukuai.cn";
@@ -16,6 +19,7 @@ public class HostConfig {
     //    protected static  String API_ENT_HOST = "http://yk3-api-ent.goukuai.cn";
     protected static String API_ENT_HOST = "http://yk3-api-ent.gokuai.com";
 
+    @Deprecated
     public static void changeConfig(String oauthHost, String apiHost) {
         if (!Util.isEmpty(oauthHost)) {
             OAUTH_HOST = oauthHost;
@@ -25,6 +29,7 @@ public class HostConfig {
         }
     }
 
+    @Deprecated
     public static void setProxy(Proxy proxy) {
         if (proxy != null) {
             NetConnection.setProxy(proxy);
