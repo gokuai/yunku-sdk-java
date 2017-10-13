@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by Brandon on 2017/3/20.
@@ -31,6 +32,7 @@ public class EntFileManager extends HttpEngine {
     static String DEFAULT_OPNAME = "";
     static String UPLOAD_ROOT_PATH = "";
     static String DEFAULT_UPLOAD_TAGS = "";
+    static boolean RANDOM_GUID_TAG = false;
 
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST_V2 + "/1/file/ls";
     private final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST_V2 + "/1/file/updates";
@@ -181,6 +183,9 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String addUploadTags(String fullPath) {
+        if (RANDOM_GUID_TAG) {
+            DEFAULT_UPLOAD_TAGS += "|" + UUID.randomUUID();
+        }
         String tags[] = DEFAULT_UPLOAD_TAGS.split("\\|");
         return addTag(fullPath, tags);
 
