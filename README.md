@@ -61,13 +61,6 @@ Robots: noindex,nofollow
 
 以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传`null`
 
-## 修改API域名
-
-要修改API域名，使用前请先调用HostConfig.changeConfig(oauthHost, apiHost)
-
-## 设置代理
-
-要设置代理，使用前请先调用HostConfig.setProxy(proxy)
 
 ## 企业库管理（EntLibManager.java）
 
@@ -989,17 +982,36 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 | callBack | 否 | UploadCallBack | 文件上传回调 |
 
 ---  
-### 复制文件
+### 复制文件	
+	
 	copy(String originFullPath, String targetFullPath, String opName)
+
+	
 #### 参数 
 
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
-| originFullPath | 是 | string | 源文件路径 |
+| originFullPath | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
 | targetFullPath | 是 | string | 目标文件路径(含文件名称) |
-| opName | 否 | string | 操作人名称 |
+| opName | 否 | string | 操作人名称|
+ 
+#### 返回结果
+	正常返回 HTTP 200
+---
+### 复制文件	(拷贝 tag 与操作人属性)
+	copyAll(String originFullPaths, String targetFullPaths)
+	
+#### 参数 
 
----  
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| originFullPaths | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
+| targetFullPaths | 是 | string | 目标文件夹(不包含文件名), 如果复制多份用“｜”符号隔开  |
+
+
+#### 返回结果
+	正常返回 HTTP 200
+---
 	
 ### 删除文件
 	del( String fullPaths, String opName)
@@ -1011,6 +1023,19 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 ---
+
+### 根据 Tag 删除文件
+	delByTag(String opName, String tag)
+#### 参数 
+| 参数 | 必需 | 类型 | 说明 |
+|------|------|------|------|
+| opName | 否 | string | 操作人名称|
+| tag | 是 | string | 根据 tag 删除对应的文件, 如果是多个用 ; 号隔开|
+#### 返回结果
+	正常返回 HTTP 200
+---
+
+
 ### 回收站
 	recycle(int start, int size)
 #### 参数 
@@ -1108,6 +1133,9 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 
 #### 返回结果
+ 	{
+    "link": "外链地址"
+    }
 
 ---
 
@@ -1116,7 +1144,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| fullPath | 是 | string | 消息标题 |
+| fullPath | 是 | string | 文件路径 |
 | showWaterMark | 是 | boolean | 是否显示水印 |
 | memberName | 否 | string | 在水印中显示的文档查看人姓名 |
 
@@ -1285,7 +1313,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ## 企业合作API（ThirdPartyManager.java）
 ### 构造方法
 	new ThirdPartyManager(String clientId, String clientSecret, String outId)
-### 参数
+#### 参数
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | clientId | 是 | string | 够快分配的client_id |
@@ -1407,6 +1435,101 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 
+## 条件配置（ConfigHelper.java）
+### 构造方法
+	new ConfigHelper()
+	
+### 修改认证地址
+	oauthHost(String oauthHost)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| oauthHost | 是 | string | 认证使用的地址 |
+
+---
+
+### 修改 API 地址
+	apiHost(String apiHost)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| authHost | 是 | string | API 使用的地址 |
+
+---
+
+### 设置上传根目录
+	uploadRootPath(String rootPath)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| rootPath | 是 | string | 上传默认路径，在原有上传路径上添加上传前缀，例如上传路径为 uploadPath，则路径变为 "rootPath/uploadPath"|
+
+---
+
+
+
+### 设置默认上传文件标签
+	uploadFileTags(String tags)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| tags | 是 | string| 设置上传时，默认使用的 tag,如果是多个文件用“｜”符号隔开 |
+---
+
+### 设置默认上传操作人
+	uploadOpName(String opName)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| opName | 是 | string| 设置默认上传时操作人的名字 |
+---
+
+
+### 设置代理方法
+	proxy(Proxy proxy)
+#### 参数	
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| proxy | 是 | Proxy| 设置代理方法 |
+---
+
+
+### 修改 USERAGENT
+	userAgent(String userAgent)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| userAgent | 是 | string| 更改使用的 UserAgent 值 |
+---
+
+
+### 修改接口语言环境
+	language(String language)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| language | 是 | string| 修改接口语言环境，默认获取系统的语言环境, 现只支持 ZH 和 US 两种语言 |
+---
+
+
+### 修改默认 ReadTimeOut 时间
+	defaultReadTimeOut(long millionSeconds)
+
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| millionSeconds | 是 | long| 修改网络请求 ReadTimeOut 的时间，默认 30秒 |
+---
+
+
+### 修改默认 ConnectTimeOut 时间
+	defaultConnectTimeOut(long millionSeconds)
+#### 参数
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| millionSeconds | 是 | long| 修改 ConnectTimeOut 的时间，默认 10秒 |
+---
+
 ## 常见问题
 ### 编码问题
 #### 现象
@@ -1436,5 +1559,5 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 <img src=https://repo.gokuai.cn/app/ImageResourceForMD/raw/master/YunkuJavaSDK/clean.jpg alt="Clean" title="Clean" width="50%" height="50%"/>
 
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
-[2]: https://developer.gokuai.com/yk/thirdparty#/thirdparty/sso
+[2]: https://developer.gokuai.com/other/sso.html
 [3]: https://github.com/gokuai/yunku-sdk-java-deprecated

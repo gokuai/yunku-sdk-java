@@ -3,17 +3,19 @@ package com.yunkuent.sdk.compat.v2;
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.LogPrint;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
-import com.yunkuent.sdk.*;
+import com.yunkuent.sdk.FilePermissions;
+import com.yunkuent.sdk.MsMultiPartFormData;
+import com.yunkuent.sdk.UploadRunnable;
 import com.yunkuent.sdk.upload.UploadCallBack;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,6 +27,10 @@ public class EntFileManager extends HttpEngine {
     private static final String TAG = "EntFileManager";
 
     private static final int UPLOAD_LIMIT_SIZE = 52428800;
+
+    static String DEFAULT_OPNAME = "";
+    static String UPLOAD_ROOT_PATH = "";
+    static String DEFAULT_UPLOAD_TAGS = "";
 
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST_V2 + "/1/file/ls";
     private final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST_V2 + "/1/file/updates";
@@ -157,6 +163,30 @@ public class EntFileManager extends HttpEngine {
     }
 
     /**
+     * 获取实际的上传地址
+     *
+     * @return
+     */
+    private String getRealPath(String fullPath) {
+        if (!Util.isEmpty(UPLOAD_ROOT_PATH)) {
+            return UPLOAD_ROOT_PATH + fullPath;
+        }
+        return fullPath;
+    }
+
+    /**
+     * 添加上传默认标签
+     *
+     * @param fullPath
+     * @return
+     */
+    public String addUploadTags(String fullPath) {
+        String tags[] = DEFAULT_UPLOAD_TAGS.split("\\|");
+        return addTag(fullPath, tags);
+
+    }
+
+    /**
      * 通过文件流上传
      *
      * @param fullPath
@@ -165,6 +195,10 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String createFile(String fullPath, String opName, FileInputStream stream) {
+
+        fullPath = getRealPath(fullPath);
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+
         try {
             if (stream.available() > UPLOAD_LIMIT_SIZE) {
                 LogPrint.error(TAG, "文件大小超过50MB");
@@ -193,10 +227,18 @@ public class EntFileManager extends HttpEngine {
             multipart.addFormField("op_name", opName);
             multipart.addFormField("filefield", "file");
             multipart.addFormField("sign", generateSign(params));
-
             multipart.addFilePart("file", stream, fileName);
 
-            return multipart.finish();
+            String returnString = multipart.finish();
+
+            if (Util.isEmpty(DEFAULT_UPLOAD_TAGS)) {
+                return returnString;
+            }
+
+            ReturnResult returnResult = ReturnResult.create(returnString);
+            if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
+                return addUploadTags(fullPath);
+            }
 
         } catch (IOException ex) {
             System.err.println(ex);
@@ -217,8 +259,11 @@ public class EntFileManager extends HttpEngine {
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
                                         boolean overWrite, int rangSize, UploadCallBack callBack) {
 
-        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath,
-                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize);
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+        fullPath = getRealPath(fullPath);
+
+        UploadRunnable uploadRunnable = new UploadRunnable<>(URL_API_CREATE_FILE, localFilePath, fullPath,
+                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize, this);
 
         Thread thread = new Thread(uploadRunnable);
         thread.start();
@@ -328,7 +373,7 @@ public class EntFileManager extends HttpEngine {
             params.put("deadline", deadline + "");
         }
 
-        if (!authType.equals(com.yunkuent.sdk.EntFileManager.AuthType.DEFAULT)) {
+        if (!authType.equals(AuthType.DEFAULT)) {
             params.put("auth", authType.toString().toLowerCase());
         }
         params.put("password", password);
@@ -410,6 +455,10 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String createFileByUrl(String fullPath, int opId, String opName, boolean overwrite, String fileUrl) {
+
+        fullPath = getRealPath(fullPath);
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+
         String url = URL_API_CREATE_FILE_BY_URL;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);

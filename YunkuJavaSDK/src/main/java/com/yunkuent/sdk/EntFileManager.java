@@ -3,13 +3,13 @@ package com.yunkuent.sdk;
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.LogPrint;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import com.yunkuent.sdk.upload.UploadCallBack;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,6 +20,10 @@ public class EntFileManager extends HttpEngine {
 
     private static final String TAG = "EntFileManager";
 
+    static String DEFAULT_OPNAME = "";
+    static String UPLOAD_ROOT_PATH = "";
+    static String DEFAULT_UPLOAD_TAGS = "";
+
     private static final int UPLOAD_LIMIT_SIZE = 52428800;
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST + "/1/file/ls";
     private final String URL_API_UPDATE_LIST = HostConfig.API_ENT_HOST + "/1/file/updates";
@@ -27,6 +31,7 @@ public class EntFileManager extends HttpEngine {
     private final String URL_API_CREATE_FOLDER = HostConfig.API_ENT_HOST + "/1/file/create_folder";
     private final String URL_API_CREATE_FILE = HostConfig.API_ENT_HOST + "/1/file/create_file";
     private final String URL_API_COPY_FILE = HostConfig.API_ENT_HOST + "/1/file/copy";
+    private final String URL_API_MCOPY_FILE = HostConfig.API_ENT_HOST + "/1/file/mcopy";
     private final String URL_API_DEL_FILE = HostConfig.API_ENT_HOST + "/1/file/del";
     private final String URL_API_RECYCLE_FILE = HostConfig.API_ENT_HOST + "/1/file/recycle";
     private final String URL_API_RECOVER_FILE = HostConfig.API_ENT_HOST + "/1/file/recover";
@@ -160,6 +165,30 @@ public class EntFileManager extends HttpEngine {
     }
 
     /**
+     * 获取实际的上传地址
+     *
+     * @return
+     */
+    private String getRealPath(String fullPath) {
+        if (!Util.isEmpty(UPLOAD_ROOT_PATH)) {
+            return UPLOAD_ROOT_PATH + fullPath;
+        }
+        return fullPath;
+    }
+
+    /**
+     * 添加上传默认标签
+     *
+     * @param fullPath
+     * @return
+     */
+    String addUploadTags(String fullPath) {
+        String tags[] = DEFAULT_UPLOAD_TAGS.split("\\|");
+        return addTag(fullPath, tags);
+
+    }
+
+    /**
      * 通过文件流上传 (覆盖同名文件)
      *
      * @param fullPath
@@ -180,6 +209,10 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String createFile(String fullPath, String opName, FileInputStream stream, boolean overWrite) {
+
+        fullPath = getRealPath(fullPath);
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+
         try {
             if (stream.available() > UPLOAD_LIMIT_SIZE) {
                 LogPrint.error(TAG, "文件大小超过50MB");
@@ -213,7 +246,17 @@ public class EntFileManager extends HttpEngine {
 
             multipart.addFilePart("file", stream, fileName);
 
-            return multipart.finish();
+            String returnString = multipart.finish();
+
+            if (Util.isEmpty(DEFAULT_UPLOAD_TAGS)) {
+                return returnString;
+            }
+
+            ReturnResult returnResult = ReturnResult.create(returnString);
+            if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
+                return addUploadTags(fullPath);
+            }
+
 
         } catch (IOException ex) {
             System.err.println(ex);
@@ -233,7 +276,7 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                       int rangSize, UploadCallBack callBack) {
+                                        int rangSize, UploadCallBack callBack) {
         return uploadByBlock(fullPath, opName, opId, localFilePath, true, rangSize, callBack);
     }
 
@@ -250,8 +293,11 @@ public class EntFileManager extends HttpEngine {
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
                                         boolean overWrite, int rangSize, UploadCallBack callBack) {
 
-        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath,
-                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize);
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+        fullPath = getRealPath(fullPath);
+
+        UploadRunnable uploadRunnable = new UploadRunnable<>(URL_API_CREATE_FILE, localFilePath, fullPath,
+                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize, this);
 
         Thread thread = new Thread(uploadRunnable);
         thread.start();
@@ -280,16 +326,18 @@ public class EntFileManager extends HttpEngine {
      * @param fullPath
      * @param opName
      * @param opId
-     * @param localFilePath
+     * @param inputStream
      * @param overWrite
      * @param callBack
      * @return
      */
-    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream localFilePath,
+    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
                                         boolean overWrite, int rangSize, UploadCallBack callBack) {
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+        fullPath = getRealPath(fullPath);
 
-        UploadRunnable uploadRunnable = new UploadRunnable(URL_API_CREATE_FILE, localFilePath, fullPath, opName,
-                opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize);
+        UploadRunnable uploadRunnable = new UploadRunnable<>(URL_API_CREATE_FILE, inputStream, fullPath, opName,
+                opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize, this);
 
         Thread thread = new Thread(uploadRunnable);
         thread.start();
@@ -355,6 +403,27 @@ public class EntFileManager extends HttpEngine {
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
+
+    /**
+     * 复制文件( 拷贝 tag 以及 opname )
+     *
+     * @param originFullPaths
+     * @param targetFullPaths
+     * @return
+     */
+    public String copyAll(String originFullPaths, String targetFullPaths) {
+        String url = URL_API_MCOPY_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("from_fullpaths", originFullPaths);
+        params.put("paths", targetFullPaths);
+        params.put("copy_all", 1 + "");
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+
     /**
      * 删除文件
      *
@@ -368,6 +437,24 @@ public class EntFileManager extends HttpEngine {
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpaths", fullPaths);
+        params.put("op_name", opName);
+        params.put("sign", generateSign(params));
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 根据 tag 删除文件
+     *
+     * @param tag
+     * @param opName
+     * @return
+     */
+    public String delByTag(String tag, String opName) {
+        String url = URL_API_DEL_FILE;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("org_client_id", mClientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        params.put("tag", tag);
         params.put("op_name", opName);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();

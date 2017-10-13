@@ -3,6 +3,7 @@ package com.gokuai.yunku.demo;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntManagerHelper;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.HostConfig;
 
 import java.net.InetSocketAddress;
@@ -18,7 +19,7 @@ public class SetProxy {
 //        DebugConfig.LOG_PATH="LogPath/";
 
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("",80));
-        HostConfig.setProxy(proxy);
+        new ConfigHelper().proxy(proxy).config();
 
         String returnString = EntManagerHelper.getInstance().getMembers(0, 99);
 

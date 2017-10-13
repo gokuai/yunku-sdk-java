@@ -40,18 +40,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @return
      */
     public String createEnt(String entName, String contactName, String contactMobile, String contactEmail, String contactAddress) {
-        String url = URL_API_CREATE_ENT;
-        HashMap<String, String> params = new HashMap<>();
-        params.put("client_id", mClientId);
-        params.put("out_id", OUT_ID);
-        params.put("ent_name", entName);
-        params.put("contact_name", contactName);
-        params.put("contact_mobile", contactMobile);
-        params.put("contact_email", contactEmail);
-        params.put("contact_address", contactAddress);
-        params.put("dateline", Util.getUnixDateline() + "");
-        params.put("sign", generateSign(params));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+        return createEnt(null,entName,contactName,contactMobile,contactEmail,contactAddress);
     }
 
     /**
@@ -118,7 +107,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @return
      */
     public String orderRenew(int month) {
-        return order(UPGRADE, -1, 0, month);
+        return order(RENEW, -1, 0, month);
     }
 
     /**

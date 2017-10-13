@@ -3,7 +3,7 @@ package com.gokuai.yunku.demo.compat.v2;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.yunku.demo.compat.v2.helper.EntManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
-import com.yunkuent.sdk.compat.v2.HostConfig;
+import com.yunkuent.sdk.compat.v2.ConfigHelper;
 
 /**
  * Created by qp on 2017/4/8.
@@ -14,7 +14,12 @@ public class ChangeConfig {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        HostConfig.changeConfig("","");
+        new ConfigHelper()
+                .apiHost("http://apihost")
+                .oauthHost("http://oauthHost")
+                .language("Zh-CN")
+                .userAgent("[Your User Agent]")
+                .config();
 
         String returnString = EntManagerHelper.getInstance().getMembers(0, 99);
 
