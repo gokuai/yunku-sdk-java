@@ -7,9 +7,8 @@ import java.net.Proxy;
 
 /**
  * Created by qp on 2017/4/7.
- *
+ * <p>
  * use ConfigHelper.class instead
- *
  */
 public class HostConfig {
 
@@ -28,6 +27,7 @@ public class HostConfig {
             API_ENT_HOST_V2 = apiHost;
         }
     }
+
     @Deprecated
     public static void setProxy(Proxy proxy) {
         if (!(proxy == null)) {
