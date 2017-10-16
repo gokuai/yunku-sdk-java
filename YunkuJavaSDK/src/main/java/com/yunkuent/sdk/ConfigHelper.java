@@ -12,6 +12,7 @@ public class ConfigHelper {
     private String mUploadRootPath;
     private String mUploadOpname;
     private String mUploadTags;
+    private boolean mRandomGuidTag;
     private Proxy mProxy;
     private String mUserAgent;
     private String mLanguage;
@@ -19,7 +20,7 @@ public class ConfigHelper {
     private long mConnectTimeOut;
 
     /**
-     *
+     * 设置 api host
      * @param apiHost
      * @return
      */
@@ -29,11 +30,21 @@ public class ConfigHelper {
 
     }
 
+    /**
+     *
+     * @param oauthHost
+     * @return
+     */
     public ConfigHelper oauthHost(String oauthHost) {
         this.mOauthHost = oauthHost;
         return this;
     }
 
+    /**
+     *
+     * @param uploadRootPath
+     * @return
+     */
     public ConfigHelper uploadRootPath(String uploadRootPath) {
         this.mUploadRootPath = uploadRootPath;
         return this;
@@ -60,30 +71,60 @@ public class ConfigHelper {
     }
 
 
+    /**
+     *
+     * @param proxy
+     * @return
+     */
     public ConfigHelper proxy(Proxy proxy) {
         this.mProxy = proxy;
         return this;
     }
 
+    /**
+     *
+     * @param userAgent
+     * @return
+     */
     public ConfigHelper userAgent(String userAgent) {
         this.mUserAgent = userAgent;
         return this;
     }
 
 
+    /**
+     *
+     * @param language
+     * @return
+     */
     public ConfigHelper language(String language) {
         this.mLanguage = language;
         return this;
     }
 
+    /**
+     *
+     * @param millionSeconds
+     * @return
+     */
     public ConfigHelper readTimeOut(long millionSeconds) {
         this.mReadTimeOut = millionSeconds;
         return this;
     }
 
 
+    /**
+     *
+     * @param millionSeconds
+     * @return
+     */
     public ConfigHelper connectTimeOut(long millionSeconds) {
         this.mConnectTimeOut = millionSeconds;
+        return this;
+    }
+
+    public ConfigHelper randomGuidTag(boolean randomGuidTag) {
+        this.mRandomGuidTag = randomGuidTag;
         return this;
     }
 
@@ -128,8 +169,11 @@ public class ConfigHelper {
             EntFileManager.DEFAULT_UPLOAD_TAGS = mUploadTags;
         }
 
+        EntFileManager.RANDOM_GUID_TAG = mRandomGuidTag;
+
 
     }
+
 
 
 }

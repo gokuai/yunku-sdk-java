@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by Brandon on 2014/8/14.
@@ -20,9 +21,10 @@ public class EntFileManager extends HttpEngine {
 
     private static final String TAG = "EntFileManager";
 
-    static String DEFAULT_OPNAME = "";
+    protected static String DEFAULT_OPNAME = "";
     static String UPLOAD_ROOT_PATH = "";
     static String DEFAULT_UPLOAD_TAGS = "";
+    static boolean RANDOM_GUID_TAG = false;
 
     private static final int UPLOAD_LIMIT_SIZE = 52428800;
     private final String URL_API_FILELIST = HostConfig.API_ENT_HOST + "/1/file/ls";
@@ -183,6 +185,10 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     String addUploadTags(String fullPath) {
+        if (RANDOM_GUID_TAG) {
+            DEFAULT_UPLOAD_TAGS += "|" + UUID.randomUUID();
+        }
+
         String tags[] = DEFAULT_UPLOAD_TAGS.split("\\|");
         return addTag(fullPath, tags);
 
