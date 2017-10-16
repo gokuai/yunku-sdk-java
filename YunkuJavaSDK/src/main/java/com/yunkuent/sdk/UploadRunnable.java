@@ -221,34 +221,36 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                                 finishErrorCode = upload_check();
 
                                 if (finishErrorCode == HttpURLConnection.HTTP_OK) {
-                                    if (!Util.isEmpty(EntFileManager.DEFAULT_UPLOAD_TAGS)) {
-                                        if (mManager != null) {
-                                            String returnString = "";
-                                            if (mManager instanceof EntFileManager) {
-                                                returnString = ((EntFileManager) mManager).addUploadTags(fullpath);
-
-                                            } else if (mManager instanceof com.yunkuent.sdk.compat.v2.EntFileManager) {
-                                                returnString = ((com.yunkuent.sdk.compat.v2.EntFileManager) mManager).addUploadTags(fullpath);
-                                            }
-
-                                            ReturnResult uploadResult = ReturnResult.create(returnString);
-                                            if (uploadResult == null || uploadResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
-                                                if (mCallBack != null) {
-                                                    mCallBack.onFail(mRId, "add tag fail:" + returnResult.getStatusCode());
-                                                    LogPrint.error(LOG_TAG, returnResult.getResult());
-                                                }
-                                                return;
-                                            }
-
-                                        }
-
-                                    }
                                     break;
                                 }
 
                                 Thread.sleep(3000);
 
                             } while (finishErrorCode == HttpURLConnection.HTTP_ACCEPTED);
+                        }
+
+                    }
+
+
+                    if (!Util.isEmpty(EntFileManager.DEFAULT_UPLOAD_TAGS)) {
+                        if (mManager != null) {
+                            String returnString = "";
+                            if (mManager instanceof EntFileManager) {
+                                returnString = ((EntFileManager) mManager).addUploadTags(fullpath);
+
+                            } else if (mManager instanceof com.yunkuent.sdk.compat.v2.EntFileManager) {
+                                returnString = ((com.yunkuent.sdk.compat.v2.EntFileManager) mManager).addUploadTags(fullpath);
+                            }
+
+                            ReturnResult uploadResult = ReturnResult.create(returnString);
+                            if (uploadResult == null || uploadResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
+                                if (mCallBack != null) {
+                                    mCallBack.onFail(mRId, "add tag fail:" + returnResult.getStatusCode());
+                                    LogPrint.error(LOG_TAG, returnResult.getResult());
+                                }
+                                return;
+                            }
+
                         }
 
                     }
