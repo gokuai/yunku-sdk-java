@@ -9,7 +9,7 @@ public class DelByTag {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().delByTag("tag","qp");
+        String returnString = EntFileManagerHelper.getInstance().delByTag("BrandonTest", "", "BrandonTest");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

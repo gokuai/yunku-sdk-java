@@ -452,15 +452,16 @@ public class EntFileManager extends HttpEngine {
      * 根据 tag 删除文件
      *
      * @param tag
-     * @param opName
-     * @return
+     * @param path
+     * @param opName @return
      */
-    public String delByTag(String tag, String opName) {
+    public String delByTag(String tag, String path, String opName) {
         String url = URL_API_DEL_FILE;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("tag", tag);
+        params.put("path", path);
         params.put("op_name", opName);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
