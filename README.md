@@ -1025,12 +1025,13 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 ### 根据 Tag 删除文件
-	delByTag(String opName, String tag)
+	delByTag(String opName,String path, String tag)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
 | opName | 否 | string | 操作人名称|
 | tag | 是 | string | 根据 tag 删除对应的文件, 如果是多个用 ; 号隔开|
+| path| 否 |string| 删除指定路径下，有 tag 的文件 |
 #### 返回结果
 	正常返回 HTTP 200
 ---
