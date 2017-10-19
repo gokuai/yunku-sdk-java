@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.20'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.24'
 	}
 ```
 或者Maven：
@@ -720,12 +720,19 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 ---
 ### 获取文件列表
-	getFileList( int start, String fullPath)
+	getFileList(String fullPath)
+	
+	getFileList(String fullPath, String order)
+	
+	String getFileList(String fullPath, String order, int start, int size, boolean dirOnly)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| start | 是 | int | 开始位置(每次返回100条数据) |
 | fullPath | 是 | string | 文件的路径 |
+| order | 否 | string | 文件排序，filename 文件排序，last_dateline 修改时间，filesize 文件大小排序，desc 为降序， asc 为升序， 例如按文件名降序为 filename desc |
+| start | 否 | int | 文件起始位置 |
+| size | 否 | int | 文件数量 |
+| dirOnly | 否 | boolean | true 只显示文件夹，默认为 false  |
 
 #### 返回结果
 	{
@@ -1016,23 +1023,27 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	
 ### 删除文件
 	del( String fullPaths, String opName)
+	del( String fullPaths, String opName, boolean completeDelete)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
 | fullPaths| 是 |string| 文件路径，如果是多个文件用“｜”符号隔开 |
 | opName | 否 | string | 操作人名称|
+| destroy | 否 |boolean| 1彻底删除文件, 不进回收站, 默认0删除文件进入回收站 |
 #### 返回结果
 	正常返回 HTTP 200
 ---
 
 ### 根据 Tag 删除文件
 	delByTag(String opName,String path, String tag)
+	delByTag(String opName,String path, String tag, boolean completeDelete)
 #### 参数 
 | 参数 | 必需 | 类型 | 说明 |
 |------|------|------|------|
 | opName | 否 | string | 操作人名称|
 | tag | 是 | string | 根据 tag 删除对应的文件, 如果是多个用 ; 号隔开|
 | path| 否 |string| 删除指定路径下，有 tag 的文件 |
+| destroy | 否 |boolean| 1彻底删除文件, 不进回收站, 默认0删除文件进入回收站 |
 #### 返回结果
 	正常返回 HTTP 200
 ---

@@ -16,7 +16,7 @@ public class GetFileList {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getFileList();
+        String returnString = EntFileManagerHelper.getInstance().getFileList("","filename asc");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

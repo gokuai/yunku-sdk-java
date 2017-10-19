@@ -66,7 +66,7 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String getFileList() {
-        return this.getFileList("", 0, 100, false);
+        return this.getFileList("", null, 0, 100, false);
     }
 
     /**
@@ -76,19 +76,32 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String getFileList(String fullPath) {
-        return this.getFileList(fullPath, 0, 100, false);
+        return this.getFileList(fullPath, null, 0, 100, false);
     }
 
     /**
      * 获取文件列表
      *
      * @param fullPath 路径, 空字符串表示根目录
+     * @param order 排序
+     * @return
+     */
+    public String getFileList(String fullPath, String order) {
+        return this.getFileList(fullPath, order, 0, 100, false);
+    }
+
+
+    /**
+     * 获取文件列表
+     *
+     * @param fullPath 路径, 空字符串表示根目录
+     * @param order    排序
      * @param start    起始下标, 分页显示
      * @param size     返回文件/文件夹数量限制
      * @param dirOnly  只返回文件夹
      * @return
      */
-    public String getFileList(String fullPath, int start, int size, boolean dirOnly) {
+    public String getFileList(String fullPath, String order, int start, int size, boolean dirOnly) {
         String url = URL_API_FILELIST;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
@@ -96,6 +109,7 @@ public class EntFileManager extends HttpEngine {
         params.put("fullpath", fullPath);
         params.put("start", start + "");
         params.put("size", size + "");
+        params.put("order", order);
         if (dirOnly) {
             params.put("dir", "1");
         }
@@ -440,15 +454,29 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String del(String fullPaths, String opName) {
+        return del(fullPaths, opName, false);
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param fullPaths
+     * @param opName
+     * @param destroy
+     * @return
+     */
+    public String del(String fullPaths, String opName, boolean destroy) {
         String url = URL_API_DEL_FILE;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpaths", fullPaths);
+        params.put("destroy", destroy ? "1" : "0");
         params.put("op_name", opName);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
+
 
     /**
      * 根据 tag 删除文件
@@ -458,11 +486,24 @@ public class EntFileManager extends HttpEngine {
      * @param opName @return
      */
     public String delByTag(String tag, String path, String opName) {
+        return delByTag(tag, path, opName, false);
+    }
+
+    /**
+     * 根据 tag 删除文件
+     *
+     * @param tag
+     * @param path
+     * @param destroy
+     * @param opName         @return
+     */
+    public String delByTag(String tag, String path, String opName, boolean destroy) {
         String url = URL_API_DEL_FILE;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("tag", tag);
+        params.put("destroy", destroy ? "1" : "0");
         params.put("path", path);
         params.put("op_name", opName);
         params.put("sign", generateSign(params));
