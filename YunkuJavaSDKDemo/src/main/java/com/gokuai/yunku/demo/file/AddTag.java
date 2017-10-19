@@ -16,7 +16,7 @@ public class AddTag {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().addTag("test", new String[]{"test", "test1"});
+        String returnString = EntFileManagerHelper.getInstance().addTag("default/custom/upload/path/search.txt", new String[]{"test", "test1"});
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

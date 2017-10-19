@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.helper;
 
 import com.gokuai.yunku.demo.Config;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.EntFileManager;
 
 /**
@@ -9,6 +10,10 @@ import com.yunkuent.sdk.EntFileManager;
 public class EntFileManagerHelper {
 
     private static volatile EntFileManager instance = null;
+
+    static {
+        new ConfigHelper().apiHost("http://yk3-api-ent.goukuai.cn").config();
+    }
 
     public static EntFileManager getInstance() {
         if (instance == null) {

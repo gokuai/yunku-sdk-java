@@ -1,5 +1,4 @@
 allprojects {
-    version = "3.24"
 }
 
 subprojects {

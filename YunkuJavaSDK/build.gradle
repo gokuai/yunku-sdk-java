@@ -1,5 +1,5 @@
+version = "3.25"
 group 'com.gokuai'
-
 apply plugin: 'java'
 
 sourceCompatibility = 1.7

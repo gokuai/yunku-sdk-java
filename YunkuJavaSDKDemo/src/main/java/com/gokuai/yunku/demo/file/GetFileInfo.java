@@ -17,7 +17,7 @@ public class GetFileInfo {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getFileInfo("aa.jpg", EntFileManager.NetType.DEFAULT, true);
+        String returnString = EntFileManagerHelper.getInstance().getFileInfo("default/custom/upload/path/search3.txt", EntFileManager.NetType.DEFAULT, true);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

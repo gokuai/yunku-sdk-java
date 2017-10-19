@@ -7,7 +7,7 @@ import com.yunkuent.sdk.ScopeType;
 
 /**
  * Created by qp on 2017/3/2.
- *
+ * <p>
  * 文件搜索
  */
 public class Search {
@@ -17,7 +17,7 @@ public class Search {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().search("tes", "", 0, 100, ScopeType.FILENAME, ScopeType.TAG, ScopeType.CONTENT);
+        String returnString = EntFileManagerHelper.getInstance().search("search", "", 0, 100, ScopeType.FILENAME, ScopeType.CONTENT, ScopeType.TAG);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }
