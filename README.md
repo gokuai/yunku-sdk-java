@@ -999,7 +999,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	正常返回 HTTP 200
 ---
 ### 复制文件	(拷贝 tag 与操作人属性)
-	copyAll(String originFullPaths, String targetFullPaths)
+	copyAll(String originFullPaths, String targetFullPaths,String sp)
 	
 #### 参数 
 
@@ -1007,6 +1007,7 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 |------|------|------|------|
 | originFullPaths | 是 | string | 源文件路径,如果是多个文件用“｜”符号隔开 |
 | targetFullPaths | 是 | string | 目标文件夹(不包含文件名), 如果复制多份用“｜”符号隔开  |
+| tsp| 否 | string | 特殊参数, 预留  |
 
 
 #### 返回结果

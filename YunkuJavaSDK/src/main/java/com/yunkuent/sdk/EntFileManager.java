@@ -415,15 +415,17 @@ public class EntFileManager extends HttpEngine {
      *
      * @param originFullPaths
      * @param targetFullPaths
+     * @param sp
      * @return
      */
-    public String copyAll(String originFullPaths, String targetFullPaths) {
+    public String copyAll(String originFullPaths, String targetFullPaths, String sp) {
         String url = URL_API_MCOPY_FILE;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("from_fullpaths", originFullPaths);
         params.put("paths", targetFullPaths);
+        params.put("sp", sp);
         params.put("copy_all", 1 + "");
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();

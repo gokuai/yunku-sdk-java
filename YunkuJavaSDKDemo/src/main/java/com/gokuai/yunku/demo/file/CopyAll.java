@@ -10,7 +10,7 @@ public class CopyAll {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().copyAll("file1.jpg|file2.jpg", "folder1|folder2");
+        String returnString = EntFileManagerHelper.getInstance().copyAll("file1.jpg|file2.jpg", "folder1|folder2", "");
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
 
