@@ -724,12 +724,13 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	
 	getFileList(String fullPath, String order)
 	
-	String getFileList(String fullPath, String order, int start, int size, boolean dirOnly)
+	String getFileList(String fullPath, String order, String tag,int start, int size, boolean dirOnly)
 #### 参数 
 | 名称 | 必需 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | fullPath | 是 | string | 文件的路径 |
 | order | 否 | string | 文件排序，filename 文件排序，last_dateline 修改时间，filesize 文件大小排序，desc 为降序， asc 为升序， 例如按文件名降序为 filename desc |
+| tag | 否 | string | 添返回 fullpath 下所有层级中带指定标签的文件及文件夹 |
 | start | 否 | int | 文件起始位置 |
 | size | 否 | int | 文件数量 |
 | dirOnly | 否 | boolean | true 只显示文件夹，默认为 false  |

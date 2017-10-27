@@ -66,7 +66,7 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String getFileList() {
-        return this.getFileList("", null, 0, 100, false);
+        return this.getFileList("", null, null, 0, 100, false);
     }
 
     /**
@@ -76,18 +76,18 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public String getFileList(String fullPath) {
-        return this.getFileList(fullPath, null, 0, 100, false);
+        return this.getFileList(fullPath, null, null, 0, 100, false);
     }
 
     /**
      * 获取文件列表
      *
      * @param fullPath 路径, 空字符串表示根目录
-     * @param order 排序
+     * @param order    排序
      * @return
      */
     public String getFileList(String fullPath, String order) {
-        return this.getFileList(fullPath, order, 0, 100, false);
+        return this.getFileList(fullPath, order, null, 0, 100, false);
     }
 
 
@@ -96,17 +96,18 @@ public class EntFileManager extends HttpEngine {
      *
      * @param fullPath 路径, 空字符串表示根目录
      * @param order    排序
+     * @param tag      返回指定标签的文件
      * @param start    起始下标, 分页显示
      * @param size     返回文件/文件夹数量限制
-     * @param dirOnly  只返回文件夹
-     * @return
+     * @param dirOnly  只返回文件夹    @return
      */
-    public String getFileList(String fullPath, String order, int start, int size, boolean dirOnly) {
+    public String getFileList(String fullPath, String order, String tag, int start, int size, boolean dirOnly) {
         String url = URL_API_FILELIST;
         HashMap<String, String> params = new HashMap<>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
+        params.put("tag", tag);
         params.put("start", start + "");
         params.put("size", size + "");
         params.put("order", order);
@@ -495,7 +496,7 @@ public class EntFileManager extends HttpEngine {
      * @param tag
      * @param path
      * @param destroy
-     * @param opName         @return
+     * @param opName  @return
      */
     public String delByTag(String tag, String path, String opName, boolean destroy) {
         String url = URL_API_DEL_FILE;
