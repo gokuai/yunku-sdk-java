@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.yunku.demo.Config;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.UploadRunnable;
 import com.yunkuent.sdk.compat.v2.ConfigHelper;
@@ -8,7 +9,7 @@ import com.yunkuent.sdk.upload.UploadCallBack;
 
 /**
  * Created by qp on 2017/3/2.
- *
+ * <p>
  * 文件分块上传
  */
 public class UploadByBlock {
@@ -24,9 +25,8 @@ public class UploadByBlock {
         //---------------------------------------------------
 
         DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testRangSize.jpg", "Brandon", 0, DebugConfig.TEST_FILE_PATH, true, 65536, new UploadCallBack() {
+        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testRangSize.jpg", "Brandon", 0, Config.TEST_FILE_PATH, true, 65536, new UploadCallBack() {
 
             @Override
             public void onSuccess(long threadId, String fileHash) {

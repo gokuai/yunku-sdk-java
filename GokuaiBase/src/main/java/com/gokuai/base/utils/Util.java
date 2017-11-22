@@ -3,14 +3,10 @@ package com.gokuai.base.utils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Util {
@@ -267,8 +263,6 @@ public class Util {
         folderPath = folderPath.substring(0, folderPath.length() - 1);
         return getNameFromPath(folderPath);
     }
-
-
 
 
     /**

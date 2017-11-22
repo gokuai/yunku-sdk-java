@@ -38,4 +38,5 @@ public class Config {
      */
     public static final String PASSWORD = "";
 
+    public static String TEST_FILE_PATH = "YunkuJavaSDK/testData/test.jpg";
 }
