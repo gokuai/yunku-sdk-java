@@ -32,7 +32,7 @@ Robots: noindex,nofollow
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.24'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.27'
 	}
 ```
 或者Maven：
@@ -50,7 +50,7 @@ Robots: noindex,nofollow
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.20</version>
+	    <version>3.27</version>
 	</dependency>
 ```
 
@@ -1575,3 +1575,54 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/other/sso.html
 [3]: https://github.com/gokuai/yunku-sdk-java-deprecated
+
+### Log4J 库冲突问题
+#### 现象
+会出现 classNotFoundError
+
+#### 解决方法
+将log4j 排除处理
+
+**Gradle:**
+	
+	compile ('com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:{Version Number}'){
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-api'
+    }
+    
+**Maven:**
+
+	<dependencies>
+    <dependency>
+      <groupId>com.github.gokuai</groupId>
+      <artifactId>yunku-sdk-java</artifactId>
+      <version>{Version Number}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId> 
+          <artifactId>log4j-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId> 
+          <artifactId>log4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+也同时用自己的日志打印方法，管理 SDK 的日志输出
+>详细可见 Module YunkuJavaSDKDemo 中 PrintWithLogWithYourEngine.class
+
+
+	    DebugConfig.PRINT_LOG = true;
+
+       LogPrint.setLogDetector(new DebugConfig.LogDetector() {
+            @Override
+            public void getLog(String logtag, String level, String message) {
+
+                //在这里添加你需要的 log
+
+            }
+        });
+
+       LogPrint.info("LogTag", "Your Log");

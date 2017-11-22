@@ -4,7 +4,7 @@ import com.gokuai.base.DebugConfig;
 
 public class PrintWithLogWithYourEngine {
 
-    public static class YourDetector implements DebugConfig.LogDetector{
+    public static class YourDetector implements DebugConfig.LogDetector {
 
         @Override
         public void getLog(String logtag, String level, String message) {
@@ -13,6 +13,8 @@ public class PrintWithLogWithYourEngine {
     }
 
     public static void main(String[] args) {
+
+        DebugConfig.PRINT_LOG = true;
 
         DebugConfig.setListener(new YourDetector());
 
