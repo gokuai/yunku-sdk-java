@@ -1594,8 +1594,8 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 
 	<dependencies>
     <dependency>
-      <groupId>com.github.gokuai</groupId>
-      <artifactId>yunku-sdk-java</artifactId>
+      <groupId>com.github.gokuai.yunku-sdk-java</groupId>
+      <artifactId>YunkuJavaSDK</artifactId>
       <version>{Version Number}</version>
       <exclusions>
         <exclusion>
