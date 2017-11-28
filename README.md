@@ -1,20 +1,12 @@
-/*
-Title:够快云库3.0 Java SDK 使用说明
-Description:
-Author: Brandon
-Date: 2016/10/28
-Robots: noindex,nofollow
-*/
-
 # 够快云库 3.0 Java SDK 使用说明
 
 [![](https://jitpack.io/v/gokuai/yunku-sdk-java.svg)](https://jitpack.io/#gokuai/yunku-sdk-java)
 
 >够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
->原 yunku-sdk-java 迁移到[这里][3]
 
-* 版本：3.0
-* 创建：2016-10-28
+##兼容
+* Java 7 或者更高
+* 支持 Android 系统
 
 ## 引用 
 将`[yunku-java-sdk].jar`文件引用进项目，或者将`YunkuJavaSDK`做为依赖项目。
@@ -55,14 +47,14 @@ Robots: noindex,nofollow
 ```
 
 ## 初始化
-要使用云库3.0的API，您需要先在 <a href="http://developer.gokuai.com/yk/tutorial#yk3" target="_blank">企业授权</a> 中获取 `client_id` 和 `client_secret`
+要使用云库3.0的API，您需要先在 [企业授权][5]中获取 `client_id` 和 `client_secret`
 
 ## 参数使用
 
 以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传`null`
 
 
-## 企业库管理（EntLibManager.java）
+## 企业库管理（EntLibManager.java）{#index}
 
 ### 构造方法
 	new EntLibManager（ClientId, ClientSecret）
@@ -704,9 +696,10 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 
+
 ## 企业文件管理（EntFileManager.java）
 
-`orgClientId`和`orgClientSecret`需要通过`EntLibManager`.`bind`方法获取
+`orgClientId`和`orgClientSecret`需要通过`EntLibManager`.`bind`方法获取，又或者通过[库授权][4] 获取
 
 ### 构造方法
 
@@ -1575,6 +1568,8 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 [1]: https://github.com/gokuai/yunku-sdk-java-gradle/blob/master/V2.0/README.md  
 [2]: https://developer.gokuai.com/other/sso.html
 [3]: https://github.com/gokuai/yunku-sdk-java-deprecated
+[4]: http://developer.gokuai.com/grant/library.html
+[5]: http://developer.gokuai.com/grant/ent.html
 
 ### Log4J 库冲突问题
 #### 现象
