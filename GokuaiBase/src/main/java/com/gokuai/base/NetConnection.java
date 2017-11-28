@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public final class NetConnection {
 
     private static final String LOG_TAG = "NetConnection";
-    private static final String USER_AGENT = "GK_ANDROID" + ";" + System.getProperties().getProperty("http.agent");
+    private static final String USER_AGENT = "YunkuJavaSDK" + ";" + System.getProperties().getProperty("http.agent");
     private static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
     private static final int TIMEOUT = 30000;
     private static final int CONNECT_TIMEOUT = 30000;
@@ -34,6 +34,10 @@ public final class NetConnection {
 
     public static void setUserAgent(String userAgent) {
         NetConnection.mUserAgent = userAgent;
+    }
+
+    public static String getUserAgent() {
+        return Util.isEmpty(mUserAgent) ? USER_AGENT : USER_AGENT + ";" + mUserAgent;
     }
 
 
@@ -121,7 +125,7 @@ public final class NetConnection {
             }
         }
 
-        String userAgent = Util.isEmpty(mUserAgent) ? USER_AGENT : USER_AGENT + ";" + mUserAgent;
+        String userAgent = getUserAgent();
         String language = Util.isEmpty(mAcceptLanguage) ? ACCEPT_LANGUAGE : mAcceptLanguage;
 
         headerBuilder.add("User-Agent", userAgent);

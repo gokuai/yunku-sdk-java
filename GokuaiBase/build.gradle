@@ -1,5 +1,3 @@
-version '3.8'
-
 apply plugin: 'java'
 
 sourceCompatibility = 1.7

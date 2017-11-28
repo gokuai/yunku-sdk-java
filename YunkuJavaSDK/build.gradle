@@ -1,4 +1,3 @@
-version = "3.26"
 group 'com.gokuai'
 apply plugin: 'java'
 
