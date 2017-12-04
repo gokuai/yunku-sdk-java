@@ -178,7 +178,10 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                                 long currentLength = mRangSize * range_index;
                                 range = currentLength + "-" + range_end;
 
-                                mCallBack.onProgress(mRId, (float) currentLength / (float) filesize);
+                                if (mCallBack != null) {
+                                    mCallBack.onProgress(mRId, (float) currentLength / (float) filesize);
+                                }
+
                                 result = upload_part(range, buffer, (int) datalength, crc32);
                                 code = result.getStatusCode();
                                 if (code == HttpURLConnection.HTTP_OK) {
@@ -208,7 +211,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                                     continue;
                                 } else {
 
-                                    throw new Exception();
+                                    throw new Exception("upload part error:" + result.getStatusCode() + "," + result.getResult());
                                 }
                             }
                         }
