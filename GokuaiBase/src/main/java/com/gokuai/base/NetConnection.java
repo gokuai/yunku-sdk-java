@@ -91,7 +91,7 @@ public final class NetConnection {
      */
     public static String sendRequest(String url, RequestMethod method,
                                      HashMap<String, String> params, HashMap<String, String> headParams, String postType) {
-        LogPrint.info(LOG_TAG, "sendRequest(): url is: " + url + " " + params);
+        LogPrint.info(LOG_TAG, "sendRequest(): url is: " + url + " params" + params + ", headParams, " + headParams);
 
 
         OkHttpClient client = getOkHttpClient();
@@ -161,8 +161,20 @@ public final class NetConnection {
                 if (response.header("X-GOKUAI-DEBUG") != null) {
                     LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(response.header("X-GOKUAI-DEBUG").getBytes())));
                 }
+
                 returnResult.setStatusCode(response.code());
-                returnResult.setResult(response.body().string());
+
+                String responseString = "";
+                responseString = response.body().string();
+                returnResult.setResult(responseString);
+
+                if (!Util.isEmpty(responseString)) {
+                    if (responseString.length() > 1000) {
+                        responseString = responseString.substring(0, 1000);
+                    }
+                    LogPrint.info(LOG_TAG, "response:" + responseString);
+                }
+
             } catch (IOException | NullPointerException e) {
                 if (e.getCause() != null && e.getCause().equals(SocketTimeoutException.class)) {
                     returnResult.setStatusCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT);
