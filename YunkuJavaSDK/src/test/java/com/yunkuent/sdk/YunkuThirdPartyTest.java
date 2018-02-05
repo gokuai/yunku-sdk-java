@@ -26,7 +26,7 @@ public class YunkuThirdPartyTest {
     @Test
     public void createEntByMap() throws Exception {
         ThirdPartyManager thirdParty = new ThirdPartyManager(CLIENT_ID, CLIENT_SECRET, OUT_ID);
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<String, String>();
         map.put("__setting_site_url","aaa");
         String s = thirdParty.createEnt(map,"yunku","yunku","","","");
         ReturnResult r = ReturnResult.create(s);

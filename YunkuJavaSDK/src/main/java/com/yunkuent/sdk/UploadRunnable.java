@@ -23,7 +23,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
     private static final String URL_UPLOAD_ABORT = "/upload_abort";
     private static final String URL_UPLOAD_FINISH = "/upload_finish";
 
-    private final int mRangSize;// 上传分块大小
+    private final int mBlockSize;// 上传分块大小
 
     private String mServer = "";// 上传服务器地址
     private String mSession = "";// 上传session
@@ -36,7 +36,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
     private String mOpName;
     private int mOpId;
     private static long threadSeqNumber;
-    private boolean overWrite;
+    private boolean mOverwrite;
 
     private OkHttpClient mUploadHttpClient;
 
@@ -46,7 +46,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
     private T mManager;
 
     public UploadRunnable(String apiUrl, String localFullPath, String fullPath,
-                          String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite, int rangSize, T manager) {
+                          String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overwrite, int blockSize, T manager) {
 
         super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;
@@ -58,15 +58,15 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
         this.mClientSecret = clientSecret;
         this.mOpId = opId;
         this.mOpName = opName;
-        this.overWrite = overWrite;
+        this.mOverwrite = overwrite;
         this.mRId = nextThreadID();
-        this.mRangSize = rangSize;
+        this.mBlockSize = blockSize;
         this.mManager = manager;
     }
 
 
     protected UploadRunnable(String apiUrl, InputStream inputStream, String fullPath,
-                             String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overWrite, int rangSize, T manager) {
+                             String opName, int opId, String orgClientId, long dateline, UploadCallBack callBack, String clientSecret, boolean overwrite, int blockSize, T manager) {
 
         super(orgClientId, clientSecret);
         this.mApiUrl = apiUrl;
@@ -78,9 +78,9 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
         this.mClientSecret = clientSecret;
         this.mOpId = opId;
         this.mOpName = opName;
-        this.overWrite = overWrite;
+        this.mOverwrite = overwrite;
         this.mRId = nextThreadID();
-        this.mRangSize = rangSize;
+        this.mBlockSize = blockSize;
         this.mManager = manager;
     }
 
@@ -157,15 +157,15 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                             long datalength = -1;
                             long crc32 = 0;
                             String range = "";
-                            byte[] buffer = new byte[mRangSize];
+                            byte[] buffer = new byte[mBlockSize];
                             CRC32 crc = new CRC32();
-                            bis.mark(mRangSize);
+                            bis.mark(mBlockSize);
                             while ((datalength = bis.read(buffer)) != -1 && !isStop) {
 
-                                range_end = mRangSize * (range_index + 1) - 1;
+                                range_end = mBlockSize * (range_index + 1) - 1;
                                 if (range_end >= filesize) {
                                     range_end = filesize - 1;
-                                    int length_end = (int) (filesize - mRangSize * range_index);
+                                    int length_end = (int) (filesize - mBlockSize * range_index);
                                     byte[] buffer_end = new byte[length_end];
                                     System.arraycopy(buffer, 0, buffer_end, 0, length_end);
                                     crc.update(buffer_end);
@@ -175,7 +175,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                                     crc32 = crc.getValue();
                                 }
                                 crc.reset();
-                                long currentLength = mRangSize * range_index;
+                                long currentLength = mBlockSize * range_index;
                                 range = currentLength + "-" + range_end;
 
                                 if (mCallBack != null) {
@@ -186,7 +186,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                                 code = result.getStatusCode();
                                 if (code == HttpURLConnection.HTTP_OK) {
                                     // 200
-                                    bis.mark(mRangSize);
+                                    bis.mark(mBlockSize);
                                     range_index++;
                                     System.gc();
                                 } else if (code == HttpURLConnection.HTTP_ACCEPTED) {
@@ -205,7 +205,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
                                     // 409-上传块序号错误, http内容中给出服务器期望的块序号
                                     JSONObject json = new JSONObject(result.getResult());
                                     long part_range_start = Long.parseLong(json.optString("expect"));
-                                    range_index = part_range_start / mRangSize;
+                                    range_index = part_range_start / mBlockSize;
                                     bis.reset();
                                     bis.skip(part_range_start);
                                     continue;
@@ -344,7 +344,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
     private int upload_init(String hash, String filename, String fullpath,
                             String filehash, long filesize) throws Exception {
         String url = mServer + URL_UPLOAD_INIT + "?org_client_id=" + mOrgClientId;
-        final HashMap<String, String> headParams = new HashMap<>();
+        final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-pathhash", hash);
         headParams.put("x-gk-upload-filename", URLEncoder.encodeUTF8(filename));
         headParams.put("x-gk-upload-filehash", filehash);
@@ -418,7 +418,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
      */
     private String upload_finish() {
         String url = mServer + URL_UPLOAD_FINISH;
-        final HashMap<String, String> headParams = new HashMap<>();
+        final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
         return new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
@@ -429,14 +429,14 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
      */
     public void upload_abort() {
         String url = mServer + URL_UPLOAD_ABORT;
-        final HashMap<String, String> headParams = new HashMap<>();
+        final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
         new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
     public String addFile(long filesize, String filehash, String fullpath) {
         String url = mApiUrl;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mOrgClientId);
         params.put("dateline", mDateline + "");
         params.put("fullpath", fullpath + "");
@@ -445,7 +445,7 @@ public class UploadRunnable<T> extends HttpEngine implements Runnable {
         } else if (mOpName != null) {
             params.put("op_name", mOpName);
         }
-        params.put("overwrite", (overWrite ? 1 : 0) + "");
+        params.put("mOverwrite", (mOverwrite ? 1 : 0) + "");
         params.put("sign", generateSign(params));
 
         params.put("filesize", filesize + "");

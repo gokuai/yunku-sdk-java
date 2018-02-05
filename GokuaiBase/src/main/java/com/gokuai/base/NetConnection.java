@@ -5,7 +5,6 @@ import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import okhttp3.*;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
@@ -134,23 +133,21 @@ public final class NetConnection {
 
         Request.Builder requestBuilder = new Request.Builder();
         Request request = null;
-        switch (method) {
-            case GET:
-                request = requestBuilder.url(url).headers(headerBuilder.build()).get().build();
-                break;
-            case POST:
-                RequestBody postBody = RequestBody.create(contentType, paramsString);
-                request = requestBuilder.url(url).post(postBody).headers(headerBuilder.build()).build();
-                break;
-            case DELETE:
-                RequestBody deleteBody = RequestBody.create(contentType, paramsString);
-                request = requestBuilder.url(url).delete(deleteBody).headers(headerBuilder.build()).build();
+        if (method.equals(RequestMethod.GET)) {
+            request = requestBuilder.url(url).headers(headerBuilder.build()).get().build();
 
-                break;
-            case PUT:
-                RequestBody putBody = RequestBody.create(contentType, paramsString);
-                request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
-                break;
+        } else if (method.equals(RequestMethod.POST)) {
+            RequestBody postBody = RequestBody.create(contentType, paramsString);
+            request = requestBuilder.url(url).post(postBody).headers(headerBuilder.build()).build();
+
+        } else if (method.equals(RequestMethod.DELETE)) {
+            RequestBody deleteBody = RequestBody.create(contentType, paramsString);
+            request = requestBuilder.url(url).delete(deleteBody).headers(headerBuilder.build()).build();
+
+        } else if (method.equals(RequestMethod.PUT)) {
+            RequestBody putBody = RequestBody.create(contentType, paramsString);
+            request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
+
         }
 
         if (request != null) {
@@ -175,12 +172,11 @@ public final class NetConnection {
                     LogPrint.info(LOG_TAG, "response:" + responseString);
                 }
 
-            } catch (IOException | NullPointerException e) {
+            } catch (Exception e) {
                 if (e.getCause() != null && e.getCause().equals(SocketTimeoutException.class)) {
                     returnResult.setStatusCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT);
                 }
                 LogPrint.error(LOG_TAG, e.getMessage());
-
             }
         }
         return new Gson().toJson(returnResult);
@@ -188,7 +184,7 @@ public final class NetConnection {
 
     public static OkHttpClient getOkHttpClient() {
 
-        ArrayList<Protocol> list = new ArrayList<>();
+        ArrayList<Protocol> list = new ArrayList<Protocol>();
         list.add(Protocol.HTTP_1_1);
         list.add(Protocol.HTTP_2);
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();

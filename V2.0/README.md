@@ -865,15 +865,16 @@ orgClientId和orgClientSecret需要通过 EntLibManager bind方法获取
 ---
 ### 文件分块上传
 	uploadByBlock( String fullPath, String opName,
-	 int opId, String localFilePath,boolean overWrite, UploadCallBack callBack)
+	 int opId, String localFilePath,boolean overwrite, UploadCallBack callBack)
 #### 参数 
 | 参数 | 必须 | 类型 | 说明 |	
 |------|------|------|------|
 | fullpath | 是 | string | 文件路径 |
 | opName | 否 | string |  创建人名称, 如果指定了opId, 就不需要opName， |
 | opId | 否 | int | 创建人id, 个人库默认是库拥有人id, 如果创建人不是云库用户, 可以用op_name代替,|
-| localFilePath | 是 | string | 文件本地路径 |	
-| overWrite | 是 | boolean | 是否覆盖同名文件，true为覆盖 |
+| localFilePath | 是 | string | 文件本地路径 |
+| overwrite | 是 | boolean | 是否覆盖同名文件，true为覆盖 |
+| blocksize | 是 | int | 分块上传, 每块大小 |
 | callBack | 否 | UploadCallBack | 文件上传回调 |
 
 ---

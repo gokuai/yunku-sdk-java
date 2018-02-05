@@ -26,7 +26,7 @@ public class UploadByBlock {
 
         DebugConfig.PRINT_LOG = true;
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testRangSize.jpg", "Brandon", 0, Config.TEST_FILE_PATH, true, 65536, new UploadCallBack() {
+        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testBlockSize.jpg", "Brandon", 0, Config.TEST_FILE_PATH, true, 10485760, new UploadCallBack() {
 
             @Override
             public void onSuccess(long threadId, String fileHash) {

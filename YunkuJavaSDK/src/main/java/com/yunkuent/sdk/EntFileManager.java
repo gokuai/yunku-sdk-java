@@ -103,7 +103,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getFileList(String fullPath, String order, String tag, int start, int size, boolean dirOnly) {
         String url = URL_API_FILELIST;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -127,7 +127,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getUpdateList(boolean isCompare, long fetchDateline) {
         String url = URL_API_UPDATE_LIST;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         if (isCompare) {
@@ -147,7 +147,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getFileInfo(String fullPath, NetType net, boolean getAttribute) {
         String url = URL_API_FILE_INFO;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -172,7 +172,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String createFolder(String fullPath, String opName) {
         String url = URL_API_CREATE_FOLDER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -229,7 +229,7 @@ public class EntFileManager extends HttpEngine {
      * @param stream
      * @return
      */
-    public String createFile(String fullPath, String opName, FileInputStream stream, boolean overWrite) {
+    public String createFile(String fullPath, String opName, FileInputStream stream, boolean overwrite) {
 
         fullPath = getRealPath(fullPath);
         opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
@@ -248,12 +248,12 @@ public class EntFileManager extends HttpEngine {
         try {
             long dateline = Util.getUnixDateline();
 
-            HashMap<String, String> params = new HashMap<>();
+            HashMap<String, String> params = new HashMap<String, String>();
             params.put("org_client_id", mClientId);
             params.put("dateline", dateline + "");
             params.put("fullpath", fullPath);
             params.put("op_name", opName);
-            params.put("overwrite", (overWrite ? 1 : 0) + "");
+            params.put("overwrite", (overwrite ? 1 : 0) + "");
             params.put("filefield", "file");
 
             MsMultiPartFormData multipart = new MsMultiPartFormData(URL_API_CREATE_FILE, "UTF-8");
@@ -261,7 +261,7 @@ public class EntFileManager extends HttpEngine {
             multipart.addFormField("dateline", dateline + "");
             multipart.addFormField("fullpath", fullPath);
             multipart.addFormField("op_name", opName);
-            multipart.addFormField("overwrite", (overWrite ? 1 : 0) + "");
+            multipart.addFormField("overwrite", (overwrite ? 1 : 0) + "");
             multipart.addFormField("filefield", "file");
             multipart.addFormField("sign", generateSign(params));
 
@@ -297,8 +297,8 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        int rangSize, UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, localFilePath, true, rangSize, callBack);
+                                        int blockSize, UploadCallBack callBack) {
+        return uploadByBlock(fullPath, opName, opId, localFilePath, true, blockSize, callBack);
     }
 
     /**
@@ -308,17 +308,17 @@ public class EntFileManager extends HttpEngine {
      * @param opName
      * @param opId
      * @param localFilePath
-     * @param overWrite
+     * @param overwrite
      * @param callBack
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        boolean overWrite, int rangSize, UploadCallBack callBack) {
+                                        boolean overwrite, int blockSize, UploadCallBack callBack) {
 
         opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
         fullPath = getRealPath(fullPath);
 
-        UploadRunnable uploadRunnable = new UploadRunnable<>(URL_API_CREATE_FILE, localFilePath, fullPath,
-                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize, this);
+        UploadRunnable<EntFileManager> uploadRunnable = new UploadRunnable<EntFileManager>(URL_API_CREATE_FILE, localFilePath, fullPath,
+                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overwrite, blockSize, this);
 
         Thread thread = new Thread(uploadRunnable);
         thread.start();
@@ -337,8 +337,8 @@ public class EntFileManager extends HttpEngine {
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
-                                        int rangSize, UploadCallBack callBack) {
-        return uploadByBlock(fullPath, opName, opId, inputStream, true, rangSize, callBack);
+                                        int blockSize, UploadCallBack callBack) {
+        return uploadByBlock(fullPath, opName, opId, inputStream, true, blockSize, callBack);
     }
 
     /**
@@ -348,17 +348,17 @@ public class EntFileManager extends HttpEngine {
      * @param opName
      * @param opId
      * @param inputStream
-     * @param overWrite
+     * @param overwrite
      * @param callBack
      * @return
      */
     public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, InputStream inputStream,
-                                        boolean overWrite, int rangSize, UploadCallBack callBack) {
+                                        boolean overwrite, int blockSize, UploadCallBack callBack) {
         opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
         fullPath = getRealPath(fullPath);
 
-        UploadRunnable uploadRunnable = new UploadRunnable<>(URL_API_CREATE_FILE, inputStream, fullPath, opName,
-                opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overWrite, rangSize, this);
+        UploadRunnable<EntFileManager> uploadRunnable = new UploadRunnable<EntFileManager>(URL_API_CREATE_FILE, inputStream, fullPath, opName,
+                opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overwrite, blockSize, this);
 
         Thread thread = new Thread(uploadRunnable);
         thread.start();
@@ -384,15 +384,15 @@ public class EntFileManager extends HttpEngine {
      * @param fullPath
      * @param opName
      * @param localPath
-     * @param overWrite
+     * @param overwrite
      * @return
      */
-    public String createFile(String fullPath, String opName, String localPath, boolean overWrite) {
+    public String createFile(String fullPath, String opName, String localPath, boolean overwrite) {
         File file = new File(localPath.trim());
         if (file.exists()) {
             try {
                 FileInputStream inputStream = new FileInputStream(file);
-                return createFile(fullPath, opName, inputStream, overWrite);
+                return createFile(fullPath, opName, inputStream, overwrite);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -414,7 +414,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String copy(String originFullPath, String targetFullPath, String opName) {
         String url = URL_API_COPY_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("from_fullpath", originFullPath);
@@ -435,7 +435,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String copyAll(String originFullPaths, String targetFullPaths, String sp) {
         String url = URL_API_MCOPY_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("from_fullpaths", originFullPaths);
@@ -468,7 +468,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String del(String fullPaths, String opName, boolean destroy) {
         String url = URL_API_DEL_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpaths", fullPaths);
@@ -500,7 +500,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String delByTag(String tag, String path, String opName, boolean destroy) {
         String url = URL_API_DEL_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("tag", tag);
@@ -520,7 +520,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String recycle(int start, int size) {
         String url = URL_API_RECYCLE_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("start", start + "");
@@ -538,7 +538,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String recover(String fullpaths, String opName) {
         String url = URL_API_RECOVER_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpaths", fullpaths);
@@ -556,7 +556,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String delCompletely(String[] fullpaths, String opName) {
         String url = URL_API_DEL_COMPLETELY_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpaths", Util.strArrayToString(fullpaths, "|") + "");
@@ -575,7 +575,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String move(String fullPath, String destFullPath, String opName) {
         String url = URL_API_MOVE_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -595,7 +595,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String history(String fullPath, int start, int size) {
         String url = URL_API_HISTORY_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -616,7 +616,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String link(String fullPath, int deadline, AuthType authType, String password) {
         String url = URL_API_LINK_FILE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -646,7 +646,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String sendmsg(String title, String text, String image, String linkUrl, String opName) {
         String url = URL_API_SENDMSG;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("title", title);
@@ -666,7 +666,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String links(boolean fileOnly) {
         String url = URL_API_GET_LINK;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         if (fileOnly) {
@@ -687,7 +687,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getUpdateCounts(long beginDateline, long endDateline, boolean showDelete) {
         String url = URL_API_UPDATE_COUNT;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("begin_dateline", beginDateline + "");
@@ -722,7 +722,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String createFileByUrl(String fullPath, int opId, String opName, boolean overwrite, String fileUrl) {
         String url = URL_API_CREATE_FILE_BY_URL;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("fullpath", fullPath);
         params.put("dateline", Util.getUnixDateline() + "");
@@ -746,7 +746,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getUploadServers() {
         String url = URL_API_UPLOAD_SERVERS;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("sign", generateSign(params));
@@ -762,7 +762,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getServerSite(String type) {
         String url = URL_API_GET_SERVER_SITE;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("type", type);
         params.put("dateline", Util.getUnixDateline() + "");
@@ -782,7 +782,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String search(String keyWords, String path, int start, int size, ScopeType... scopes) {
         String url = URL_API_FILE_SEARCH;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("keywords", keyWords);
         params.put("path", path);
@@ -841,7 +841,7 @@ public class EntFileManager extends HttpEngine {
      */
     private String getDownloadUrl(String hash, String fullPath, final boolean isOpen, NetType net, String fileName) {
         String url = URL_API_GET_UPLOAD_URL;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("hash", hash);
@@ -869,7 +869,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String previewUrl(String fullPath, final boolean showWaterMark, String memberName) {
         String url = URL_API_PREVIEW_URL;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -888,7 +888,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String getPermission(String fullPath, int memberId) {
         String url = URL_API_GET_PERMISSION;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -906,10 +906,10 @@ public class EntFileManager extends HttpEngine {
      */
     public String setPermission(String fullPath, int memberId, FilePermissions... permissions) {
         String url = URL_API_SET_PERMISSION;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         if (permissions != null) {
-            HashMap<Integer, ArrayList<String>> map = new HashMap<>();
-            ArrayList<String> list = new ArrayList<>();
+            HashMap<Integer, ArrayList<String>> map = new HashMap<Integer, ArrayList<String>>();
+            ArrayList<String> list = new ArrayList<String>();
             for (FilePermissions p : permissions) {
                 list.add(p.toString().toLowerCase());
             }
@@ -932,7 +932,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String addTag(String fullPath, String[] tags) {
         String url = URL_API_ADD_TAG;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);
@@ -950,7 +950,7 @@ public class EntFileManager extends HttpEngine {
      */
     public String delTag(String fullPath, String[] tags) {
         String url = URL_API_DEL_TAG;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("fullpath", fullPath);

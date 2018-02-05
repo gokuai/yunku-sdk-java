@@ -38,7 +38,7 @@ abstract class SignAbility {
             }
         }
 
-        ArrayList<String> keys = new ArrayList<>(params.keySet());
+        ArrayList<String> keys = new ArrayList<String>(params.keySet());
         Collections.sort(keys, mComparator);
         int size = params.size();
         String string_to_sign = "";

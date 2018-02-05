@@ -71,14 +71,12 @@ public class LogPrint {
             String time = getCurrentTimeStamp();
             String logContent = String.format(LOG_CONTENT_FORMAT, time, level.toUpperCase(), logTag, log);
 
-            switch (level) {
-                case WARN:
-                case ERROR:
-                    System.err.print(logContent);
-                    break;
-                case INFO:
-                    System.out.println(logContent);
-                    break;
+            if (WARN.equals(level) || ERROR.equals(level)) {
+                System.err.print(logContent);
+
+            } else if (INFO.equals(level)) {
+                System.out.println(logContent);
+
             }
         }
 

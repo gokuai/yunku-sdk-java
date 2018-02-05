@@ -19,7 +19,7 @@ public class UploadByBlock {
         new ConfigHelper()
                 .uploadOpname("[Default Name]")
                 .uploadRootPath("default/custom/upload/path")
-                .uploadTags("BrandonTest").config();
+                .uploadTags("document").config();
 
         //---------------------------------------------------
 
@@ -27,7 +27,7 @@ public class UploadByBlock {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("sear.txt", "Brandon", 0, "/Users/Brandon/Desktop/search.txt", true, 524288, new UploadCallBack() {
+        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("sear.txt", "Brandon", 0, "/Users/Brandon/Desktop/search.txt", true, 10485760, new UploadCallBack() {
 
             @Override
             public void onSuccess(long threadId, String fileHash) {

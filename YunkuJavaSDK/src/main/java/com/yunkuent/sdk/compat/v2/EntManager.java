@@ -47,7 +47,7 @@ public class EntManager extends OauthEngine {
      */
     public String getRoles() {
         String url = URL_API_GET_ROLES;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
@@ -62,7 +62,7 @@ public class EntManager extends OauthEngine {
      */
     public String getMembers(int start, int size) {
         String url = URL_API_GET_MEMBERS;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("start", start + "");
         params.put("size", size + "");
@@ -72,7 +72,7 @@ public class EntManager extends OauthEngine {
 
     private String getMember(int memberId, String outId, String account) {
         String url = URL_API_GET_MEMBER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         if (memberId > 0) {
             params.put("member_id", memberId + "");
@@ -124,7 +124,7 @@ public class EntManager extends OauthEngine {
      */
     public String getGroups() {
         String url = URL_API_GET_GROUPS;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
@@ -139,7 +139,7 @@ public class EntManager extends OauthEngine {
 
     public String getMemberFileLink(int memberId, boolean fileOnly) {
         String url = URL_API_GET_MEMBER_FILE_LINK;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("member_id", memberId + "");
         if (fileOnly) {
@@ -176,7 +176,7 @@ public class EntManager extends OauthEngine {
 //
 //    private String getMemberByIds(String[] userIds, String[] outIds) {
 //        String url = URL_API_GET_MEMBER_BY_OUT_ID;
-//        HashMap<String, String> params = new HashMap<>();
+//        HashMap<String, String> params = new HashMap<String, String>();
 //        addAuthParams(params);
 //        if (outIds != null) {
 //            params.put("out_ids", Util.strArrayToString(outIds, ",") + "");
@@ -200,7 +200,7 @@ public class EntManager extends OauthEngine {
      */
     public String addSyncMember(String oudId, String memberName, String account, String memberEmail, String memberPhone, String password) {
         String url = URL_API_ADD_SYNC_MEMBER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("out_id", oudId);
         params.put("member_name", memberName);
@@ -220,7 +220,7 @@ public class EntManager extends OauthEngine {
      */
     public String setSyncMemberState(String oudId, boolean state) {
         String url = URL_API_ADD_SYNC_MEMBER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("out_id", oudId);
         params.put("state", state ? "1" : "0");
@@ -236,7 +236,7 @@ public class EntManager extends OauthEngine {
      */
     public String delSyncMember(String[] members) {
         String url = URL_API_DEL_SYNC_MEMBER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("members", Util.strArrayToString(members, ","));
         params.put("sign", generateSign(params));
@@ -253,7 +253,7 @@ public class EntManager extends OauthEngine {
      */
     public String addSyncGroup(String outId, String name, String parentOutId) {
         String url = URL_API_ADD_SYNC_GROUP;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("out_id", outId);
         params.put("name", name);
@@ -270,7 +270,7 @@ public class EntManager extends OauthEngine {
      */
     public String delSyncGroup(String[] groups) {
         String url = URL_API_DEL_SYNC_GROUP;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("groups", Util.strArrayToString(groups, ","));
         params.put("sign", generateSign(params));
@@ -286,7 +286,7 @@ public class EntManager extends OauthEngine {
      */
     public String addSyncGroupMember(String groupOutId, String[] members) {
         String url = URL_API_ADD_SYNC_GROUP_MEMBER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("group_out_id", groupOutId);
         params.put("members", Util.strArrayToString(members, ","));
@@ -303,7 +303,7 @@ public class EntManager extends OauthEngine {
      */
     public String delSyncGroupMember(String groupOutId, String[] members) {
         String url = URL_API_DEL_SYNC_GROUP_MEMBER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("group_out_id", groupOutId);
         params.put("members", Util.strArrayToString(members, ","));
@@ -322,7 +322,7 @@ public class EntManager extends OauthEngine {
      */
     public String getGroupMembers(int groupId, int start, int size, boolean showChild) {
         String url = URL_API_GET_GROUP_MEMBERS;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("group_id", groupId + "");
         params.put("start", start + "");
@@ -340,7 +340,7 @@ public class EntManager extends OauthEngine {
      */
     public String delSyncMemberGroup(String[] members) {
         String url = URL_API_DEL_SYNC_MEMBER_GROUP;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("members", Util.strArrayToString(members, ","));
         params.put("sign", generateSign(params));

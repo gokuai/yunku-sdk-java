@@ -80,8 +80,8 @@ public class YunkuEntTest {
     @Test
     public void addSyncMember() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        String s = ent.addSyncMember("MemberTest1", "Member1", "Member1", "1234", "111", "111");
-        String s2 = ent.addSyncMember("MemberTest2", "Member2", "Member2", "", "", "");
+        String s = ent.addSyncMember("MemberTest1", "Member1", "Member1", "1234", "111", "111", null);
+        String s2 = ent.addSyncMember("MemberTest2", "Member2", "Member2", "", "", "", null);
         ReturnResult r = ReturnResult.create(s);
         ReturnResult r2 = ReturnResult.create(s2);
         Assert.assertEquals(200,r.getStatusCode());

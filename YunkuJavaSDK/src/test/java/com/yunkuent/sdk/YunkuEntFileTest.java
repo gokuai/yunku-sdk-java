@@ -21,7 +21,7 @@ public class YunkuEntFileTest {
     public static final String ORG_CLIENT_ID = "";
     public static final String ORG_CLIENT_SECRET = "";
 
-    public static final String TEST_FILE_PATH = "testData/test.jpg";
+    public static final String TEST_FILE_PATH = "testData/1.xlsx";
 
     @Test
     public void getFileList() throws Exception{
@@ -42,7 +42,7 @@ public class YunkuEntFileTest {
     @Test
     public void getFileInfo() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.getFileInfo("qq.jpg", EntFileManager.NetType.DEFAULT, false);
+        String s = entFile.getFileInfo("doc/1.xlsx", EntFileManager.NetType.DEFAULT, false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -50,7 +50,7 @@ public class YunkuEntFileTest {
     @Test
     public void createFolder() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.createFolder("test","Brandon");
+        String s = entFile.createFolder("test","");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -58,7 +58,7 @@ public class YunkuEntFileTest {
     @Test
     public void createFile() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.createFile("test.jpg","Brandon",TEST_FILE_PATH,false);
+        String s = entFile.createFile("doc/1.xlsx","",TEST_FILE_PATH,false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -66,7 +66,7 @@ public class YunkuEntFileTest {
     @Test
     public void createFileAndOverWrite() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.createFile("test.jpg","Brandon",TEST_FILE_PATH);
+        String s = entFile.createFile("doc/1.xlsx","",TEST_FILE_PATH);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -75,7 +75,7 @@ public class YunkuEntFileTest {
     public void createFileByStream() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         FileInputStream stream = new FileInputStream(new File(TEST_FILE_PATH));
-        String s = entFile.createFile("test.jpg","Brandon",stream,false);
+        String s = entFile.createFile("doc/1.xlsx","",stream,false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -84,7 +84,7 @@ public class YunkuEntFileTest {
     public void createFileByStreamAndOverWrite() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         FileInputStream stream = new FileInputStream(new File(TEST_FILE_PATH));
-        String s = entFile.createFile("test.jpg","Brandon",stream);
+        String s = entFile.createFile("doc/1.xlsx","",stream);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -94,7 +94,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, false, 524288, new UploadCallBack() {
+        entFile.uploadByBlock("doc/1.xlsx", "", 0, TEST_FILE_PATH, false, 10485760, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();
@@ -113,7 +113,7 @@ public class YunkuEntFileTest {
                 System.out.println("onProgress:" + threadId + " onProgress:" + percent * 100);
             }
         });
-            latch.await();
+        latch.await();
     }
 
     @Test
@@ -121,7 +121,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon", 0, TEST_FILE_PATH, 524288, new UploadCallBack() {
+        entFile.uploadByBlock("doc/1.xlsx", "", 0, TEST_FILE_PATH, 10485760, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();
@@ -149,7 +149,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
         final CountDownLatch Latch = new CountDownLatch(1);
-        entFile.uploadByBlock("test.jpg", "Brandon",0, inputStream, false, 524288, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "",0, inputStream, false, 10485760, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 Latch.countDown();
@@ -177,7 +177,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlock("test.jpg", "Brandon",0, inputStream, 524288, new UploadCallBack() {
+        entFile.uploadByBlock("test.jpg", "",0, inputStream, 10485760, new UploadCallBack() {
             @Override
             public void onSuccess(long threadId, String fileHash) {
                 latch.countDown();
@@ -202,7 +202,7 @@ public class YunkuEntFileTest {
     @Test
     public void move() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.move("qq.jpg","test/qq.jpg","Brandon");
+        String s = entFile.move("qq.jpg","test/qq.jpg","");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -218,7 +218,7 @@ public class YunkuEntFileTest {
     @Test
     public void sendmsg() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.sendmsg("msgTest", "msg", "", "", "Brandon");
+        String s = entFile.sendmsg("msgTest", "msg", "", "", "");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -246,7 +246,7 @@ public class YunkuEntFileTest {
     public void createFileByUrlAndOverWrite() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         String s = entFile.createFileByUrl("qq.jpg", 0,
-                "Brandon", "http://reso2.yiihuu.com/976162-z.jpg");
+                "", "http://reso2.yiihuu.com/976162-z.jpg");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -255,7 +255,7 @@ public class YunkuEntFileTest {
     public void createFileByUrl() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         String s = entFile.createFileByUrl("qq.jpg", 0,
-                "Brandon", true, "http://reso2.yiihuu.com/976162-z.jpg");
+                "", true, "http://reso2.yiihuu.com/976162-z.jpg");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -303,7 +303,7 @@ public class YunkuEntFileTest {
     @Test
     public void del() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.del("test.jpg","Brandon");
+        String s = entFile.del("test.jpg","");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -319,7 +319,7 @@ public class YunkuEntFileTest {
     @Test
     public void copy() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.copy("qq.jpg", "test/qq.jpg", "qp");
+        String s = entFile.copy("qq.jpg", "test/qq.jpg", "");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -327,7 +327,7 @@ public class YunkuEntFileTest {
     @Test
     public void delCompletely() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.delCompletely(new String[]{"test.jpg","test(3).jpg"}, "Brandon");
+        String s = entFile.delCompletely(new String[]{"test.jpg","test(3).jpg"}, "");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -367,7 +367,7 @@ public class YunkuEntFileTest {
     @Test
     public void recover() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        String s = entFile.recover("qq.jpg", "qp");
+        String s = entFile.recover("qq.jpg", "");
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }

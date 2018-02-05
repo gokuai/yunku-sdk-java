@@ -42,7 +42,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      */
     public String accessToken(String username, String password) {
         String url = URL_API_TOKEN;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", username);
         String passwordEncoded;
         if (username.indexOf("/") > 0 || username.indexOf("\\") > 0) {
@@ -114,7 +114,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
         if (Util.isEmpty(refreshToken)) {
             return false;
         }
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("grant_type", "refresh_token");
         params.put("refresh_token", refreshToken);
         params.put("client_id", mClientId);

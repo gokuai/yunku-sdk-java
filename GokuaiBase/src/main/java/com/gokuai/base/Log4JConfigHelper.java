@@ -26,16 +26,15 @@ public class Log4JConfigHelper {
         @Override
         public void getLog(String logTag, String level, String message) {
             Logger logger = LogManager.getLogger(logTag);
-            switch (level) {
-                case INFO:
-                    logger.info(message);
-                    break;
-                case ERROR:
-                    logger.error(message);
-                    break;
-                case WARN:
-                    logger.warn(message);
-                    break;
+            if (INFO.equals(level)) {
+                logger.info(message);
+
+            } else if (ERROR.equals(level)) {
+                logger.error(message);
+
+            } else if (WARN.equals(level)) {
+                logger.warn(message);
+
             }
 
         }

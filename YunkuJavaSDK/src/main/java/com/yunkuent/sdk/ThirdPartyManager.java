@@ -57,7 +57,7 @@ public class ThirdPartyManager extends HttpEngine {
     public String createEnt(HashMap<String, String> map, String entName, String contactName, String contactMobile,
                             String contactEmail, String contactAddress) {
         String url = URL_API_CREATE_ENT;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
         params.put("out_id", OUT_ID);
         params.put("ent_name", entName);
@@ -80,7 +80,7 @@ public class ThirdPartyManager extends HttpEngine {
      */
     public String getEntInfo() {
         String url = URL_API_ENT_INFO;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
         params.put("out_id", OUT_ID);
         params.put("dateline", Util.getUnixDateline() + "");
@@ -143,24 +143,23 @@ public class ThirdPartyManager extends HttpEngine {
      */
     private String order(String type, int memberCount, int space, int month) {
         String url = URL_API_ORDER;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
         params.put("out_id", OUT_ID);
         if (!Util.isEmpty(type)) {
             params.put("type", type);
-            switch (type) {
-                case SUBSCRIBE:
-                    params.put("member_count", memberCount + "");
-                    params.put("space", space + "");
-                    params.put("month", month + "");
-                    break;
-                case UPGRADE:
-                    params.put("member_count", memberCount + "");
-                    params.put("space", space + "");
-                    break;
-                case RENEW:
-                    params.put("month", month + "");
-                    break;
+            if (SUBSCRIBE.equals(type)) {
+                params.put("member_count", memberCount + "");
+                params.put("space", space + "");
+                params.put("month", month + "");
+
+            } else if (UPGRADE.equals(type)) {
+                params.put("member_count", memberCount + "");
+                params.put("space", space + "");
+
+            } else if (RENEW.equals(type)) {
+                params.put("month", month + "");
+
             }
         }
         params.put("dateline", Util.getUnixDateline() + "");
@@ -175,7 +174,7 @@ public class ThirdPartyManager extends HttpEngine {
      */
     public String getEntToken() {
         String url = URL_GET_TOKEN;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
         params.put("out_id", OUT_ID);
         params.put("dateline", Util.getUnixDateline() + "");
@@ -191,7 +190,7 @@ public class ThirdPartyManager extends HttpEngine {
      */
     public String getSsoUrl(String ticket) {
         String url = URL_GET_SSO_URL;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
         params.put("out_id", OUT_ID);
         params.put("ticket", ticket);

@@ -39,7 +39,7 @@ abstract class OauthEngine extends HttpEngine {
      */
     public String accessToken(String username, String password) {
         String url = URL_API_TOKEN;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", username);
         String passwordEncoded;
         if (username.indexOf("/") > 0 || username.indexOf("\\") > 0) {
