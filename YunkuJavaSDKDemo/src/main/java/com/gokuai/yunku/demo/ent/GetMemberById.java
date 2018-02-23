@@ -16,7 +16,7 @@ public class GetMemberById {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().getMemberById(74478);
+        String returnString = EntManagerHelper.getInstance().getMemberById(74478, false);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

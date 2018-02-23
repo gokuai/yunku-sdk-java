@@ -16,7 +16,7 @@ public class GetMemberByAccount {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().getMemberByAccount("6905656124312207");
+        String returnString = EntManagerHelper.getInstance().getMemberByAccount("6905656124312207", false);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

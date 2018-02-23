@@ -31,7 +31,7 @@ public class YunkuEntTest {
     @Test
     public void getMemberById() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        String s = ent.getMemberById(74478);
+        String s = ent.getMemberById(74478, false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -39,7 +39,7 @@ public class YunkuEntTest {
     @Test
     public void getMemberByOutId() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        String s = ent.getMemberByOutId("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==");
+        String s = ent.getMemberByOutId("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==", false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }
@@ -47,7 +47,7 @@ public class YunkuEntTest {
     @Test
     public void getMemberByAccount() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        String s = ent.getMemberByAccount("6905656124312207");
+        String s = ent.getMemberByAccount("6905656124312207", false);
         ReturnResult r = ReturnResult.create(s);
         Assert.assertEquals(200,r.getStatusCode());
     }

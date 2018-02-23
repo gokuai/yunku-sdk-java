@@ -16,7 +16,7 @@ public class GetMemberByOutId {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().getMemberByOutId("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==");
+        String returnString = EntManagerHelper.getInstance().getMemberByOutId("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==", false);
 
         DeserializeHelper.getInstance().deserializeReturn(returnString);
     }

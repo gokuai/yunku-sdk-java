@@ -68,7 +68,7 @@ public class EntManager extends OauthEngine {
     }
 
 
-    private String getMember(int memberId, String outId, String account) {
+    private String getMember(int memberId, String outId, String account, boolean showGroups) {
         String url = URL_API_GET_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -78,6 +78,9 @@ public class EntManager extends OauthEngine {
         params.put("out_id", outId);
         params.put("account", account);
         params.put("sign", generateSign(params));
+        if (showGroups) {
+            params.put("show_groups", "1");
+        }
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -85,22 +88,22 @@ public class EntManager extends OauthEngine {
      * 根据成员id获取企业成员信息
      *
      * @param memberId
+     * @param showGroups
      * @return
      */
-
-    public String getMemberById(int memberId) {
-        return getMember(memberId, null, null);
+    public String getMemberById(int memberId, boolean showGroups) {
+        return getMember(memberId, null, null, showGroups);
     }
 
     /**
      * 根据外部id获取企业成员信息
      *
      * @param outId
+     * @param showGroups
      * @return
      */
-
-    public String getMemberByOutId(String outId) {
-        return getMember(0, outId, null);
+    public String getMemberByOutId(String outId, boolean showGroups) {
+        return getMember(0, outId, null, showGroups);
 
     }
 
@@ -108,11 +111,11 @@ public class EntManager extends OauthEngine {
      * 根据帐号获取企业成员信息
      *
      * @param account
+     * @param showGroups
      * @return
      */
-
-    public String getMemberByAccount(String account) {
-        return getMember(0, null, account);
+    public String getMemberByAccount(String account, boolean showGroups) {
+        return getMember(0, null, account, showGroups);
     }
 
 
