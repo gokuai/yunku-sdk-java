@@ -24,7 +24,7 @@
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.27'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.30'
 	}
 ```
 或者Maven：
@@ -42,17 +42,31 @@
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.27</version>
+	    <version>3.30</version>
 	</dependency>
 ```
 
 ## 初始化
+
 要使用云库3.0的API，您需要先在 [企业授权][5]中获取 `client_id` 和 `client_secret`
+
+
+**初始化配置**
+
+```
+new ConfigHelper()
+        .apiHost("http://apihost")
+        .language("Zh-CN")
+        .config();
+```
+
+* apiHost: 公有云/混合云用户使用 `http://yk3-api-ent.gokuai.com`, 私有部署用户使用 `http://{webhost}/m-open`, 可以在浏览器中打开 `http://{apiHost}/status` 检测API服务器是否正常
+* language: 多语言环境, `Zh-CN`表示中文, `En-US`表示英文
+
 
 ## 参数使用
 
 以下使用到的方法中，如果是string类型的非必要参数，如果是不传，则传`null`
-
 
 ## 企业库管理（EntLibManager.java）{#index}
 
