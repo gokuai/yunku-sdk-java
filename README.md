@@ -1304,6 +1304,32 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 	}
 ---
 
+## 一站式登录 (SSOManager.java)
+
+### 构造方法
+
+	new SSOManager(String clientId, String clientSecret)
+	
+#### 参数
+
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| clientId | 是 | string | 够快分配的client_id |
+| clientSecret | 是 | string | 够快分配的clientSecret |
+
+### 获取一站式登录URL
+
+	getSsoUrl(String account)
+	
+#### 参数
+
+| 名称 | 必需 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| account | 是 | string | 一站式登录的帐号, 对应企业成员API参数中的`account` |
+| returnUrl | 否 | string | 登录成功后跳转的URL, 传null则跳转到默认界面
+
+---
+
 ## 企业合作API（ThirdPartyManager.java）
 ### 构造方法
 	new ThirdPartyManager(String clientId, String clientSecret, String outId)
