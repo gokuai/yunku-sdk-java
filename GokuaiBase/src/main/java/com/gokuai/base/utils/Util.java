@@ -176,7 +176,7 @@ public class Util {
                     "HmacSHA1");
             Mac mac = Mac.getInstance("HmacSHA1");
             mac.init(signingKey);
-            byte[] text = mac.doFinal(data.getBytes());
+            byte[] text = mac.doFinal(data.getBytes("UTF-8"));
             String result = Base64.encodeBytes(text);
             return result.trim();
         } catch (Exception e) {
