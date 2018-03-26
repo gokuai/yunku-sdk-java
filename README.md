@@ -443,13 +443,14 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 ---
 
 ### 根据成员Id查询企业成员信息
-	getMemberById(int memberId)
+	getMemberById(int memberId, boolean showGroups)
 
 #### 参数 
 	
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | memberId | 是 | int | 成员id |
+| showGroups | 是 | boolean | 是否返回所属部门信息 |
 
 
 #### 返回结果
@@ -460,19 +461,30 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
       "member_email": 成员邮箱,
       "out_id": 外部系统唯一id,
       "account": 外部系统登录帐号,
-      "state": 成员状态。1：已接受，2：未接受
+      "state": 成员状态。1：已接受，2：未接受,
+      "groups" :
+	    [
+	        {
+	            "id": 部门ID,
+	            "name": 部门名称,
+	            "group_code": 内部code,
+	            "out_id": 部门外部系统唯一ID
+	        },
+	        ...
+	    ]
 	}
 
 ---
 
 ### 根据外部系统唯一id查询企业成员信息
-	getMemberByOutId(String outId)
+	getMemberByOutId(String outId, boolean showGroups)
 
 #### 参数 
 	
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | outId | 是 | String | 外部系统唯一id|
+| showGroups | 是 | boolean | 是否返回所属部门信息 |
 
 
 #### 返回结果
@@ -483,18 +495,29 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
       "member_email": 成员邮箱,
       "out_id": 外部系统唯一id,
       "account": 外部系统登录帐号,
-      "state": 成员状态。1：已接受，2：未接受
+      "state": 成员状态。1：已接受，2：未接受,
+      "groups" :
+	    [
+	        {
+	            "id": 部门ID,
+	            "name": 部门名称,
+	            "group_code": 内部code,
+	            "out_id": 部门外部系统唯一ID
+	        },
+	        ...
+	    ]
 	}
 
 ---
 ### 根据外部系统登录帐号查询企业成员信息
-	String getMemberByAccount(String account)
+	String getMemberByAccount(String account, boolean showGroups)
 
 #### 参数 
 	
 | 参数 | 必须 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | account | 是 | String | 外部系统登录帐号 |
+| showGroups | 是 | boolean | 是否返回所属部门信息 |
 
 
 #### 返回结果
@@ -505,7 +528,17 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
       "member_email": 成员邮箱,
       "out_id": 外部系统唯一id,
       "account": 外部系统登录帐号,
-      "state": 成员状态。1：已接受，2：未接受
+      "state": 成员状态。1：已接受，2：未接受,
+      "groups" :
+	    [
+	        {
+	            "id": 部门ID,
+	            "name": 部门名称,
+	            "group_code": 内部code,
+	            "out_id": 部门外部系统唯一ID
+	        },
+	        ...
+	    ]
 	}
 
 ---
@@ -1426,18 +1459,6 @@ org\_client\_secret用于调用库文件相关API签名时的密钥
 #### 返回结果
 	正常返回 HTTP 200
 
-### 获取企业token
-	getEntToken()
-
-#### 参数
-
-(无)
-
-#### 返回结果
-	{
-    	access_token: 企业token
-    	expires_in: token过期时间
-	}
 
 ### 获取单点登录地址
 	getSsoUrl(String ticket)
