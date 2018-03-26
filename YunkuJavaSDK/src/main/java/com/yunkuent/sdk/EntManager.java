@@ -77,10 +77,10 @@ public class EntManager extends OauthEngine {
         }
         params.put("out_id", outId);
         params.put("account", account);
-        params.put("sign", generateSign(params));
         if (showGroups) {
             params.put("show_groups", "1");
         }
+        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
