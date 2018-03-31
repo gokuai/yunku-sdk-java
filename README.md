@@ -24,7 +24,7 @@
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.30'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.31'
 	}
 ```
 或者Maven：
@@ -42,7 +42,7 @@
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.30</version>
+	    <version>3.31</version>
 	</dependency>
 ```
 
