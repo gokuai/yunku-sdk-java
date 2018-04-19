@@ -29,7 +29,7 @@ public class UploadByBlockAsync {
 
         DebugConfig.PRINT_LOG = true;
 
-        UploadManager u = EntFileManagerHelper.getInstance().uploadByBlockAsync("testBlockSize.jpg", "", 0, Config.TEST_FILE_PATH, true, 10485760, new UploadCallback() {
+        EntFileManagerHelper.getInstance().uploadByBlockAsync("testBlockSize.jpg", "", 0, Config.TEST_FILE_PATH, true, 10485760, new UploadCallback() {
 
             @Override
             public void onSuccess(String fullpath, FileInfo file) {
@@ -40,11 +40,15 @@ public class UploadByBlockAsync {
             public void onFail(String fullpath, YunkuException e) {
                 System.out.println("upload fail");
                 e.printStackTrace();
+
                 ReturnResult result = e.getReturnResult();
                 if (result != null) {
-                    System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
                     if (result.getException() != null) {
+                        //出现网络或IO错误
                         result.getException().printStackTrace();
+                    } else {
+                        //如果API接口返回异常, 获取最后一次API请求的结果
+                        System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
                     }
                 }
             }

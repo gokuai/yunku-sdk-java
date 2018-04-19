@@ -94,6 +94,9 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         }
     }
 
+    /**
+     * 线程使用的上传方法
+     */
     @Override
     public void run() {
         try {
@@ -117,7 +120,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         }
     }
 
-    public void startUpload() throws YunkuException, IOException {
+    private void startUpload() throws YunkuException, IOException {
         ReturnResult result;
 
         if (mInputStream != null) {
@@ -184,7 +187,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
 
             mInputStream.skip(offset);
 
-            while (offset < this.mFileinfo.fileSize - 1 && !mIsStop) {
+            while (offset < this.mFileinfo.fileSize - 1 && !this.mIsStop) {
 
                 if (mCallback != null) {
                     mCallback.onProgress(this.mFullPath, (float) offset / (float) this.mFileinfo.fileSize);
@@ -226,8 +229,11 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
                     offset = Long.parseLong(json.getString("expect"));
                     mInputStream.skip(offset);
                 } else {
-                    throw new YunkuException("fail to upload part", result);
+                    throw new YunkuException("fail to call upload_part", result);
                 }
+            }
+            if (this.mIsStop) {
+                throw new YunkuException("upload stopped");
             }
             if (!uploadPartErr) {
                 break;
@@ -413,6 +419,9 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         }
     }
 
+    /**
+     * 终止异步上传
+     */
     public void stop() {
         mIsStop = true;
     }

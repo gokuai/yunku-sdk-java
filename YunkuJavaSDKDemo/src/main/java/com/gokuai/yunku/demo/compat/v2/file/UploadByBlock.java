@@ -34,9 +34,16 @@ public class UploadByBlock {
         } catch (YunkuException e) {
             System.out.println("upload fail");
             e.printStackTrace();
+
             ReturnResult result = e.getReturnResult();
             if (result != null) {
-                System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
+                if (result.getException() != null) {
+                    //出现网络或IO错误
+                    result.getException().printStackTrace();
+                } else {
+                    //如果API接口返回异常, 获取最后一次API请求的结果
+                    System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
+                }
             }
         }
     }
