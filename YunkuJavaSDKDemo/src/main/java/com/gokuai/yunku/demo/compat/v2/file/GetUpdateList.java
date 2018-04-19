@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 
@@ -17,8 +18,8 @@ public class GetUpdateList {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-            String returnString = EntFileManagerHelper.getInstance().getUpdateList(false, 0);
+            ReturnResult result = EntFileManagerHelper.getInstance().getUpdateList(false, 0);
 
-            DeserializeHelper.getInstance().deserializeReturn(returnString);
+            DeserializeHelper.getInstance().deserializeReturn(result);
         }
     }

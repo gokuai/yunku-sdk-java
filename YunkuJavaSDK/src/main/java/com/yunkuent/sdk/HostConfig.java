@@ -13,18 +13,16 @@ import java.net.Proxy;
 
 public class HostConfig {
 
-    //     protected static  String OAUTH_HOST = "http://yk3-api.goukuai.cn";
     protected static String OAUTH_HOST = "http://yk3-api.gokuai.com";
-    //    protected static  String API_ENT_HOST = "http://yk3-api-ent.goukuai.cn";
     protected static String API_ENT_HOST = "http://yk3-api-ent.gokuai.com";
 
     @Deprecated
-    public static void changeConfig(String oauthHost, String apiHost) {
+    public static void changeConfig(String oauthHost, String apiEntHost) {
         if (!Util.isEmpty(oauthHost)) {
             OAUTH_HOST = oauthHost;
         }
-        if (!Util.isEmpty(apiHost)) {
-            API_ENT_HOST = apiHost;
+        if (!Util.isEmpty(apiEntHost)) {
+            API_ENT_HOST = apiEntHost;
         }
     }
 

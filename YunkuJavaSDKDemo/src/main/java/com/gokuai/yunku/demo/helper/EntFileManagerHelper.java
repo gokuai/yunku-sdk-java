@@ -11,10 +11,6 @@ public class EntFileManagerHelper {
 
     private static volatile EntFileManager instance = null;
 
-    static {
-        new ConfigHelper().apiHost("http://yk3-api-ent.goukuai.cn").config();
-    }
-
     public static EntFileManager getInstance() {
         if (instance == null) {
             synchronized (EntFileManager.class) {

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.lib;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntLibraryManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 
@@ -17,8 +18,8 @@ public class Create {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().create("compatV3", "1073741824", "destroy", "test lib");
+        ReturnResult result = EntLibraryManagerHelper.getInstance().create("compatV3", "1073741824", "destroy", "test lib");
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

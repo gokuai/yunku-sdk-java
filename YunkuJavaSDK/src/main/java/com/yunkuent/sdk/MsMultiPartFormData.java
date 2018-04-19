@@ -121,7 +121,7 @@ public class MsMultiPartFormData {
      * @return a list of Strings as response in case the server returned
      * status OK, otherwise an exception is thrown.
      */
-    public String finish() {
+    public ReturnResult finish() {
         List<String> response = new ArrayList<String>();
 
         writer.append(LINE_FEED).flush();
@@ -161,10 +161,9 @@ public class MsMultiPartFormData {
         for (String str : response) {
             result += str;
         }
-        ReturnResult returnResult = new ReturnResult(result, code);
-        Gson gosn = new Gson();
+        ReturnResult returnResult = new ReturnResult(code, result);
         LogPrint.info(TAG, "createFile:finish");
-        return gosn.toJson(returnResult);
+        return returnResult;
     }
 
 

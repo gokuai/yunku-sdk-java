@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.library;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
 
@@ -16,8 +17,8 @@ public class GetLibList {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().getLibList();
+        ReturnResult result = EntLibraryManagerHelper.getInstance().getLibList();
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

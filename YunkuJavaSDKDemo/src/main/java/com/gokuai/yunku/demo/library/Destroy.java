@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.library;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
 
@@ -16,8 +17,8 @@ public class Destroy {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().destroy("b2013df96cbc23b4b0dd72f075e5cbf7");
+        ReturnResult result = EntLibraryManagerHelper.getInstance().destroy("b2013df96cbc23b4b0dd72f075e5cbf7");
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

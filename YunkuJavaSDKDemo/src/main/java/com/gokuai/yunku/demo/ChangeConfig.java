@@ -1,32 +1,27 @@
 package com.gokuai.yunku.demo;
 
 
-import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
-import com.gokuai.yunku.demo.helper.EntManagerHelper;
+import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.ConfigHelper;
-import com.yunkuent.sdk.HostConfig;
+
+import java.io.IOException;
 
 /**
  * Created by qp on 2017/4/8.
  */
 public class ChangeConfig {
 
-    public static void main(String[] args) {
-
-        DebugConfig.PRINT_LOG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
-
+    public static void main(String[] args) throws IOException {
 
         new ConfigHelper()
-                .apiHost("http://apihost")
-                .oauthHost("http://oauthHost")
+                .apiHost("http://yk3-api-ent.gokuai.com")
                 .language("Zh-CN")
-                .userAgent("[Your User Agent]")
+                .blockSize(1024 * 1024)
                 .config();
 
-        String returnString = EntManagerHelper.getInstance().getMembers(0, 99);
-
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        ReturnResult result = EntFileManagerHelper.getInstance().previewUrl("upload/1521779111710/1521779111710.xls", true, "tom");
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.ent;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntManagerHelper;
 
@@ -16,8 +17,8 @@ public class GetMemberByAccount {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().getMemberByAccount("6905656124312207", false);
+        ReturnResult result = EntManagerHelper.getInstance().getMemberByAccount("6905656124312207", false);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

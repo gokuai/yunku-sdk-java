@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.ent;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 
@@ -16,8 +17,8 @@ public class GetMembers {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().getMembers(0, 99);
+        ReturnResult result = EntManagerHelper.getInstance().getMembers(0, 99);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

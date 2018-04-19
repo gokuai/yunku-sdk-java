@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.helper;
 
 import com.gokuai.yunku.demo.Config;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.EntLibManager;
 
 /**
@@ -9,7 +10,6 @@ import com.yunkuent.sdk.EntLibManager;
 public class EntLibraryManagerHelper {
 
     private static volatile EntLibManager instance = null;
-
 
     public static EntLibManager getInstance() {
         if (instance == null) {

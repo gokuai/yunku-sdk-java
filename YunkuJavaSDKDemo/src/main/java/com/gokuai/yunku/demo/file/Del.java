@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 
@@ -16,8 +17,8 @@ public class Del {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().del("test/qq.jpg","qp");
+        ReturnResult result = EntFileManagerHelper.getInstance().del("test/qq.jpg","qp");
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 
@@ -16,8 +17,8 @@ public class History {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().history("test", 0, 100);
+        ReturnResult result = EntFileManagerHelper.getInstance().history("test", 0, 100);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.ent;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 
@@ -17,10 +18,10 @@ public class AddSyncGroup {
 //        DebugConfig.LOG_PATH="LogPath/";
 
 
-        String returnString = EntManagerHelper.getInstance().addSyncGroup("ParentGroup", "ParentGroup", "");
-        String returnString1 = EntManagerHelper.getInstance().addSyncGroup("GroupTest", "Group", "ParentGroup");
+        ReturnResult result = EntManagerHelper.getInstance().addSyncGroup("ParentGroup", "ParentGroup", "");
+        ReturnResult result1 = EntManagerHelper.getInstance().addSyncGroup("GroupTest", "Group", "ParentGroup");
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
-        DeserializeHelper.getInstance().deserializeReturn(returnString1);
+        DeserializeHelper.getInstance().deserializeReturn(result);
+        DeserializeHelper.getInstance().deserializeReturn(result1);
     }
 }

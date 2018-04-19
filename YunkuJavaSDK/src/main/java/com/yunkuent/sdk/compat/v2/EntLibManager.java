@@ -2,6 +2,7 @@ package com.yunkuent.sdk.compat.v2;
 
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.MemberType;
 
@@ -50,7 +51,7 @@ public class EntLibManager extends OauthEngine {
      * @param storagePointName
      * @return
      */
-    public String create(String orgName, String orgCapacity, String storagePointName, String orgLogo) {
+    public ReturnResult create(String orgName, String orgCapacity, String storagePointName, String orgLogo) {
         String url = URL_API_CREATE_LIB;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -68,7 +69,7 @@ public class EntLibManager extends OauthEngine {
      *
      * @return
      */
-    public String getLibList() {
+    public ReturnResult getLibList() {
         return this.getLibList(0);
     }
 
@@ -78,7 +79,7 @@ public class EntLibManager extends OauthEngine {
      * @param memberId
      * @return
      */
-    public String getLibList(int memberId) {
+    public ReturnResult getLibList(int memberId) {
         String url = URL_API_GET_LIB_LIST;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -98,7 +99,7 @@ public class EntLibManager extends OauthEngine {
      * @param linkUrl 可以不传
      * @return
      */
-    public String bind(int orgId, String appName, String linkUrl) {
+    public ReturnResult bind(int orgId, String appName, String linkUrl) {
         String url = URL_API_BIND;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -115,7 +116,7 @@ public class EntLibManager extends OauthEngine {
      * @param orgClientId
      * @return
      */
-    public String unBind(String orgClientId) {
+    public ReturnResult unBind(String orgClientId) {
         String url = URL_API_UNBIND;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -132,7 +133,7 @@ public class EntLibManager extends OauthEngine {
      * @param orgId
      * @return
      */
-    public String getMembers(int start, int size, int orgId) {
+    public ReturnResult getMembers(int start, int size, int orgId) {
         String url = URL_API_GET_MEMBERS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -151,7 +152,7 @@ public class EntLibManager extends OauthEngine {
      * @param memberIds
      * @return
      */
-    public String addMembers(int orgId, int roleId, int[] memberIds) {
+    public ReturnResult addMembers(int orgId, int roleId, int[] memberIds) {
         String url = URL_API_ADD_MEMBERS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -170,7 +171,7 @@ public class EntLibManager extends OauthEngine {
      * @param memberIds
      * @return
      */
-    public String setMemberRole(int orgId, int roleId, int[] memberIds) {
+    public ReturnResult setMemberRole(int orgId, int roleId, int[] memberIds) {
         String url = URL_API_SET_MEMBER_ROLE;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -188,7 +189,7 @@ public class EntLibManager extends OauthEngine {
      * @param memberIds
      * @return
      */
-    public String delMember(int orgId, int[] memberIds) {
+    public ReturnResult delMember(int orgId, int[] memberIds) {
         String url = URL_API_DEL_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -204,7 +205,7 @@ public class EntLibManager extends OauthEngine {
      * @param orgId
      * @return
      */
-    public String getGroups(int orgId) {
+    public ReturnResult getGroups(int orgId) {
         String url = URL_API_GET_GROUPS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -221,7 +222,7 @@ public class EntLibManager extends OauthEngine {
      * @param roleId
      * @return
      */
-    public String addGroup(int orgId, int groupId, int roleId) {
+    public ReturnResult addGroup(int orgId, int groupId, int roleId) {
         String url = URL_API_ADD_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -239,7 +240,7 @@ public class EntLibManager extends OauthEngine {
      * @param groupId
      * @return
      */
-    public String delGroup(int orgId, int groupId) {
+    public ReturnResult delGroup(int orgId, int groupId) {
         String url = URL_API_DEL_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -257,7 +258,7 @@ public class EntLibManager extends OauthEngine {
      * @param roleId
      * @return
      */
-    public String setGroupRole(int orgId, int groupId, int roleId) {
+    public ReturnResult setGroupRole(int orgId, int groupId, int roleId) {
         String url = URL_API_SET_GROUP_ROLE;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -274,7 +275,7 @@ public class EntLibManager extends OauthEngine {
      * @param orgClientId
      * @return
      */
-    public String destroy(String orgClientId) {
+    public ReturnResult destroy(String orgClientId) {
         String url = URL_API_DESTROY;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -292,7 +293,7 @@ public class EntLibManager extends OauthEngine {
      * @param orgLogo
      * @return
      */
-    public String set(int orgId, String orgName, String orgCapacity, String orgLogo) {
+    public ReturnResult set(int orgId, String orgName, String orgCapacity, String orgLogo) {
         String url = URL_API_SET;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -318,7 +319,7 @@ public class EntLibManager extends OauthEngine {
      * @param ids
      * @return
      */
-    public String getMember(int orgId, MemberType type, String[] ids) {
+    public ReturnResult getMember(int orgId, MemberType type, String[] ids) {
         String url = URL_API_GET_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -335,7 +336,7 @@ public class EntLibManager extends OauthEngine {
      * @param orgId
      * @return
      */
-    public String getInfo(int orgId) {
+    public ReturnResult getInfo(int orgId) {
         String url = URL_API_GET_INFO;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);

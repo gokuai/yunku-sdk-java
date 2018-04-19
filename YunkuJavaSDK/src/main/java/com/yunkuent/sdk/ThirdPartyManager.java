@@ -2,6 +2,7 @@ package com.yunkuent.sdk;
 
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Util;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param contactAddress
      * @return
      */
-    public String createEnt(String entName, String contactName, String contactMobile, String contactEmail, String contactAddress) {
+    public ReturnResult createEnt(String entName, String contactName, String contactMobile, String contactEmail, String contactAddress) {
         return createEnt(null,entName,contactName,contactMobile,contactEmail,contactAddress);
     }
 
@@ -54,7 +55,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param contactAddress
      * @return
      */
-    public String createEnt(HashMap<String, String> map, String entName, String contactName, String contactMobile,
+    public ReturnResult createEnt(HashMap<String, String> map, String entName, String contactName, String contactMobile,
                             String contactEmail, String contactAddress) {
         String url = URL_API_CREATE_ENT;
         HashMap<String, String> params = new HashMap<String, String>();
@@ -78,7 +79,7 @@ public class ThirdPartyManager extends HttpEngine {
      *
      * @return
      */
-    public String getEntInfo() {
+    public ReturnResult getEntInfo() {
         String url = URL_API_ENT_INFO;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
@@ -95,7 +96,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param space
      * @return
      */
-    public String orderUpgrade(int memberCount, int space) {
+    public ReturnResult orderUpgrade(int memberCount, int space) {
 
         return order(UPGRADE, memberCount, space, 0);
     }
@@ -106,7 +107,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param month
      * @return
      */
-    public String orderRenew(int month) {
+    public ReturnResult orderRenew(int month) {
         return order(RENEW, -1, 0, month);
     }
 
@@ -115,7 +116,7 @@ public class ThirdPartyManager extends HttpEngine {
      *
      * @return
      */
-    public String orderUnsubscribe() {
+    public ReturnResult orderUnsubscribe() {
         return order(UNSUBSCRIBE, -1, 0, 0);
     }
 
@@ -127,7 +128,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param month
      * @return
      */
-    public String orderSubscribe(int memberCount, int space, int month) {
+    public ReturnResult orderSubscribe(int memberCount, int space, int month) {
         return order(SUBSCRIBE, memberCount, space, month);
     }
 
@@ -141,7 +142,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param month
      * @return
      */
-    private String order(String type, int memberCount, int space, int month) {
+    private ReturnResult order(String type, int memberCount, int space, int month) {
         String url = URL_API_ORDER;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
@@ -172,7 +173,7 @@ public class ThirdPartyManager extends HttpEngine {
      *
      * @return
      */
-    public String getEntToken() {
+    public ReturnResult getEntToken() {
         String url = URL_GET_TOKEN;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);
@@ -188,7 +189,7 @@ public class ThirdPartyManager extends HttpEngine {
      * @param ticket
      * @return
      */
-    public String getSsoUrl(String ticket) {
+    public ReturnResult getSsoUrl(String ticket) {
         String url = URL_GET_SSO_URL;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("client_id", mClientId);

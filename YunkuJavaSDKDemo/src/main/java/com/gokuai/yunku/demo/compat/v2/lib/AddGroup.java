@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.lib;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntLibraryManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 
@@ -16,8 +17,8 @@ public class AddGroup {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().addGroup(1262679,154837,13862);
+        ReturnResult result = EntLibraryManagerHelper.getInstance().addGroup(1262679,154837,13862);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

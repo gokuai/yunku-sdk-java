@@ -5,9 +5,8 @@ import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import okhttp3.*;
 
-import java.net.HttpURLConnection;
+import java.io.IOException;
 import java.net.Proxy;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -21,14 +20,12 @@ public final class NetConnection {
     private static final String LOG_TAG = "NetConnection";
     private static final String USER_AGENT = "YunkuJavaSDK" + ";" + System.getProperties().getProperty("http.agent");
     private static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
-    private static final int TIMEOUT = 30000;
-    private static final int CONNECT_TIMEOUT = 30000;
 
     private static Proxy mProxy = null;
-    private static String mUserAgent = null;
-    private static String mAcceptLanguage = null;
-    private static long mTimeOut = 0;
-    private static long mConnectTimeOut = 0;
+    private static String mUserAgent = "Yunku Java SDK";
+    private static String mAcceptLanguage = "Zh-CN";
+    private static long mTimeout = 1800;
+    private static long mConnectTimeout = 10;
 
 
     public static void setUserAgent(String userAgent) {
@@ -39,18 +36,16 @@ public final class NetConnection {
         return Util.isEmpty(mUserAgent) ? USER_AGENT : USER_AGENT + ";" + mUserAgent;
     }
 
-
     public static void setAcceptLanguage(String acceptLanguage) {
         NetConnection.mAcceptLanguage = acceptLanguage;
     }
 
-    public static void setTimeOut(long timeOut) {
-        NetConnection.mTimeOut = timeOut;
+    public static void setTimeout(long timeout) {
+        NetConnection.mTimeout = timeout;
     }
 
-
-    public static void setConnectTimeOut(long connectTimeOut) {
-        NetConnection.mConnectTimeOut = connectTimeOut;
+    public static void setConnectTimeout(long timeout) {
+        NetConnection.mConnectTimeout = timeout;
     }
 
 
@@ -68,7 +63,7 @@ public final class NetConnection {
      * @param headParams
      * @return
      */
-    public static String sendRequest(String url, RequestMethod method,
+    public static ReturnResult sendRequest(String url, RequestMethod method,
                                      HashMap<String, String> params, HashMap<String, String> headParams) {
 
         return sendRequest(url, method, params, headParams, NetConfig.POST_DEFAULT_FORM_TYPE);
@@ -88,7 +83,7 @@ public final class NetConnection {
      * @param headParams
      * @return
      */
-    public static String sendRequest(String url, RequestMethod method,
+    public static ReturnResult sendRequest(String url, RequestMethod method,
                                      HashMap<String, String> params, HashMap<String, String> headParams, String postType) {
         LogPrint.info(LOG_TAG, "sendRequest(): url is: " + url + " params" + params + ", headParams, " + headParams);
 
@@ -99,7 +94,8 @@ public final class NetConnection {
 
         MediaType contentType = null;
 
-        ReturnResult returnResult = new ReturnResult();
+        int statusCode = 0;
+        String body = "";
 
         if (postType.equals(NetConfig.POST_DEFAULT_FORM_TYPE)) {
             paramsString = Util.getParamsStringFromHashMapParams(params);
@@ -147,39 +143,34 @@ public final class NetConnection {
         } else if (method.equals(RequestMethod.PUT)) {
             RequestBody putBody = RequestBody.create(contentType, paramsString);
             request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
-
         }
 
         if (request != null) {
-            Response response = null;
+            Response resp = null;
             try {
-                response = client.newCall(request).execute();
+                resp = client.newCall(request).execute();
 
-                if (response.header("X-GOKUAI-DEBUG") != null) {
-                    LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(response.header("X-GOKUAI-DEBUG").getBytes())));
-                }
-
-                returnResult.setStatusCode(response.code());
-
-                String responseString = "";
-                responseString = response.body().string();
-                returnResult.setResult(responseString);
-
-                if (!Util.isEmpty(responseString)) {
-                    if (responseString.length() > 1000) {
-                        responseString = responseString.substring(0, 1000);
+                if (resp.header("X-GOKUAI-DEBUG") != null) {
+                    try {
+                        LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(resp.header("X-GOKUAI-DEBUG").getBytes())));
+                    } catch (IOException e) {
                     }
-                    LogPrint.info(LOG_TAG, "response:" + responseString);
                 }
 
-            } catch (Exception e) {
-                if (e.getCause() != null && e.getCause().equals(SocketTimeoutException.class)) {
-                    returnResult.setStatusCode(HttpURLConnection.HTTP_CLIENT_TIMEOUT);
+                statusCode = resp.code();
+                body = resp.body().string();
+
+                if (!Util.isEmpty(body)) {
+                    if (body.length() > 1000) {
+                        body = body.substring(0, 1000);
+                    }
+                    LogPrint.info(LOG_TAG, "response:" + body);
                 }
-                LogPrint.error(LOG_TAG, e.getMessage());
+            } catch (IOException e) {
+                return new ReturnResult(e);
             }
         }
-        return new Gson().toJson(returnResult);
+        return new ReturnResult(statusCode, body);
     }
 
     public static OkHttpClient getOkHttpClient() {
@@ -192,11 +183,8 @@ public final class NetConnection {
             builder.proxy(mProxy);
         }
 
-        long readTimeOut = mTimeOut > 0 ? mTimeOut : TIMEOUT;
-        long connectTimeOut = mConnectTimeOut > 0 ? mConnectTimeOut : CONNECT_TIMEOUT;
-
-        builder.connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS);
-        builder.readTimeout(readTimeOut, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
+        builder.readTimeout(mTimeout, TimeUnit.SECONDS);
         return builder.build();
     }
 

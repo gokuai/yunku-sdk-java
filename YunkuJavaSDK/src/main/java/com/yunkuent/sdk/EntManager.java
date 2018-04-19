@@ -1,6 +1,7 @@
 package com.yunkuent.sdk;
 
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Util;
 
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class EntManager extends OauthEngine {
      *
      * @return
      */
-    public String getRoles() {
+    public ReturnResult getRoles() {
         String url = URL_API_GET_ROLES;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -57,7 +58,7 @@ public class EntManager extends OauthEngine {
      * @param size
      * @return
      */
-    public String getMembers(int start, int size) {
+    public ReturnResult getMembers(int start, int size) {
         String url = URL_API_GET_MEMBERS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -68,7 +69,7 @@ public class EntManager extends OauthEngine {
     }
 
 
-    private String getMember(int memberId, String outId, String account, boolean showGroups) {
+    private ReturnResult getMember(int memberId, String outId, String account, boolean showGroups) {
         String url = URL_API_GET_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -91,7 +92,7 @@ public class EntManager extends OauthEngine {
      * @param showGroups
      * @return
      */
-    public String getMemberById(int memberId, boolean showGroups) {
+    public ReturnResult getMemberById(int memberId, boolean showGroups) {
         return getMember(memberId, null, null, showGroups);
     }
 
@@ -102,7 +103,7 @@ public class EntManager extends OauthEngine {
      * @param showGroups
      * @return
      */
-    public String getMemberByOutId(String outId, boolean showGroups) {
+    public ReturnResult getMemberByOutId(String outId, boolean showGroups) {
         return getMember(0, outId, null, showGroups);
 
     }
@@ -114,7 +115,7 @@ public class EntManager extends OauthEngine {
      * @param showGroups
      * @return
      */
-    public String getMemberByAccount(String account, boolean showGroups) {
+    public ReturnResult getMemberByAccount(String account, boolean showGroups) {
         return getMember(0, null, account, showGroups);
     }
 
@@ -124,7 +125,7 @@ public class EntManager extends OauthEngine {
      *
      * @return
      */
-    public String getGroups() {
+    public ReturnResult getGroups() {
         String url = URL_API_GET_GROUPS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -139,7 +140,7 @@ public class EntManager extends OauthEngine {
      * @return
      */
 
-    public String getMemberFileLink(int memberId, boolean fileOnly) {
+    public ReturnResult getMemberFileLink(int memberId, boolean fileOnly) {
         String url = URL_API_GET_MEMBER_FILE_LINK;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -202,7 +203,7 @@ public class EntManager extends OauthEngine {
      * @param password    如果需要由够快验证帐号密码,密码为必须参数
      * @return
      */
-    public String addSyncMember(String outId, String memberName, String account, String memberEmail, String memberPhone, String password, String state) {
+    public ReturnResult addSyncMember(String outId, String memberName, String account, String memberEmail, String memberPhone, String password, String state) {
         String url = URL_API_ADD_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -223,7 +224,7 @@ public class EntManager extends OauthEngine {
      * @param oudId
      * @return
      */
-    public String setSyncMemberState(String oudId, boolean state) {
+    public ReturnResult setSyncMemberState(String oudId, boolean state) {
         String url = URL_API_ADD_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -239,7 +240,7 @@ public class EntManager extends OauthEngine {
      * @param members
      * @return
      */
-    public String delSyncMember(String[] members) {
+    public ReturnResult delSyncMember(String[] members) {
         String url = URL_API_DEL_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -256,7 +257,7 @@ public class EntManager extends OauthEngine {
      * @param parentOutId
      * @return
      */
-    public String addSyncGroup(String outId, String name, String parentOutId) {
+    public ReturnResult addSyncGroup(String outId, String name, String parentOutId) {
         String url = URL_API_ADD_SYNC_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -273,7 +274,7 @@ public class EntManager extends OauthEngine {
      * @param groups
      * @return
      */
-    public String delSyncGroup(String[] groups) {
+    public ReturnResult delSyncGroup(String[] groups) {
         String url = URL_API_DEL_SYNC_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -289,7 +290,7 @@ public class EntManager extends OauthEngine {
      * @param members
      * @return
      */
-    public String addSyncGroupMember(String groupOutId, String[] members) {
+    public ReturnResult addSyncGroupMember(String groupOutId, String[] members) {
         String url = URL_API_ADD_SYNC_GROUP_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -306,7 +307,7 @@ public class EntManager extends OauthEngine {
      * @param members
      * @return
      */
-    public String delSyncGroupMember(String groupOutId, String[] members) {
+    public ReturnResult delSyncGroupMember(String groupOutId, String[] members) {
         String url = URL_API_DEL_SYNC_GROUP_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -325,7 +326,7 @@ public class EntManager extends OauthEngine {
      * @param showChild
      * @return
      */
-    public String getGroupMembers(int groupId, int start, int size, boolean showChild) {
+    public ReturnResult getGroupMembers(int groupId, int start, int size, boolean showChild) {
         String url = URL_API_GET_GROUP_MEMBERS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -343,7 +344,7 @@ public class EntManager extends OauthEngine {
      * @param members
      * @return
      */
-    public String delSyncMemberGroup(String[] members) {
+    public ReturnResult delSyncMemberGroup(String[] members) {
         String url = URL_API_DEL_SYNC_MEMBER_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -360,7 +361,7 @@ public class EntManager extends OauthEngine {
      * @param isSuperAdmin
      * @return
      */
-    public String addSyncAdmin(String outId, String memberEmail, boolean isSuperAdmin) {
+    public ReturnResult addSyncAdmin(String outId, String memberEmail, boolean isSuperAdmin) {
         String url = ADD_SYNC_ADMIN;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
@@ -378,7 +379,7 @@ public class EntManager extends OauthEngine {
      * @param enDdate
      * @return
      */
-    public String memberLoginReport(String startDate, String enDdate) {
+    public ReturnResult memberLoginReport(String startDate, String enDdate) {
         String url = MEMBER_LOGIN_REPORT;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);

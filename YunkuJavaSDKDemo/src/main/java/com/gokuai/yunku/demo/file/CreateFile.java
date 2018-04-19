@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.Config;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
@@ -26,8 +27,8 @@ public class CreateFile {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().createFile("aa.jpg", "Brandon", Config.TEST_FILE_PATH);
+        ReturnResult result = EntFileManagerHelper.getInstance().createFile("aa.jpg", "Brandon", Config.TEST_FILE_PATH);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

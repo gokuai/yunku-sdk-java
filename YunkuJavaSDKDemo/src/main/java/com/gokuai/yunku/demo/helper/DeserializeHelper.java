@@ -1,7 +1,6 @@
 package com.gokuai.yunku.demo.helper;
 
 import com.gokuai.base.ReturnResult;
-import com.gokuai.base.utils.Util;
 import com.gokuai.yunku.demo.model.BaseData;
 
 import java.net.HttpURLConnection;
@@ -28,24 +27,27 @@ public class DeserializeHelper {
      *
      * @param result
      */
-    public void deserializeReturn(String result) {
+    public void deserializeReturn(ReturnResult result) {
 
-        //解析结果
-        ReturnResult returnResult = ReturnResult.create(result);
-
-        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
+        if (result.isOK()) {
             //成功的结果
-            System.out.println("return 200");
+            System.out.println("success");
 
         } else {
-            //解析result中的内容
-            BaseData data = BaseData.create(returnResult.getResult());
-            if (data != null) {
-                //如果可解析，则返回错误信息和错误号
-                System.out.println(data.getErrorCode() + ":" + data.getErrorMsg());
+            if (result.getException() != null) {
+                //出现网络或IO错误
+                result.getException().printStackTrace();
+            } else {
+                System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
+
+                //解析result中的内容
+                BaseData data = BaseData.create(result.getBody());
+                if (data != null) {
+                    //如果可解析，则返回错误信息和错误号
+                    System.out.println(data.getErrorCode() + ":" + data.getErrorMsg());
+                }
             }
         }
-        System.out.println(returnResult.getResult());
 
     }
 }

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.thirdParty;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.ThirdPartyManagerHelper;
 
@@ -14,8 +15,8 @@ public class OrderSubscribe {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = ThirdPartyManagerHelper.getInstance().orderSubscribe(-1,1,12);
+        ReturnResult result = ThirdPartyManagerHelper.getInstance().orderSubscribe(-1,1,12);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

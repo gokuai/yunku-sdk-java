@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.sso;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.SSOManagerHelper;
 
@@ -17,7 +18,7 @@ public class GetSsoGkkey {
 //        DebugConfig.LOG_PATH="LogPath/";
         String account = "gk001";
 
-        String returnString = SSOManagerHelper.getInstance().getSsoGkkey(account);
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        ReturnResult result = SSOManagerHelper.getInstance().getSsoGkkey(account);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

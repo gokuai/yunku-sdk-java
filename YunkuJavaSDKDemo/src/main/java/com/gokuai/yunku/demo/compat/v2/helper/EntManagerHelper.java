@@ -10,7 +10,6 @@ public class EntManagerHelper {
 
     private static volatile EntManager instance = null;
 
-
     public static EntManager getInstance() {
         if (instance == null) {
             synchronized (EntManager.class) {

@@ -3,6 +3,7 @@ package com.gokuai.base;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -113,12 +114,11 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        public String executeSync() {
+        public ReturnResult executeSync() {
             checkNecessaryParams(url, method);
 
             if (!isNetworkAvailableEx()) {
-                ReturnResult returnResult = new ReturnResult("", ERRORID_NETDISCONNECT);
-                return new Gson().toJson(returnResult);
+                return null;
             }
 
             if (checkAuth) {
@@ -167,13 +167,11 @@ public abstract class HttpEngine extends SignAbility {
                 throw new IllegalArgumentException("method must not be null");
             }
         }
-
-
     }
 
 
     public interface RequestHelperCallBack {
-        Object getReturnData(String returnString);
+        Object getReturnData(ReturnResult result);
     }
 
 

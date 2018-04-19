@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.EntFileManager;
@@ -10,15 +11,15 @@ import com.yunkuent.sdk.EntFileManager;
  *
  * 通过文件路径获取下载地址
  */
-public class GetDownloadUrlByFullPath {
+public class GetDownloadUrlByFullpath {
 
     public static void main(String[] args) {
 
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByFullPath("qq.jpg",false, EntFileManager.NetType.DEFAULT);
+        ReturnResult result = EntFileManagerHelper.getInstance().getDownloadUrlByFullpath("qq.jpg",false, EntFileManager.NetType.DEFAULT);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

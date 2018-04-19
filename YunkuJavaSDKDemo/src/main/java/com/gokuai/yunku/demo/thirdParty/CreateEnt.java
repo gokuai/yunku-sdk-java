@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.thirdParty;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.ThirdPartyManagerHelper;
 
@@ -14,8 +15,8 @@ public class CreateEnt {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = ThirdPartyManagerHelper.getInstance().createEnt("yunku3","yunku3","","","");
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        ReturnResult result = ThirdPartyManagerHelper.getInstance().createEnt("yunku3","yunku3","","","");
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 
 }

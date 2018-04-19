@@ -1,5 +1,6 @@
 package com.gokuai.base;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,6 +9,6 @@ import java.util.HashMap;
  */
 public interface IAuthRequest {
 
-    String sendRequestWithAuth(String url, RequestMethod method,
+    ReturnResult sendRequestWithAuth(String url, RequestMethod method,
                                HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys,String postType);
 }

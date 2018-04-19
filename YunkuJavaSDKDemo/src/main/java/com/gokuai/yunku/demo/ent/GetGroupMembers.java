@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.ent;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntManagerHelper;
 
@@ -16,8 +17,8 @@ public class GetGroupMembers {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().getGroupMembers(71715, 0, 3, true);
+        ReturnResult result = EntManagerHelper.getInstance().getGroupMembers(71715, 0, 3, true);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.EntFileManager;
@@ -17,9 +18,9 @@ public class GetFileInfo {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getFileInfo("default/custom/upload/path/search3.txt", EntFileManager.NetType.DEFAULT, true);
+        ReturnResult result = EntFileManagerHelper.getInstance().getFileInfo("default/custom/upload/path/search3.txt", EntFileManager.NetType.DEFAULT, true);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }
 

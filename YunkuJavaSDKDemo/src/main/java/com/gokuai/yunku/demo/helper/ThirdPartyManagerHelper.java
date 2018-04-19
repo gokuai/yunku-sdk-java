@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.helper;
 
 import com.gokuai.yunku.demo.Config;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.ThirdPartyManager;
 
 /**
@@ -9,7 +10,6 @@ import com.yunkuent.sdk.ThirdPartyManager;
 public class ThirdPartyManagerHelper {
 
     private static volatile ThirdPartyManager instance = null;
-
 
     public static ThirdPartyManager getInstance() {
         if (instance == null) {

@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.library;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
 import com.yunkuent.sdk.MemberType;
@@ -17,8 +18,8 @@ public class GetMember {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntLibraryManagerHelper.getInstance().getMember(1271496, MemberType.MEMBER_ID,new String[]{"4"});
+        ReturnResult result = EntLibraryManagerHelper.getInstance().getMember(1271496, MemberType.MEMBER_ID,new String[]{"4"});
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

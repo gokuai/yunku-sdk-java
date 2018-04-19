@@ -8,8 +8,10 @@ import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import com.yunkuent.sdk.FilePermissions;
 import com.yunkuent.sdk.MsMultiPartFormData;
-import com.yunkuent.sdk.UploadRunnable;
-import com.yunkuent.sdk.upload.UploadCallBack;
+import com.yunkuent.sdk.UploadManager;
+import com.yunkuent.sdk.data.FileInfo;
+import com.yunkuent.sdk.data.YunkuException;
+import com.yunkuent.sdk.upload.UploadCallback;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,7 +66,7 @@ public class EntFileManager extends HttpEngine {
      *
      * @return
      */
-    public String getFileList() {
+    public ReturnResult getFileList() {
         return this.getFileList("", 0, 100, false);
     }
 
@@ -74,7 +76,7 @@ public class EntFileManager extends HttpEngine {
      * @param fullPath 路径, 空字符串表示根目录
      * @return
      */
-    public String getFileList(String fullPath) {
+    public ReturnResult getFileList(String fullPath) {
         return this.getFileList(fullPath, 0, 100, false);
     }
 
@@ -86,7 +88,7 @@ public class EntFileManager extends HttpEngine {
      * @param size     返回文件/文件夹数量限制
      * @return
      */
-    public String getFileList(String fullPath, int start, int size, boolean dirOnly) {
+    public ReturnResult getFileList(String fullPath, int start, int size, boolean dirOnly) {
         String url = URL_API_FILELIST;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -108,7 +110,7 @@ public class EntFileManager extends HttpEngine {
      * @param fetchDateline
      * @return
      */
-    public String getUpdateList(boolean isCompare, long fetchDateline) {
+    public ReturnResult getUpdateList(boolean isCompare, long fetchDateline) {
         String url = URL_API_UPDATE_LIST;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -128,7 +130,7 @@ public class EntFileManager extends HttpEngine {
      * @param net
      * @return
      */
-    public String getFileInfo(String fullPath, EntFileManager.NetType net, boolean getAttribute) {
+    public ReturnResult getFileInfo(String fullPath, EntFileManager.NetType net, boolean getAttribute) {
         String url = URL_API_FILE_INFO;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -153,7 +155,7 @@ public class EntFileManager extends HttpEngine {
      * @param opName
      * @return
      */
-    public String createFolder(String fullPath, String opName) {
+    public ReturnResult createFolder(String fullPath, String opName) {
         String url = URL_API_CREATE_FOLDER;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -182,7 +184,7 @@ public class EntFileManager extends HttpEngine {
      * @param fullPath
      * @return
      */
-    public String addUploadTags(String fullPath) {
+    public ReturnResult addUploadTags(String fullPath) {
         if (RANDOM_GUID_TAG) {
             DEFAULT_UPLOAD_TAGS += "|" + UUID.randomUUID();
         }
@@ -199,18 +201,17 @@ public class EntFileManager extends HttpEngine {
      * @param stream
      * @return
      */
-    public String createFile(String fullPath, String opName, FileInputStream stream) {
+    public ReturnResult createFile(String fullPath, String opName, FileInputStream stream) {
 
         fullPath = getRealPath(fullPath);
         opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
 
         try {
             if (stream.available() > UPLOAD_LIMIT_SIZE) {
-                LogPrint.error(TAG, "文件大小超过50MB");
-                return "";
+                return new ReturnResult(new YunkuException("文件大小超过50MB"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return new ReturnResult(e);
         }
 
         String fileName = Util.getNameFromPath(fullPath);
@@ -234,45 +235,69 @@ public class EntFileManager extends HttpEngine {
             multipart.addFormField("sign", generateSign(params));
             multipart.addFilePart("file", stream, fileName);
 
-            String returnString = multipart.finish();
+            ReturnResult result = multipart.finish();
 
             if (Util.isEmpty(DEFAULT_UPLOAD_TAGS)) {
-                return returnString;
+                return result;
             }
 
-            ReturnResult returnResult = ReturnResult.create(returnString);
-            if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
+            if (result.getCode() == HttpURLConnection.HTTP_OK) {
                 return addUploadTags(fullPath);
             }
 
+            return result;
         } catch (IOException ex) {
-            System.err.println(ex);
+            return new ReturnResult(ex);
         }
-        return "";
     }
 
     /**
      * 文件分块上传
+     *
+     * @param fullpath
+     * @param opName
+     * @param opId
+     * @param localFilePath
+     * @param overwrite
+     * @param blockSize
+     */
+    public FileInfo uploadByBlock(String fullpath, String opName, int opId, String localFilePath,
+                                  boolean overwrite, int blockSize) throws YunkuException {
+
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+        fullpath = getRealPath(fullpath);
+
+        UploadManager<EntFileManager> uploadManager = new UploadManager<EntFileManager>(URL_API_CREATE_FILE, localFilePath, fullpath,
+                opName, opId, mClientId, mClientSecret, overwrite, blockSize, Util.getUnixDateline());
+        uploadManager.setAutoTags(EntFileManager.DEFAULT_UPLOAD_TAGS, this);
+
+        return uploadManager.upload();
+    }
+
+    /**
+     * 文件分块上传, 异步方式
      *
      * @param fullPath
      * @param opName
      * @param opId
      * @param localFilePath
      * @param overwrite
-     * @param callBack
+     * @param callback
      */
-    public UploadRunnable uploadByBlock(String fullPath, String opName, int opId, String localFilePath,
-                                        boolean overwrite, int blockSize, UploadCallBack callBack) {
+    public UploadManager uploadByBlockAsync(String fullPath, String opName, int opId, String localFilePath,
+                                       boolean overwrite, int blockSize, UploadCallback callback) {
 
         opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
         fullPath = getRealPath(fullPath);
 
-        UploadRunnable<EntFileManager> uploadRunnable = new UploadRunnable<EntFileManager>(URL_API_CREATE_FILE, localFilePath, fullPath,
-                opName, opId, mClientId, Util.getUnixDateline(), callBack, mClientSecret, overwrite, blockSize, this);
+        UploadManager<EntFileManager> uploadManager = new UploadManager<EntFileManager>(URL_API_CREATE_FILE, localFilePath, fullPath,
+                opName, opId, mClientId, mClientSecret, overwrite, blockSize, Util.getUnixDateline());
+        uploadManager.setAutoTags(EntFileManager.DEFAULT_UPLOAD_TAGS, this);
+        uploadManager.setAsyncCallback(callback);
 
-        Thread thread = new Thread(uploadRunnable);
+        Thread thread = new Thread(uploadManager);
         thread.start();
-        return uploadRunnable;
+        return uploadManager;
     }
 
     /**
@@ -283,21 +308,19 @@ public class EntFileManager extends HttpEngine {
      * @param localPath
      * @return
      */
-    public String createFile(String fullPath, String opName, String localPath) {
+    public ReturnResult createFile(String fullPath, String opName, String localPath) {
         File file = new File(localPath.trim());
         if (file.exists()) {
             try {
                 FileInputStream inputStream = new FileInputStream(file);
                 return createFile(fullPath, opName, inputStream);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                return new ReturnResult(e);
             }
         } else {
             LogPrint.error(TAG, "file not exist");
+            return new ReturnResult(new YunkuException(localPath + " not found"));
         }
-
-        return "";
-
     }
 
     /**
@@ -307,7 +330,7 @@ public class EntFileManager extends HttpEngine {
      * @param opName
      * @return
      */
-    public String del(String fullPaths, String opName) {
+    public ReturnResult del(String fullPaths, String opName) {
         String url = URL_API_DEL_FILE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -326,7 +349,7 @@ public class EntFileManager extends HttpEngine {
      * @param opName
      * @return
      */
-    public String move(String fullPath, String destFullPath, String opName) {
+    public ReturnResult move(String fullPath, String destFullPath, String opName) {
         String url = URL_API_MOVE_FILE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -346,7 +369,7 @@ public class EntFileManager extends HttpEngine {
      * @param size
      * @return
      */
-    public String history(String fullPath, int start, int size) {
+    public ReturnResult history(String fullPath, int start, int size) {
         String url = URL_API_HISTORY_FILE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -367,7 +390,7 @@ public class EntFileManager extends HttpEngine {
      * @param password
      * @return
      */
-    public String link(String fullPath, int deadline, EntFileManager.AuthType authType, String password) {
+    public ReturnResult link(String fullPath, int deadline, EntFileManager.AuthType authType, String password) {
         String url = URL_API_LINK_FILE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -397,7 +420,7 @@ public class EntFileManager extends HttpEngine {
      * @param opName
      * @return
      */
-    public String sendmsg(String title, String text, String image, String linkUrl, String opName) {
+    public ReturnResult sendmsg(String title, String text, String image, String linkUrl, String opName) {
         String url = URL_API_SENDMSG;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -417,7 +440,7 @@ public class EntFileManager extends HttpEngine {
      *
      * @return
      */
-    public String links(boolean fileOnly) {
+    public ReturnResult links(boolean fileOnly) {
         String url = URL_API_GET_LINK;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -437,7 +460,7 @@ public class EntFileManager extends HttpEngine {
      * @param showDelete
      * @return
      */
-    public String getUpdateCounts(long beginDateline, long endDateline, boolean showDelete) {
+    public ReturnResult getUpdateCounts(long beginDateline, long endDateline, boolean showDelete) {
         String url = URL_API_UPDATE_COUNT;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -459,7 +482,7 @@ public class EntFileManager extends HttpEngine {
      * @param fileUrl
      * @return
      */
-    public String createFileByUrl(String fullPath, int opId, String opName, boolean overwrite, String fileUrl) {
+    public ReturnResult createFileByUrl(String fullPath, int opId, String opName, boolean overwrite, String fileUrl) {
 
         fullPath = getRealPath(fullPath);
         opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
@@ -487,7 +510,7 @@ public class EntFileManager extends HttpEngine {
      *
      * @return
      */
-    public String getUploadServers() {
+    public ReturnResult getUploadServers() {
         String url = URL_API_UPLOAD_SERVERS;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -503,7 +526,7 @@ public class EntFileManager extends HttpEngine {
      * @param type
      * @return
      */
-    public String getServerSite(String type) {
+    public ReturnResult getServerSite(String type) {
         String url = URL_API_GET_SERVER_SITE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -522,7 +545,7 @@ public class EntFileManager extends HttpEngine {
      * @param size
      * @return
      */
-    public String search(String keyWords, String path, int start, int size) {
+    public ReturnResult search(String keyWords, String path, int start, int size) {
         String url = URL_API_FILE_SEARCH;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -542,7 +565,7 @@ public class EntFileManager extends HttpEngine {
      * @param memberId
      * @return
      */
-    public String getPermission(String fullPath, int memberId) {
+    public ReturnResult getPermission(String fullPath, int memberId) {
         String url = URL_API_GET_PERMISSION;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -560,7 +583,7 @@ public class EntFileManager extends HttpEngine {
      * @param permissions
      * @return
      */
-    public String setPermission(String fullPath, int memberId, FilePermissions... permissions) {
+    public ReturnResult setPermission(String fullPath, int memberId, FilePermissions... permissions) {
         String url = URL_API_SET_PERMISSION;
         HashMap<String, String> params = new HashMap<String, String>();
         if (permissions != null) {
@@ -586,7 +609,7 @@ public class EntFileManager extends HttpEngine {
      * @param tags
      * @return
      */
-    public String addTag(String fullPath, String[] tags) {
+    public ReturnResult addTag(String fullPath, String[] tags) {
         String url = URL_API_ADD_TAG;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
@@ -604,7 +627,7 @@ public class EntFileManager extends HttpEngine {
      * @param tags
      * @return
      */
-    public String delTag(String fullPath, String[] tags) {
+    public ReturnResult delTag(String fullPath, String[] tags) {
         String url = URL_API_DEL_TAG;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);

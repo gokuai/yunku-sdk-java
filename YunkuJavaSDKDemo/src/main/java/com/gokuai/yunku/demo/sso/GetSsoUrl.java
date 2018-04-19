@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.sso;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.SSOManagerHelper;
 
 /**
@@ -16,7 +17,8 @@ public class GetSsoUrl {
 //        DebugConfig.LOG_PATH="LogPath/";
         String account = "gk001";
 
-        String returnString = SSOManagerHelper.getInstance().getSsoUrl(account, null);
-        System.out.println(returnString);
+        String result = SSOManagerHelper.getInstance().getSsoUrl(account, null);
+
+        System.out.println(result);
     }
 }

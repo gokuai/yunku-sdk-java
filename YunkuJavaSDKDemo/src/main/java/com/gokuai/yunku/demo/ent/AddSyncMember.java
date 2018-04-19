@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.ent;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntManagerHelper;
 
@@ -16,16 +17,16 @@ public class AddSyncMember {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntManagerHelper.getInstance().addSyncMember("MemberTest1", "Member1", "Member1", "1234", "111", "111", null);
+        ReturnResult result = EntManagerHelper.getInstance().addSyncMember("MemberTest1", "Member1", "Member1", "1234", "111", "111", null);
 
-        String returnString1 = EntManagerHelper.getInstance().addSyncMember("MemberTest2", "Member2", "Member2", "", "", "", null);
+        ReturnResult result1 = EntManagerHelper.getInstance().addSyncMember("MemberTest2", "Member2", "Member2", "", "", "", null);
 
-        String returnString2 = EntManagerHelper.getInstance().addSyncMember("MemberTest3", "Member3", "Member3", "", "", "", null);
+        ReturnResult result2 = EntManagerHelper.getInstance().addSyncMember("MemberTest3", "Member3", "Member3", "", "", "", null);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString1);
+        DeserializeHelper.getInstance().deserializeReturn(result1);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString2);
+        DeserializeHelper.getInstance().deserializeReturn(result2);
     }
 }

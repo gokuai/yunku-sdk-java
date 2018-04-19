@@ -5,6 +5,7 @@ import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.data.OauthData;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      *
      * @return
      */
-    public String accessToken(String username, String password) {
+    public ReturnResult accessToken(String username, String password) throws IOException {
         String url = URL_API_TOKEN;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", username);
@@ -56,13 +57,12 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("sign", generateSign(params));
 
-        String result = NetConnection.sendRequest(url, RequestMethod.POST, params, null);
-        ReturnResult returnResult = ReturnResult.create(result);
-        LogPrint.info(LOG_TAG, "accessToken:==>result:" + result);
+        ReturnResult result = NetConnection.sendRequest(url, RequestMethod.POST, params, null);
+        LogPrint.info(LOG_TAG, "accessToken:==>result:" + result.toString());
 
-        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
+        if (result.getCode() == HttpURLConnection.HTTP_OK) {
             LogPrint.info(LOG_TAG, "accessToken:==>StatusCode:200");
-            OauthData data = OauthData.create(returnResult.getResult());
+            OauthData data = OauthData.create(result.getBody());
             mToken = data.getToken();
         }
         return result;
@@ -74,7 +74,7 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      * @param outId
      * @return
      */
-    public String accessTokenWithThirdPartyOutId(String outId) {
+    public ReturnResult accessTokenWithThirdPartyOutId(String outId) {
         return new ThirdPartyManager(mClientId, mClientSecret, outId).getEntToken();
     }
 
@@ -120,11 +120,10 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
         params.put("client_id", mClientId);
         params.put("sign", generateSign(params));
 
-        String returnString = new RequestHelper().setUrl(URL_API_TOKEN).setMethod(RequestMethod.POST).setParams(params).executeSync();
-        ReturnResult returnResult = ReturnResult.create(returnString);
-        OauthData data = OauthData.create(returnResult.getResult());
+        ReturnResult result = new RequestHelper().setUrl(URL_API_TOKEN).setMethod(RequestMethod.POST).setParams(params).executeSync();
+        OauthData data = OauthData.create(result.getBody());
         if (data != null) {
-            data.setCode(returnResult.getStatusCode());
+            data.setCode(result.getCode());
             if (data.getCode() == HttpURLConnection.HTTP_OK) {
                 mToken = data.getToken();
                 refreshToken = data.getRefresh_token();
@@ -147,16 +146,15 @@ abstract class OauthEngine extends HttpEngine implements IAuthRequest {
      * @param ignoreKeys
      * @return
      */
-    public String sendRequestWithAuth(String url, RequestMethod method,
+    public ReturnResult sendRequestWithAuth(String url, RequestMethod method,
                                       HashMap<String, String> params, HashMap<String, String> headParams, ArrayList<String> ignoreKeys, String postType) {
-        String returnString = NetConnection.sendRequest(url, method, params, headParams, postType);
-        ReturnResult returnResult = ReturnResult.create(returnString);
-        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+        ReturnResult result = NetConnection.sendRequest(url, method, params, headParams, postType);
+        if (result.getCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
             refreshToken();
             reSignParams(params, ignoreKeys);
-            returnString = NetConnection.sendRequest(url, method, params, headParams);
+            result = NetConnection.sendRequest(url, method, params, headParams);
         }
-        return returnString;
+        return result;
     }
 
     /**

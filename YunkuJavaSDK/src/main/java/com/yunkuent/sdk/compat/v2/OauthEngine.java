@@ -15,7 +15,7 @@ abstract class OauthEngine extends HttpEngine {
 
     private final static String LOG_TAG = HttpEngine.class.getSimpleName();
 
-    protected final String URL_API_TOKEN = HostConfig.OAUTH_HOST_V2 + "/oauth2/token2";
+    protected final String URL_API_TOKEN = HostConfig.API_HOST_V2 + "/oauth2/token2";
 
     protected String mToken;
     protected boolean mIsEnt;
@@ -37,7 +37,7 @@ abstract class OauthEngine extends HttpEngine {
      *
      * @return
      */
-    public String accessToken(String username, String password) {
+    public ReturnResult accessToken(String username, String password) {
         String url = URL_API_TOKEN;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", username);
@@ -53,13 +53,12 @@ abstract class OauthEngine extends HttpEngine {
         params.put("dateline", Util.getUnixDateline() + "");
         params.put("sign", generateSign(params));
 
-        String result = NetConnection.sendRequest(url, RequestMethod.POST, params, null);
-        ReturnResult returnResult = ReturnResult.create(result);
+        ReturnResult result = NetConnection.sendRequest(url, RequestMethod.POST, params, null);
         LogPrint.info(LOG_TAG, "accessToken:==>result:" + result);
 
-        if (returnResult.getStatusCode() == HttpURLConnection.HTTP_OK) {
+        if (result.getCode() == HttpURLConnection.HTTP_OK) {
             LogPrint.info(LOG_TAG, "accessToken:==>StatusCode:200");
-            OauthData data = OauthData.create(returnResult.getResult());
+            OauthData data = OauthData.create(result.getBody());
             mToken = data.getToken();
         }
         return result;

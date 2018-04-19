@@ -1,5 +1,7 @@
 package com.gokuai.base;
 
+import java.io.IOException;
+
 public class DefaultAsyncTarget implements IAsyncTarget {
 
     private Thread mThread;
@@ -19,12 +21,12 @@ public class DefaultAsyncTarget implements IAsyncTarget {
         mThread = new Thread() {
             @Override
             public void run() {
-                String returnString = helper.executeSync();
+                ReturnResult result = helper.executeSync();
                 if (listener != null) {
                     if (callBack == null) {
-                        listener.onReceivedData(apiId, ReturnResult.create(returnString), -1);
+                        listener.onReceivedData(apiId, result, -1);
                     } else {
-                        Object object = callBack.getReturnData(returnString);
+                        Object object = callBack.getReturnData(result);
                         listener.onReceivedData(apiId, object, -1);
                     }
                 }

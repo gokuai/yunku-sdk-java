@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.yunkuent.sdk.compat.v2.EntFileManager;
@@ -17,9 +18,9 @@ public class GetFileInfo {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getFileInfo("testBlockSize.jpg", EntFileManager.NetType.DEFAULT, false);
+        ReturnResult result = EntFileManagerHelper.getInstance().getFileInfo("testBlockSize.jpg", EntFileManager.NetType.DEFAULT, false);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }
 

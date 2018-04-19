@@ -12,13 +12,6 @@ public class SSOManagerHelper {
 
     private static volatile SSOManager instance = null;
 
-    static {
-        new ConfigHelper()
-                .oauthHost("http://yk3.goukuai.cn")
-                .language("Zh-CN")
-                .config();
-    }
-
     public static SSOManager getInstance() {
         if (instance == null) {
             synchronized (EntFileManager.class) {

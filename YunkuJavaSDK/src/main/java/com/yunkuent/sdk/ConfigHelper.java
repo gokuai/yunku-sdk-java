@@ -16,11 +16,13 @@ public class ConfigHelper {
     private Proxy mProxy;
     private String mUserAgent;
     private String mLanguage;
-    private long mReadTimeOut;
-    private long mConnectTimeOut;
+    private long mConnectTimeout;
+    private long mTimeout;
+    private int mBlockSize;
 
     /**
      * 设置 api host
+     *
      * @param apiHost
      * @return
      */
@@ -31,7 +33,6 @@ public class ConfigHelper {
     }
 
     /**
-     *
      * @param oauthHost
      * @return
      */
@@ -41,7 +42,6 @@ public class ConfigHelper {
     }
 
     /**
-     *
      * @param uploadRootPath
      * @return
      */
@@ -52,6 +52,7 @@ public class ConfigHelper {
 
     /**
      * 设置上传默认操作人
+     *
      * @param uploadOpname
      * @return
      */
@@ -62,6 +63,7 @@ public class ConfigHelper {
 
     /**
      * 设置上传默认 tag
+     *
      * @param tags
      * @return
      */
@@ -70,9 +72,7 @@ public class ConfigHelper {
         return this;
     }
 
-
     /**
-     *
      * @param proxy
      * @return
      */
@@ -82,7 +82,6 @@ public class ConfigHelper {
     }
 
     /**
-     *
      * @param userAgent
      * @return
      */
@@ -91,9 +90,7 @@ public class ConfigHelper {
         return this;
     }
 
-
     /**
-     *
      * @param language
      * @return
      */
@@ -103,23 +100,34 @@ public class ConfigHelper {
     }
 
     /**
+     * 分块上传单块大小, 单位字节
      *
-     * @param millionSeconds
      * @return
      */
-    public ConfigHelper readTimeOut(long millionSeconds) {
-        this.mReadTimeOut = millionSeconds;
+    public ConfigHelper blockSize(int blockSize) {
+        this.mBlockSize = blockSize;
         return this;
     }
 
-
     /**
+     * 网络连接超时
      *
-     * @param millionSeconds
+     * @param timeoutSeconds
      * @return
      */
-    public ConfigHelper connectTimeOut(long millionSeconds) {
-        this.mConnectTimeOut = millionSeconds;
+    public ConfigHelper connectTimeout(long timeoutSeconds) {
+        this.mConnectTimeout = timeoutSeconds;
+        return this;
+    }
+
+    /**
+     * 网络执行超时
+     *
+     * @param timeoutSeconds
+     * @return
+     */
+    public ConfigHelper timeout(long timeoutSeconds) {
+        this.mTimeout = timeoutSeconds;
         return this;
     }
 
@@ -145,12 +153,12 @@ public class ConfigHelper {
             NetConnection.setUserAgent(mUserAgent);
         }
 
-        if (mConnectTimeOut > 0) {
-            NetConnection.setConnectTimeOut(mConnectTimeOut);
+        if (mConnectTimeout > 0) {
+            NetConnection.setConnectTimeout(mConnectTimeout);
         }
 
-        if (mReadTimeOut > 0) {
-            NetConnection.setTimeOut(mReadTimeOut);
+        if (mTimeout > 0) {
+            NetConnection.setTimeout(mTimeout);
         }
 
         if (!Util.isEmpty(mLanguage)) {
@@ -169,11 +177,10 @@ public class ConfigHelper {
             EntFileManager.DEFAULT_UPLOAD_TAGS = mUploadTags;
         }
 
+        if (this.mBlockSize > 0) {
+            EntFileManager.DEFAULT_BLOCKSIZE = this.mBlockSize;
+        }
+
         EntFileManager.RANDOM_GUID_TAG = mRandomGuidTag;
-
-
     }
-
-
-
 }

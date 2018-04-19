@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.FilePermissions;
@@ -17,10 +18,10 @@ public class SetPermission {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().setPermission("test", 4,
+        ReturnResult result = EntFileManagerHelper.getInstance().setPermission("test", 4,
                 FilePermissions.FILE_PREVIEW, FilePermissions.FILE_DELETE,
                 FilePermissions.FILE_READ, FilePermissions.FILE_WRITE);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

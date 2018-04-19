@@ -1,10 +1,12 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
-import com.yunkuent.sdk.ConfigHelper;
-import com.yunkuent.sdk.UploadRunnable;
-import com.yunkuent.sdk.upload.UploadCallBack;
+import com.yunkuent.sdk.UploadManager;
+import com.yunkuent.sdk.data.FileInfo;
+import com.yunkuent.sdk.data.YunkuException;
+import com.yunkuent.sdk.upload.UploadCallback;
 
 /**
  * Created by qp on 2017/3/2.
@@ -15,35 +17,27 @@ public class UploadByBlock {
 
     public static void main(String[] args) {
 
-        //-------- 如果想改编上传基础配置，可以进行以几种配置------
-        new ConfigHelper()
-                .uploadOpname("[Default Name]")
-                .uploadRootPath("default/custom/upload/path")
-                .uploadTags("document").config();
-
-        //---------------------------------------------------
-
-
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("sear.txt", "Brandon", 0, "/Users/Brandon/Desktop/search.txt", true, 10485760, new UploadCallBack() {
+        try {
+            //overwrite=false, 如果有重名 file.fullpath 的文件会自动追加(2), (3)...
+            FileInfo file = EntFileManagerHelper.getInstance().uploadByBlock("RiverOtters-Yellowstone_GettyImages_RM-564829679_1080_HD_ZH-CN.mp4", "", 0, "/Pictures/RiverOtters-Yellowstone_GettyImages_RM-564829679_1080_HD_ZH-CN.mp4", true);
+            System.out.println(file.fullpath + " upload success");
+        } catch (YunkuException e) {
+            System.out.println("upload fail");
+            e.printStackTrace();
 
-            @Override
-            public void onSuccess(long threadId, String fileHash) {
-                System.out.println("success:" + threadId);
-
+            ReturnResult result = e.getReturnResult();
+            if (result != null) {
+                if (result.getException() != null) {
+                    //出现网络或IO错误
+                    result.getException().printStackTrace();
+                } else {
+                    //如果API接口返回异常, 获取最后一次API请求的结果
+                    System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
+                }
             }
-
-            public void onFail(long threadId, String errorMsg) {
-                System.out.println("fail:" + threadId + " errorMsg:" + errorMsg);
-
-            }
-
-            public void onProgress(long threadId, float percent) {
-                System.out.println("onProgress:" + threadId + " onProgress:" + percent * 100);
-
-            }
-        });
+        }
     }
 }

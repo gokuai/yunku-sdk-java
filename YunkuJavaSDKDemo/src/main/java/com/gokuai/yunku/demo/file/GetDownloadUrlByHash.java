@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 import com.yunkuent.sdk.EntFileManager;
@@ -17,8 +18,8 @@ public class GetDownloadUrlByHash {
         DebugConfig.PRINT_LOG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        String returnString = EntFileManagerHelper.getInstance().getDownloadUrlByHash("a712811330970ce5c13673ba73708cb85175fcd3",false, EntFileManager.NetType.DEFAULT);
+        ReturnResult result = EntFileManagerHelper.getInstance().getDownloadUrlByHash("a712811330970ce5c13673ba73708cb85175fcd3",false, EntFileManager.NetType.DEFAULT);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

@@ -2,6 +2,7 @@ package com.yunkuent.sdk;
 
 import com.gokuai.base.HttpEngine;
 import com.gokuai.base.RequestMethod;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.base.utils.Base64;
 import com.gokuai.base.utils.URLEncoder;
 import com.gokuai.base.utils.Util;
@@ -56,7 +57,7 @@ public class SSOManager extends HttpEngine {
      * @param account 需要登录的帐号
      * @return {"gkkey":""}
      */
-    public String getSsoGkkey(String account) {
+    public ReturnResult getSsoGkkey(String account) {
         String url = this.getSsoUrl(account, null) + "&format=json";
         return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }

@@ -19,8 +19,8 @@ public class ConfigHelper {
     private Proxy mProxy;
     private String mUserAgent;
     private String mLanguage;
-    private long mReadTimeOut;
-    private long mConnectTimeOut;
+    private long mTimeout;
+    private long mConnectTimeout;
 
 
     public ConfigHelper apiHost(String apiHost) {
@@ -67,7 +67,6 @@ public class ConfigHelper {
         return this;
     }
 
-
     /**
      * @param language
      * @return
@@ -78,21 +77,20 @@ public class ConfigHelper {
     }
 
     /**
-     * @param millionSeconds
+     * @param timeoutSeconds
      * @return
      */
-    public ConfigHelper readTimeOut(long millionSeconds) {
-        this.mReadTimeOut = millionSeconds;
+    public ConfigHelper connectTimeout(long timeoutSeconds) {
+        this.mConnectTimeout = timeoutSeconds;
         return this;
     }
 
-
     /**
-     * @param millionSeconds
+     * @param timeoutSeconds
      * @return
      */
-    public ConfigHelper connectTimeOut(long millionSeconds) {
-        this.mConnectTimeOut = millionSeconds;
+    public ConfigHelper timeout(long timeoutSeconds) {
+        this.mTimeout = timeoutSeconds;
         return this;
     }
 
@@ -108,7 +106,7 @@ public class ConfigHelper {
         }
 
         if (!Util.isEmpty(mOauthHostV2)) {
-            HostConfig.OAUTH_HOST_V2 = mOauthHostV2;
+            HostConfig.API_HOST_V2 = mOauthHostV2;
         }
 
         if (mProxy != null) {
@@ -119,12 +117,12 @@ public class ConfigHelper {
             NetConnection.setUserAgent(mUserAgent);
         }
 
-        if (mConnectTimeOut > 0) {
-            NetConnection.setConnectTimeOut(mConnectTimeOut);
+        if (mConnectTimeout > 0) {
+            NetConnection.setConnectTimeout(mConnectTimeout);
         }
 
-        if (mReadTimeOut > 0) {
-            NetConnection.setTimeOut(mReadTimeOut);
+        if (mTimeout > 0) {
+            NetConnection.setTimeout(mTimeout);
         }
 
         if (!Util.isEmpty(mLanguage)) {

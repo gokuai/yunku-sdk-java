@@ -1,6 +1,7 @@
 package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 
@@ -23,8 +24,8 @@ public class GetUpdateCounts {
         calendar.add(Calendar.DATE, -1);//昨天
         Date date = calendar.getTime();
 
-        String returnString = EntFileManagerHelper.getInstance().getUpdateCounts(date.getTime(), System.currentTimeMillis(), false);
+        ReturnResult result = EntFileManagerHelper.getInstance().getUpdateCounts(date.getTime(), System.currentTimeMillis(), false);
 
-        DeserializeHelper.getInstance().deserializeReturn(returnString);
+        DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

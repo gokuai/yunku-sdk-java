@@ -1,11 +1,14 @@
 package com.gokuai.yunku.demo.compat.v2.file;
 
 import com.gokuai.base.DebugConfig;
+import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.Config;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
-import com.yunkuent.sdk.UploadRunnable;
+import com.yunkuent.sdk.UploadManager;
 import com.yunkuent.sdk.compat.v2.ConfigHelper;
-import com.yunkuent.sdk.upload.UploadCallBack;
+import com.yunkuent.sdk.data.FileInfo;
+import com.yunkuent.sdk.data.YunkuException;
+import com.yunkuent.sdk.upload.UploadCallback;
 
 /**
  * Created by qp on 2017/3/2.
@@ -26,23 +29,15 @@ public class UploadByBlock {
 
         DebugConfig.PRINT_LOG = true;
 
-        UploadRunnable u = EntFileManagerHelper.getInstance().uploadByBlock("testBlockSize.jpg", "Brandon", 0, Config.TEST_FILE_PATH, true, 10485760, new UploadCallBack() {
-
-            @Override
-            public void onSuccess(long threadId, String fileHash) {
-                System.out.println("success:" + threadId);
-
+        try {
+            FileInfo file = EntFileManagerHelper.getInstance().uploadByBlock("testBlockSize.jpg", "", 0, Config.TEST_FILE_PATH, true, 10485760);
+        } catch (YunkuException e) {
+            System.out.println("upload fail");
+            e.printStackTrace();
+            ReturnResult result = e.getReturnResult();
+            if (result != null) {
+                System.out.println("http response code: " + result.getCode() + ", body: " + result.getBody());
             }
-
-            public void onFail(long threadId, String errorMsg) {
-                System.out.println("fail:" + threadId + " errorMsg:" + errorMsg);
-
-            }
-
-            public void onProgress(long threadId, float percent) {
-                System.out.println("onProgress:" + threadId + " onProgress:" + percent * 100);
-
-            }
-        });
+        }
     }
 }

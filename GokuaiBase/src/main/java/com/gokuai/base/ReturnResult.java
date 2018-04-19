@@ -1,21 +1,39 @@
 package com.gokuai.base;
 
-import org.json.JSONObject;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 
 /**
  * 返回结果和返回状态号
  */
 public class ReturnResult {
-    int statusCode;
-    String result;
+    private int code;
+    private String body;
+    private Exception exception;
 
-    public ReturnResult(){
-
+    public ReturnResult() {
+        this.code = 0;
+        this.body = "";
     }
 
-    public ReturnResult(String result, int code) {
-        statusCode = code;
-        this.result = result;
+    public ReturnResult(Exception e) {
+        this.exception = e;
+        this.code = 0;
+        this.body = "";
+    }
+
+    public ReturnResult(int code, String body) {
+        this.code = code;
+        this.body = body;
+    }
+
+    /**
+     * 接口调用是否成功
+     * @return
+     */
+    public boolean isOK() {
+        return exception == null && (code == 200 || code == 206);
     }
 
     /**
@@ -23,52 +41,33 @@ public class ReturnResult {
      *
      * @return
      */
-    public String getResult() {
-        return result;
+    public String getBody() {
+        return body;
     }
 
     /**
-     * 返回请求号
+     * 返回请求状态
      *
      * @return
      */
-    public int getStatusCode() {
-        return statusCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public Exception getException() {
+        return this.exception;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-
-    public static ReturnResult create(String jsonString) {
-        JSONObject json = null;
-        String result = "";
-        int statusCode = 0;
-        try {
-            json = new JSONObject(jsonString);
-            result = json.optString("result");
-            statusCode = json.optInt("statusCode");
-        } catch (Exception e) {
-            e.printStackTrace();
-            json = null;
-        }
-        if (json == null) {
-            return new ReturnResult("result json is null", 0);
-        }
-        return new ReturnResult(result, statusCode);
+    public void setCode(int code) {
+        this.code = code;
     }
-
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("result:" + result + "\n");
-        sb.append("statusCode:" + statusCode + "\n");
-        return sb.toString();    //To change body of overridden methods use File | Settings | File Templates.
+        return new Gson().toJson(this);
     }
 }
