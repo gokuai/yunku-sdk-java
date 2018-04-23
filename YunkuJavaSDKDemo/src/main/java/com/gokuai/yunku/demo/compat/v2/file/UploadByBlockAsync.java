@@ -4,7 +4,6 @@ import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.Config;
 import com.gokuai.yunku.demo.compat.v2.helper.EntFileManagerHelper;
-import com.yunkuent.sdk.UploadManager;
 import com.yunkuent.sdk.compat.v2.ConfigHelper;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;

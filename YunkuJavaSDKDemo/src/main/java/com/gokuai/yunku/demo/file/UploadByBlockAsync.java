@@ -3,7 +3,6 @@ package com.gokuai.yunku.demo.file;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
-import com.yunkuent.sdk.UploadManager;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
 import com.yunkuent.sdk.upload.UploadCallback;
