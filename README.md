@@ -2,11 +2,11 @@
 
 [![](https://jitpack.io/v/gokuai/yunku-sdk-java.svg)](https://jitpack.io/#gokuai/yunku-sdk-java)
 
-**注意: `3.4` 对接口返回类型和分块上传做了重构, 不兼容以前的版本**
+**注意: SDK版本 >=`4.0` 对接口返回类型和分块上传做了重构, 不兼容以前的版本**
 
 >够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
 
-##兼容
+## 兼容
 * Java 7 或者更高
 * 支持 Android 系统
 
@@ -26,7 +26,7 @@
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:3.4'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:4.0'
 	}
 ```
 或者Maven：
@@ -44,7 +44,7 @@
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>3.4</version>
+	    <version>4.0</version>
 	</dependency>
 ```
 
