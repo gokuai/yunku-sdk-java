@@ -323,6 +323,43 @@ public class EntFileManager extends HttpEngine {
     }
 
     /**
+     * 文件流分块上传
+     *
+     * @param fullpath
+     * @param opName
+     * @param opId
+     * @param inputStream
+     * @param overwrite
+     * @param blockSize
+     */
+    public FileInfo uploadByBlock(String fullpath, String opName, int opId, InputStream inputStream,
+                                  boolean overwrite, int blockSize) throws YunkuException {
+
+        opName = Util.isEmpty(opName) ? DEFAULT_OPNAME : opName;
+        fullpath = getRealPath(fullpath);
+
+        UploadManager<EntFileManager> uploadManager = new UploadManager<EntFileManager>(URL_API_CREATE_FILE, inputStream, fullpath,
+                opName, opId, mClientId, mClientSecret, overwrite, blockSize, Util.getUnixDateline());
+        uploadManager.setAutoTags(EntFileManager.DEFAULT_UPLOAD_TAGS, this);
+
+        return uploadManager.upload();
+    }
+
+    /**
+     * 文件流分块上传, 默认分块10MB
+     *
+     * @param fullpath
+     * @param opName
+     * @param opId
+     * @param inputStream
+     * @param overwrite
+     */
+    public FileInfo uploadByBlock(String fullpath, String opName, int opId, InputStream inputStream, boolean overwrite) throws YunkuException {
+
+        return this.uploadByBlock(fullpath, opName, opId, inputStream, overwrite, DEFAULT_BLOCKSIZE);
+    }
+
+    /**
      * 文件分块上传, 异步方式, 默认分块10MB
      *
      * @param fullpath
