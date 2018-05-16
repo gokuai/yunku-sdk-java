@@ -18,18 +18,17 @@ import java.util.concurrent.TimeUnit;
 public final class NetConnection {
 
     private static final String LOG_TAG = "NetConnection";
-    private static final String USER_AGENT = "YunkuJavaSDK" + ";" + System.getProperties().getProperty("http.agent");
-    private static final String ACCEPT_LANGUAGE = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
+    private static final String USER_AGENT = "YunkuJavaSDK;" + System.getProperties().getProperty("http.agent");
 
     private static Proxy mProxy = null;
-    private static String mUserAgent = "Yunku Java SDK";
-    private static String mAcceptLanguage = "Zh-CN";
+    private static String mUserAgent = null;
+    private static String mAcceptLanguage = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
     private static long mTimeout = 1800;
     private static long mConnectTimeout = 10;
-
+    private static int mRetry = 0;
 
     public static void setUserAgent(String userAgent) {
-        NetConnection.mUserAgent = userAgent;
+        mUserAgent = userAgent;
     }
 
     public static String getUserAgent() {
@@ -37,20 +36,23 @@ public final class NetConnection {
     }
 
     public static void setAcceptLanguage(String acceptLanguage) {
-        NetConnection.mAcceptLanguage = acceptLanguage;
+        mAcceptLanguage = acceptLanguage;
     }
 
     public static void setTimeout(long timeout) {
-        NetConnection.mTimeout = timeout;
+        mTimeout = timeout;
     }
 
     public static void setConnectTimeout(long timeout) {
-        NetConnection.mConnectTimeout = timeout;
+        mConnectTimeout = timeout;
     }
 
-
     public static void setProxy(Proxy proxy) {
-        NetConnection.mProxy = proxy;
+        mProxy = proxy;
+    }
+
+    public static void setRetry(int retry) {
+        mRetry = retry;
     }
 
 
@@ -107,10 +109,9 @@ public final class NetConnection {
         }
 
         if (method.equals(RequestMethod.GET) && !Util.isEmpty(paramsString)) {
-            url += "?" + paramsString;
+            url += (url.indexOf("?") > 0 ? "&" : "?") + paramsString;
             LogPrint.info(LOG_TAG, method + ":" + url);
         }
-
 
         Headers.Builder headerBuilder = new Headers.Builder();
         if (headParams != null) {
@@ -121,11 +122,10 @@ public final class NetConnection {
         }
 
         String userAgent = getUserAgent();
-        String language = Util.isEmpty(mAcceptLanguage) ? ACCEPT_LANGUAGE : mAcceptLanguage;
 
         headerBuilder.add("User-Agent", userAgent);
 
-        headerBuilder.add("Accept-Language", language);
+        headerBuilder.add("Accept-Language", mAcceptLanguage);
 
         Request.Builder requestBuilder = new Request.Builder();
         Request request = null;
@@ -143,15 +143,17 @@ public final class NetConnection {
         } else if (method.equals(RequestMethod.PUT)) {
             RequestBody putBody = RequestBody.create(contentType, paramsString);
             request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
+        } else {
+            return null;
         }
 
-        if (request != null) {
-            Response resp = null;
+        int retry = mRetry;
+        while (true) {
             try {
-                resp = client.newCall(request).execute();
+                Response resp = client.newCall(request).execute();
 
                 if (resp.header("X-GOKUAI-DEBUG") != null) {
-                    try {
+                try {
                         LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(resp.header("X-GOKUAI-DEBUG").getBytes())));
                     } catch (IOException e) {
                     }
@@ -166,10 +168,25 @@ public final class NetConnection {
                     }
                     LogPrint.info(LOG_TAG, "response:" + body);
                 }
+
+                break;
+
             } catch (IOException e) {
-                return new ReturnResult(e);
+
+                if (retry-- > 0) {
+                    //网络异常自动重试
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e1) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    return new ReturnResult(e);
+                }
             }
+
         }
+
         return new ReturnResult(statusCode, body);
     }
 

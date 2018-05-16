@@ -19,6 +19,7 @@ public class ConfigHelper {
     private long mConnectTimeout;
     private long mTimeout;
     private int mBlockSize;
+    private int mRetry;
 
     /**
      * 设置 api host
@@ -121,6 +122,19 @@ public class ConfigHelper {
     }
 
     /**
+     * 接口访问失败后重试几次
+     *
+     * @param retry
+     * @return
+     */
+    public ConfigHelper retry(int retry) {
+        if (retry > 0) {
+            this.mRetry = retry;
+        }
+        return this;
+    }
+
+    /**
      * 网络执行超时
      *
      * @param timeoutSeconds
@@ -179,6 +193,11 @@ public class ConfigHelper {
 
         if (this.mBlockSize > 0) {
             EntFileManager.DEFAULT_BLOCKSIZE = this.mBlockSize;
+        }
+
+        if (this.mRetry > 0) {
+            NetConnection.setRetry(mRetry);
+            UploadManager.setRetry(mRetry);
         }
 
         EntFileManager.RANDOM_GUID_TAG = mRandomGuidTag;

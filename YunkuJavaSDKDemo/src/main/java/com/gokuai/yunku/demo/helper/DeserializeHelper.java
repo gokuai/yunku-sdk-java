@@ -32,6 +32,7 @@ public class DeserializeHelper {
         if (result.isOK()) {
             //成功的结果
             System.out.println("success");
+            System.out.println(result.getBody());
 
         } else {
             if (result.getException() != null) {

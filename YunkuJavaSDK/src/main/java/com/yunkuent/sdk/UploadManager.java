@@ -23,6 +23,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
     private static final String URL_UPLOAD_PART = "/upload_part";
     private static final String URL_UPLOAD_ABORT = "/upload_abort";
     private static final String URL_UPLOAD_FINISH = "/upload_finish";
+    private static int RETRY = 0;
 
     private final int mBlockSize;// 上传分块大小
     private String mSession = "";// 上传session
@@ -45,6 +46,10 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
     private T mManager;
     private boolean mIsStop;
 
+    public static void setRetry(int retry) {
+        RETRY = retry;
+    }
+
     public UploadManager(String apiUrl, String localFullPath, String fullPath,
                          String opName, int opId, String orgClientId, String clientSecret, boolean overwrite, int blockSize, long dateline) {
 
@@ -58,7 +63,6 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         this.mBlockSize = blockSize;
         this.mDateline = dateline;
     }
-
 
     protected UploadManager(String apiUrl, InputStream inputStream, String fullPath,
                             String opName, int opId, String orgClientId, String clientSecret, boolean overwrite, int blockSize, long dateline) {
@@ -338,27 +342,42 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
      */
     private ReturnResult uploadPart(String range, byte[] content, long crc32) throws YunkuException {
 
-        try {
-            String url = this.mFileinfo.uploadServer + URL_UPLOAD_PART;
+        String url = this.mFileinfo.uploadServer + URL_UPLOAD_PART;
 
-            Headers.Builder headerBuilder = new Headers.Builder();
-            headerBuilder.add("Connection", "Keep-Alive");
-            headerBuilder.add("x-gk-upload-session", mSession);
-            headerBuilder.add("x-gk-upload-range", range);
-            headerBuilder.add("x-gk-upload-crc", String.valueOf(crc32));
+        Headers.Builder headerBuilder = new Headers.Builder();
+        headerBuilder.add("Connection", "Keep-Alive");
+        headerBuilder.add("x-gk-upload-session", mSession);
+        headerBuilder.add("x-gk-upload-range", range);
+        headerBuilder.add("x-gk-upload-crc", String.valueOf(crc32));
 
-            Request.Builder requestBuilder = new Request.Builder();
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), content);
-            Request request = requestBuilder
-                    .url(url)
-                    .put(requestBody)
-                    .headers(headerBuilder.build())
-                    .build();
+        Request.Builder requestBuilder = new Request.Builder();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), content);
+        Request request = requestBuilder
+                .url(url)
+                .put(requestBody)
+                .headers(headerBuilder.build())
+                .build();
 
-            Response resp = this.getUploadHttpClient().newCall(request).execute();
-            return new ReturnResult(resp.code(), resp.body().string());
-        } catch (Exception e) {
-            throw new YunkuException("fail to call upload_part", new ReturnResult(e));
+        int retry = RETRY;
+        while (true) {
+            try {
+
+                Response resp = this.getUploadHttpClient().newCall(request).execute();
+                return new ReturnResult(resp.code(), resp.body().string());
+
+            } catch (IOException e) {
+
+                if (retry-- > 0) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e1) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    throw new YunkuException("fail to call upload_part", new ReturnResult(e));
+                }
+
+            }
         }
     }
 
@@ -378,11 +397,27 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_FINISH;
         final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
-        ReturnResult result = new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
-        if (!result.isOK()) {
+        ReturnResult result = null;
+
+        int retry = 10;
+        while (retry-- > 0) {
+            result = new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+            if (result.getCode() == HttpURLConnection.HTTP_ACCEPTED) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            } else {
+                break;
+            }
+        }
+
+        if (result.isOK()) {
+            return result;
+        } else {
             throw new YunkuException("fail to call upload_finish" , result);
         }
-        return result;
     }
 
     /**
