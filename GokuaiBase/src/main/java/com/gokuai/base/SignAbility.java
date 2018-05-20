@@ -26,7 +26,7 @@ public class SignAbility {
         return this.mSecret;
     }
 
-    protected String generateSign(HashMap<String, String> params) {
+    protected String generateSign(HashMap<String, String> params, String secret) {
         //移除 null 参数
         Iterator it = params.entrySet().iterator();
         while (it.hasNext()) {
@@ -49,6 +49,10 @@ public class SignAbility {
             }
             strToSign = strToSign.substring(1);
         }
-        return Util.getHmacSha1(strToSign, this.getSecret());
+        return Util.getHmacSha1(strToSign, secret);
+    }
+
+    protected String generateSign(HashMap<String, String> params) {
+        return this.generateSign(params, this.mSecret);
     }
 }
