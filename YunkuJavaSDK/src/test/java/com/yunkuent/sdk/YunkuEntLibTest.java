@@ -62,7 +62,7 @@ public class YunkuEntLibTest {
     @Test
     public void bind() throws Exception {
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
-        ReturnResult r = entLib.bind(0,"YunkuJavaSDKDemo",null);
+        ReturnResult r = entLib.bind(0,"YunkuJavaSDKDemo");
         System.out.println(r);
         Assert.assertEquals(200,r.getCode());
     }
@@ -135,7 +135,7 @@ public class YunkuEntLibTest {
     @Test
     public void destroy() throws Exception {
         EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
-        ReturnResult r = entLib.destroy("b2013df96cbc23b4b0dd72f075e5cbf7");
+        ReturnResult r = entLib.destroy(1258748);
         Assert.assertEquals(200,r.getCode());
     }
 

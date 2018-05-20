@@ -14,7 +14,7 @@ public class PreviewUrl {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().previewUrl( "upload/1521012471953/1521012471953.doc", true, "gogogo");

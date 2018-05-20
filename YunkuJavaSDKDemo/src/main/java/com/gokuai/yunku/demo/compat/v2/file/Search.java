@@ -14,7 +14,7 @@ public class Search {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().search("tes", "", 0, 100);

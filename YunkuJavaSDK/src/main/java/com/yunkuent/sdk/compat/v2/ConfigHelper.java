@@ -2,6 +2,7 @@ package com.yunkuent.sdk.compat.v2;
 
 import com.gokuai.base.NetConnection;
 import com.gokuai.base.utils.Util;
+import com.yunkuent.sdk.UploadManager;
 
 import java.net.Proxy;
 
@@ -12,15 +13,15 @@ public class ConfigHelper {
     private String mApiHostV2;
 
     private String mUploadRootPath;
-    private String mUploadOpname;
-    private String mUploadTags;
-    private boolean mRandomGuidTag;
+    private String mUploadOpName;
 
     private Proxy mProxy;
     private String mUserAgent;
     private String mLanguage;
-    private long mTimeout;
     private long mConnectTimeout;
+    private long mTimeout;
+    private int mBlockSize;
+    private int mRetry;
 
 
     public ConfigHelper apiHost(String apiHost) {
@@ -39,13 +40,8 @@ public class ConfigHelper {
         return this;
     }
 
-    public ConfigHelper uploadOpname(String uploadOpname) {
-        this.mUploadOpname = uploadOpname;
-        return this;
-    }
-
-    public ConfigHelper uploadTags(String tags) {
-        this.mUploadTags = tags;
+    public ConfigHelper uploadOpName(String opName) {
+        this.mUploadOpName = opName;
         return this;
     }
 
@@ -77,6 +73,16 @@ public class ConfigHelper {
     }
 
     /**
+     * 分块上传单块大小, 单位字节
+     *
+     * @return
+     */
+    public ConfigHelper blockSize(int blockSize) {
+        this.mBlockSize = blockSize;
+        return this;
+    }
+
+    /**
      * @param timeoutSeconds
      * @return
      */
@@ -94,8 +100,16 @@ public class ConfigHelper {
         return this;
     }
 
-    public ConfigHelper randomGuidTag(boolean randomGuidTag) {
-        this.mRandomGuidTag = randomGuidTag;
+    /**
+     * 接口访问失败后重试几次
+     *
+     * @param retry
+     * @return
+     */
+    public ConfigHelper retry(int retry) {
+        if (retry > 0) {
+            this.mRetry = retry;
+        }
         return this;
     }
 
@@ -129,20 +143,18 @@ public class ConfigHelper {
             NetConnection.setAcceptLanguage(mLanguage);
         }
 
-        if (!Util.isEmpty(mUploadOpname)) {
-            EntFileManager.DEFAULT_OPNAME = mUploadOpname;
+        if (!Util.isEmpty(mUploadOpName)) {
+            EntFileManager.DEFAULT_OPNAME = mUploadOpName;
         }
 
         if (!Util.isEmpty(mUploadRootPath)) {
             EntFileManager.UPLOAD_ROOT_PATH = mUploadRootPath + (mUploadRootPath.endsWith("/") ? "" : "/");
         }
 
-        if (!Util.isEmpty(mUploadTags)) {
-            EntFileManager.DEFAULT_UPLOAD_TAGS = mUploadTags;
+        if (this.mRetry > 0) {
+            NetConnection.setRetry(mRetry);
+            UploadManager.setRetry(mRetry);
         }
-
-        EntFileManager.RANDOM_GUID_TAG = mRandomGuidTag;
-
     }
 
 

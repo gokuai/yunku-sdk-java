@@ -3,6 +3,7 @@ package com.gokuai.yunku.demo.file;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
 import com.yunkuent.sdk.upload.UploadCallback;
@@ -16,11 +17,17 @@ public class UploadByBlockAsync {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
+        new ConfigHelper()
+                .apiHost("http://yk3.gokuai.com/m-open")
+                .retry(5)
+                .language("zh-CN")
+                .config();
+
         //overwrite=false, 如果有重名返回的 file.fullpath 的文件会自动追加(2), (3)...
-        EntFileManagerHelper.getInstance().uploadByBlockAsync("ArcticFoxPups_FramepoolRM_372-581-588_1080_HD_ZH-CN.mp4", "", 0, "/Pictures/ArcticFoxPups_FramepoolRM_372-581-588_1080_HD_ZH-CN.mp4", true, new UploadCallback() {
+        EntFileManagerHelper.getInstance().uploadByBlockAsync("pic/FalcoPeregrinus.jpg", "", 0, "/Pictures/bing/FalcoPeregrinus.jpg", true, new UploadCallback() {
 
             @Override
             public void onSuccess(String fullpath, FileInfo file) {

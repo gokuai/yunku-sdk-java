@@ -12,7 +12,7 @@ public class SetSyncMemberState {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntManagerHelper.getInstance().setSyncMemberState("ac1d8e1f-6d67-4143-8494-4c864c5f3d31", true);

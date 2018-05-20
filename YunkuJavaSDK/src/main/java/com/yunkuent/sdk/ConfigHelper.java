@@ -10,9 +10,7 @@ public class ConfigHelper {
     private String mOauthHost;
     private String mApiHost;
     private String mUploadRootPath;
-    private String mUploadOpname;
-    private String mUploadTags;
-    private boolean mRandomGuidTag;
+    private String mUploadOpName;
     private Proxy mProxy;
     private String mUserAgent;
     private String mLanguage;
@@ -54,22 +52,11 @@ public class ConfigHelper {
     /**
      * 设置上传默认操作人
      *
-     * @param uploadOpname
+     * @param uploadOpName
      * @return
      */
-    public ConfigHelper uploadOpname(String uploadOpname) {
-        this.mUploadOpname = uploadOpname;
-        return this;
-    }
-
-    /**
-     * 设置上传默认 tag
-     *
-     * @param tags
-     * @return
-     */
-    public ConfigHelper uploadTags(String tags) {
-        this.mUploadTags = tags;
+    public ConfigHelper uploadOpName(String uploadOpName) {
+        this.mUploadOpName = uploadOpName;
         return this;
     }
 
@@ -122,19 +109,6 @@ public class ConfigHelper {
     }
 
     /**
-     * 接口访问失败后重试几次
-     *
-     * @param retry
-     * @return
-     */
-    public ConfigHelper retry(int retry) {
-        if (retry > 0) {
-            this.mRetry = retry;
-        }
-        return this;
-    }
-
-    /**
      * 网络执行超时
      *
      * @param timeoutSeconds
@@ -145,8 +119,16 @@ public class ConfigHelper {
         return this;
     }
 
-    public ConfigHelper randomGuidTag(boolean randomGuidTag) {
-        this.mRandomGuidTag = randomGuidTag;
+    /**
+     * 接口访问失败后重试几次
+     *
+     * @param retry
+     * @return
+     */
+    public ConfigHelper retry(int retry) {
+        if (retry > 0) {
+            this.mRetry = retry;
+        }
         return this;
     }
 
@@ -179,16 +161,12 @@ public class ConfigHelper {
             NetConnection.setAcceptLanguage(mLanguage);
         }
 
-        if (!Util.isEmpty(mUploadOpname)) {
-            EntFileManager.DEFAULT_OPNAME = mUploadOpname;
+        if (!Util.isEmpty(mUploadOpName)) {
+            EntFileManager.DEFAULT_OPNAME = mUploadOpName;
         }
 
         if (!Util.isEmpty(mUploadRootPath)) {
             EntFileManager.UPLOAD_ROOT_PATH = mUploadRootPath + (mUploadRootPath.endsWith("/") ? "" : "/");
-        }
-
-        if (!Util.isEmpty(mUploadTags)) {
-            EntFileManager.DEFAULT_UPLOAD_TAGS = mUploadTags;
         }
 
         if (this.mBlockSize > 0) {
@@ -199,7 +177,5 @@ public class ConfigHelper {
             NetConnection.setRetry(mRetry);
             UploadManager.setRetry(mRetry);
         }
-
-        EntFileManager.RANDOM_GUID_TAG = mRandomGuidTag;
     }
 }

@@ -9,15 +9,13 @@ import java.util.HashMap;
 /**
  * Created by Brandon on 2014/8/14.
  */
-public class EntManager extends OauthEngine {
+public class EntManager extends EntEngine {
 
     private final String URL_API_GET_GROUPS = HostConfig.API_ENT_HOST + "/1/ent/get_groups";
     private final String URL_API_GET_MEMBERS = HostConfig.API_ENT_HOST + "/1/ent/get_members";
     private final String URL_API_GET_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/get_member";
     private final String URL_API_GET_ROLES = HostConfig.API_ENT_HOST + "/1/ent/get_roles";
-    //    private final String URL_API_SYNC_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/sync_member";
-    private final String URL_API_GET_MEMBER_FILE_LINK = HostConfig.API_ENT_HOST + "/1/ent/get_member_file_link";
-//    private final String URL_API_GET_MEMBER_BY_OUT_ID = HostConfig.API_ENT_HOST + "/1/ent/get_member_by_out_id";
+    private final String URL_API_GET_MEMBER_BY_OUT_ID = HostConfig.API_ENT_HOST + "/1/ent/get_member_by_out_id";
 
     private final String URL_API_ADD_SYNC_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/add_sync_member";
     private final String URL_API_DEL_SYNC_MEMBER = HostConfig.API_ENT_HOST + "/1/ent/del_sync_member";
@@ -28,14 +26,9 @@ public class EntManager extends OauthEngine {
     private final String URL_API_DEL_SYNC_MEMBER_GROUP = HostConfig.API_ENT_HOST + "/1/ent/del_sync_member_group";
     private final String URL_API_GET_GROUP_MEMBERS = HostConfig.API_ENT_HOST + "/1/ent/get_group_members";
     private final String ADD_SYNC_ADMIN = HostConfig.API_ENT_HOST + "/1/ent/add_sync_admin";
-    private final String MEMBER_LOGIN_REPORT = HostConfig.API_ENT_HOST + "/1/ent/member_login_report";
 
-    public EntManager(String clientId, String clientSecret) {
-        super(clientId, clientSecret, true);
-    }
-
-    private EntManager(String clientId, String clientSecret, boolean isEnt, String token) {
-        super(clientId, clientSecret, isEnt, token);
+    public EntManager(String clientId, String secret) {
+        super(clientId, secret);
     }
 
     /**
@@ -45,10 +38,7 @@ public class EntManager extends OauthEngine {
      */
     public ReturnResult getRoles() {
         String url = URL_API_GET_ROLES;
-        HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
-        params.put("sign", generateSign(params));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+        return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
     /**
@@ -61,27 +51,26 @@ public class EntManager extends OauthEngine {
     public ReturnResult getMembers(int start, int size) {
         String url = URL_API_GET_MEMBERS;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
-        params.put("start", start + "");
-        params.put("size", size + "");
-        params.put("sign", generateSign(params));
+        params.put("start", Integer.toString(start));
+        params.put("size", Integer.toString(size));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
-
 
     private ReturnResult getMember(int memberId, String outId, String account, boolean showGroups) {
         String url = URL_API_GET_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         if (memberId > 0) {
-            params.put("member_id", memberId + "");
+            params.put("member_id", Integer.toString(memberId));
         }
-        params.put("out_id", outId);
-        params.put("account", account);
+        if (!Util.isEmpty(outId)) {
+            params.put("out_id", outId);
+        }
+        if (!Util.isEmpty(account)) {
+            params.put("account", account);
+        }
         if (showGroups) {
             params.put("show_groups", "1");
         }
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -127,70 +116,37 @@ public class EntManager extends OauthEngine {
      */
     public ReturnResult getGroups() {
         String url = URL_API_GET_GROUPS;
-        HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
-        params.put("sign", generateSign(params));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+        return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
     /**
-     * 根据成员id获取成员个人库外链
+     * 根据外部成员id获取成员信息
      *
-     * @param memberId
      * @return
      */
-
-    public ReturnResult getMemberFileLink(int memberId, boolean fileOnly) {
-        String url = URL_API_GET_MEMBER_FILE_LINK;
-        HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
-        params.put("member_id", memberId + "");
-        if (fileOnly) {
-            params.put("file", "1");
-        }
-        params.put("sign", generateSign(params));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    public ReturnResult getMemberByOutids(String[] outIds) {
+        return getMemberByIds(null, outIds);
     }
 
-//    /**
-//     * 根据外部成员id获取成员信息
-//     *
-//     * @return
-//     */
-//    public String getMemberByOutid(String outIds[]) {
-//        if (outIds == null) {
-//            throw new NullPointerException("outIds is null");
-//        }
-//        return getMemberByIds(null, outIds);
-//
-//    }
-//
-//    /**
-//     * 根据外部成员登录帐号获取成员信息
-//     *
-//     * @return
-//     */
-//    public String getMemberByUserId(String[] userIds) {
-//        if (userIds == null) {
-//            throw new NullPointerException("userIds is null");
-//        }
-//        return getMemberByIds(userIds, null);
-//    }
+    /**
+     * 根据外部成员登录帐号获取成员信息
+     *
+     * @return
+     */
+    public ReturnResult getMemberByUserIds(String[] userIds) {
+        return getMemberByIds(userIds, null);
+    }
 
-//    private String getMemberByIds(String[] userIds, String[] outIds) {
-//        String method = "GET";
-//        String url = URL_API_GET_MEMBER_BY_OUT_ID;
-//        ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-//        params.add(new BasicNameValuePair("client_id", mClientId));
-//        params.add(new BasicNameValuePair("dateline", Util.getUnixDateline() + ""));
-//        if (outIds != null) {
-//            params.add(new BasicNameValuePair("out_ids", Util.strArrayToString(outIds, ",") + ""));
-//        } else {
-//            params.add(new BasicNameValuePair("user_ids", Util.strArrayToString(userIds, ",") + ""));
-//        }
-//        params.add(new BasicNameValuePair("sign", generateSign(paramSorted(params))));
-//        return NetConnection.sendRequest(url, method, params, null);
-//    }
+    private ReturnResult getMemberByIds(String[] outIds, String[] userIds) {
+        String url = URL_API_GET_MEMBER_BY_OUT_ID;
+        HashMap<String, String> params = new HashMap<String, String>();
+        if (outIds != null && outIds.length > 0) {
+            params.put("out_ids", Util.strArrayToString(outIds, ","));
+        } else {
+            params.put("out_ids", Util.strArrayToString(userIds, ","));
+        }
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
 
     /**
      * 添加或修改同步成员
@@ -206,7 +162,6 @@ public class EntManager extends OauthEngine {
     public ReturnResult addSyncMember(String outId, String memberName, String account, String memberEmail, String memberPhone, String password, String state) {
         String url = URL_API_ADD_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("out_id", outId);
         params.put("member_name", memberName);
         params.put("account", account);
@@ -214,7 +169,6 @@ public class EntManager extends OauthEngine {
         params.put("member_phone", memberPhone);
         params.put("password", password);
         params.put("state", state);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -227,10 +181,8 @@ public class EntManager extends OauthEngine {
     public ReturnResult setSyncMemberState(String oudId, boolean state) {
         String url = URL_API_ADD_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("out_id", oudId);
         params.put("state", state ? "1" : "0");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -243,9 +195,7 @@ public class EntManager extends OauthEngine {
     public ReturnResult delSyncMember(String[] members) {
         String url = URL_API_DEL_SYNC_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -260,11 +210,9 @@ public class EntManager extends OauthEngine {
     public ReturnResult addSyncGroup(String outId, String name, String parentOutId) {
         String url = URL_API_ADD_SYNC_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("out_id", outId);
         params.put("name", name);
         params.put("parent_out_id", parentOutId);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -277,9 +225,7 @@ public class EntManager extends OauthEngine {
     public ReturnResult delSyncGroup(String[] groups) {
         String url = URL_API_DEL_SYNC_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("groups", Util.strArrayToString(groups, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -293,10 +239,8 @@ public class EntManager extends OauthEngine {
     public ReturnResult addSyncGroupMember(String groupOutId, String[] members) {
         String url = URL_API_ADD_SYNC_GROUP_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("group_out_id", groupOutId);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -310,10 +254,8 @@ public class EntManager extends OauthEngine {
     public ReturnResult delSyncGroupMember(String groupOutId, String[] members) {
         String url = URL_API_DEL_SYNC_GROUP_MEMBER;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("group_out_id", groupOutId);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -329,12 +271,10 @@ public class EntManager extends OauthEngine {
     public ReturnResult getGroupMembers(int groupId, int start, int size, boolean showChild) {
         String url = URL_API_GET_GROUP_MEMBERS;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
-        params.put("group_id", groupId + "");
-        params.put("start", start + "");
-        params.put("size", size + "");
-        params.put("show_child", (showChild ? 1 : 0) + "");
-        params.put("sign", generateSign(params));
+        params.put("group_id", Integer.toString(groupId));
+        params.put("start", Integer.toString(start));
+        params.put("size", Integer.toString(size));
+        params.put("show_child", (showChild ? "1" : "0"));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -347,9 +287,7 @@ public class EntManager extends OauthEngine {
     public ReturnResult delSyncMemberGroup(String[] members) {
         String url = URL_API_DEL_SYNC_MEMBER_GROUP;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -364,29 +302,10 @@ public class EntManager extends OauthEngine {
     public ReturnResult addSyncAdmin(String outId, String memberEmail, boolean isSuperAdmin) {
         String url = ADD_SYNC_ADMIN;
         HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
         params.put("out_id", outId);
         params.put("member_email", memberEmail);
-        params.put("type", (isSuperAdmin ? 1 : 0) + "");
-        params.put("sign", generateSign(params));
+        params.put("type", (isSuperAdmin ? "1" : "0"));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
-    }
-
-    /**
-     * 成员登录情况统计
-     *
-     * @param startDate
-     * @param enDdate
-     * @return
-     */
-    public ReturnResult memberLoginReport(String startDate, String enDdate) {
-        String url = MEMBER_LOGIN_REPORT;
-        HashMap<String, String> params = new HashMap<String, String>();
-        addAuthParams(params);
-        params.put("start_date", startDate);
-        params.put("end_date", enDdate);
-        params.put("sign", generateSign(params));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
     /**
@@ -395,7 +314,6 @@ public class EntManager extends OauthEngine {
      * @return
      */
     public EntManager clone() {
-        return new EntManager(mClientId, mClientSecret, mIsEnt, mToken);
+        return new EntManager(mClientId, mSecret);
     }
-
 }

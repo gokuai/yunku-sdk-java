@@ -15,7 +15,7 @@ public class GetMember {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().getMember(1262679, MemberType.MEMBER_ID,new String[]{"885371"});

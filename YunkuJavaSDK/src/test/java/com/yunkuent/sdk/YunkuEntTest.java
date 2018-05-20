@@ -61,13 +61,6 @@ public class YunkuEntTest {
         Assert.assertEquals(200,r.getCode());
     }
 
-    @Test
-    public void getMemberFileLink() throws Exception {
-        EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
-        ReturnResult r = ent.getMemberFileLink(74478,true);
-        Assert.assertEquals(200,r.getCode());
-    }
-
 //    @Ignore("addSyncMember is ignored")
     @Test
     public void addSyncMember() throws Exception {

@@ -5,6 +5,7 @@ import com.gokuai.base.utils.URLEncoder;
 import com.gokuai.base.utils.Util;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
+import com.yunkuent.sdk.upload.IEntFileManager;
 import com.yunkuent.sdk.upload.UploadCallback;
 import com.yunkuent.sdk.utils.YKUtils;
 import okhttp3.*;
@@ -15,7 +16,7 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.zip.CRC32;
 
-public class UploadManager<T> extends HttpEngine implements Runnable {
+public class UploadManager {
     private static final String LOG_TAG = "UploadManager ";
 
     private static final String URL_UPLOAD_INIT = "/upload_init";
@@ -27,11 +28,11 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
 
     private final int mBlockSize;// 上传分块大小
     private String mSession = "";// 上传session
-    private String mApiUrl = "";
 
-    private String mLocalFullPath;
-    private String mFullPath;
-    private long mDateline;
+    private HttpEngine mEngine;
+
+    private String mLocalFile;
+    private String mFullpath;
     private String mOpName;
     private int mOpId;
     private boolean mOverwrite;
@@ -39,58 +40,61 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
     private OkHttpClient mUploadHttpClient;
 
     private UploadCallback mCallback;
-    private InputStream mInputStream;
+    private InputStream mStream;
     private FileInfo mFileinfo = new FileInfo();
 
-    private String mTags;
-    private T mManager;
     private boolean mIsStop;
 
     public static void setRetry(int retry) {
         RETRY = retry;
     }
 
-    public UploadManager(String apiUrl, String localFullPath, String fullPath,
-                         String opName, int opId, String orgClientId, String clientSecret, boolean overwrite, int blockSize, long dateline) {
-
-        super(orgClientId, clientSecret);
-        this.mApiUrl = apiUrl;
-        this.mLocalFullPath = localFullPath;
-        this.mFullPath = fullPath;
-        this.mOpId = opId;
-        this.mOpName = opName;
-        this.mOverwrite = overwrite;
+    public UploadManager(int blockSize, HttpEngine engine) {
         this.mBlockSize = blockSize;
-        this.mDateline = dateline;
+        this.mEngine = engine;
     }
 
-    protected UploadManager(String apiUrl, InputStream inputStream, String fullPath,
-                            String opName, int opId, String orgClientId, String clientSecret, boolean overwrite, int blockSize, long dateline) {
-
-        super(orgClientId, clientSecret);
-        this.mApiUrl = apiUrl;
-        this.mInputStream = inputStream;
-        this.mFullPath = fullPath;
+    public void setOperator(int opId) {
         this.mOpId = opId;
-        this.mOpName = opName;
-        this.mOverwrite = overwrite;
-        this.mBlockSize = blockSize;
-        this.mDateline = dateline;
     }
 
-    public void setAsyncCallback(UploadCallback callback) {
+    public void setOperator(String opName) {
+        this.mOpName = opName;
+    }
+
+    public FileInfo upload(String localFile, String fullpath, boolean overwrite) throws YunkuException {
+        this.mLocalFile = localFile;
+        this.mFullpath = fullpath;
+        this.mOverwrite = overwrite;
+        return this.doUpload();
+    }
+
+    public FileInfo upload(InputStream stream, String fullpath, boolean overwrite) throws YunkuException {
+        this.mStream = stream;
+        this.mFullpath = fullpath;
+        this.mOverwrite = overwrite;
+        return this.doUpload();
+    }
+
+    public void uploadAsync(String localFile, String fullpath, boolean overwrite, UploadCallback callback) {
+        this.mLocalFile = localFile;
+        this.mFullpath = fullpath;
+        this.mOverwrite = overwrite;
         this.mCallback = callback;
+        this.doUploadAsync();
     }
 
-    public void setAutoTags(String tags, T manager) {
-        this.mTags = tags;
-        this.mManager = manager;
+    public void uploadAsync(InputStream stream, String fullpath, boolean overwrite, UploadCallback callback) {
+        this.mStream = stream;
+        this.mFullpath = fullpath;
+        this.mOverwrite = overwrite;
+        this.mCallback = callback;
+        this.doUploadAsync();
     }
 
-    public FileInfo upload() throws YunkuException {
+    private FileInfo doUpload() throws YunkuException {
         try {
             this.startUpload();
-            this.tagUploadFile();
             return this.mFileinfo;
         } catch (IOException e) {
             LogPrint.error(LOG_TAG, e.getMessage());
@@ -98,61 +102,62 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         }
     }
 
-    /**
-     * 线程使用的上传方法
-     */
-    @Override
-    public void run() {
-        try {
-            this.startUpload();
-            this.tagUploadFile();
+    private void doUploadAsync() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    startUpload();
 
-            if (mCallback != null) {
-                mCallback.onProgress(this.mFullPath, 1);
-                mCallback.onSuccess(this.mFullPath, this.mFileinfo);
+                    if (mCallback != null) {
+                        mCallback.onProgress(mFullpath, 1);
+                        mCallback.onSuccess(mFullpath, mFileinfo);
+                    }
+                } catch (YunkuException e) {
+                    LogPrint.error(LOG_TAG, e.getMessage());
+                    if (mCallback != null) {
+                        mCallback.onFail(mFullpath, e);
+                    }
+                } catch (IOException e) {
+                    LogPrint.error(LOG_TAG, e.getMessage());
+                    if (mCallback != null) {
+                        mCallback.onFail(mFullpath, new YunkuException(e));
+                    }
+                }
             }
-        } catch (YunkuException e) {
-            LogPrint.error(LOG_TAG, e.getMessage());
-            if (mCallback != null) {
-                mCallback.onFail(this.mFullPath, e);
-            }
-        } catch (IOException e) {
-            LogPrint.error(LOG_TAG, e.getMessage());
-            if (mCallback != null) {
-                mCallback.onFail(this.mFullPath, new YunkuException(e));
-            }
-        }
+        });
+        thread.run();
     }
 
     private void startUpload() throws YunkuException, IOException {
         ReturnResult result;
 
-        if (mInputStream != null) {
-            mInputStream = Util.cloneInputStream(mInputStream);
-            FileInfo fileInfo = YKUtils.getFileSha1(mInputStream, false);
+        if (mStream != null) {
+            mStream = Util.cloneInputStream(mStream);
+            FileInfo fileInfo = YKUtils.getFileSha1(mStream, false);
             this.mFileinfo.fileHash = fileInfo.fileHash;
             this.mFileinfo.fileSize = fileInfo.fileSize;
-        } else if (!Util.isEmpty(mLocalFullPath)) {
-            File file = new File(mLocalFullPath);
+        } else if (!Util.isEmpty(mLocalFile)) {
+            File file = new File(mLocalFile);
             if (!file.exists()) {
-                throw new YunkuException(mLocalFullPath + " not found");
+                throw new YunkuException(mLocalFile + " not found");
             }
             if (!file.canRead()) {
-                throw new YunkuException(mLocalFullPath + " can not read");
+                throw new YunkuException(mLocalFile + " can not read");
             }
 
-            this.mFileinfo.fileHash = Util.getFileSha1(mLocalFullPath);
+            this.mFileinfo.fileHash = Util.getFileSha1(mLocalFile);
             this.mFileinfo.fileSize = file.length();
-            mInputStream = new FileInputStream(mLocalFullPath);
+            mStream = new FileInputStream(mLocalFile);
         }
 
-        if (mInputStream == null) {
+        if (mStream == null) {
             throw new YunkuException("fail to open file stream");
         }
 
         for (int trys = 0; trys < 3; trys++) {
 
-            result = this.addFile();
+            result = ((IEntFileManager)this.mEngine).createFile(this.mFullpath, this.mFileinfo.fileHash, this.mFileinfo.fileSize, mOpId, mOpName, mOverwrite);
             boolean shouldUpload = this.decodeAddFileResult(result);
             if (!shouldUpload) {
                 return;
@@ -189,17 +194,17 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
             int code;
             CRC32 crc = new CRC32();
 
-            mInputStream.skip(offset);
+            mStream.skip(offset);
 
             while (offset < this.mFileinfo.fileSize - 1 && !this.mIsStop) {
 
                 if (mCallback != null) {
-                    mCallback.onProgress(this.mFullPath, (float) offset / (float) this.mFileinfo.fileSize);
+                    mCallback.onProgress(this.mFullpath, (float) offset / (float) this.mFileinfo.fileSize);
                 }
 
                 buflen = offset + this.mBlockSize > mFileinfo.fileSize ? (int) (mFileinfo.fileSize - offset) : this.mBlockSize;
                 byte[] buffer = new byte[buflen];
-                mInputStream.read(buffer);
+                mStream.read(buffer);
                 crc.update(buffer);
                 crc32 = crc.getValue();
                 crc.reset();
@@ -231,7 +236,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
                     // 409-上传块序号错误, http内容中给出服务器期望的块序号
                     JSONObject json = new JSONObject(result.getBody());
                     offset = Long.parseLong(json.getString("expect"));
-                    mInputStream.skip(offset);
+                    mStream.skip(offset);
                 } else {
                     throw new YunkuException("fail to call upload_part", result);
                 }
@@ -244,26 +249,6 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
             }
         }
         this.uploadFinish();
-    }
-
-    private ReturnResult addFile() {
-        String url = mApiUrl;
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", this.mClientId);
-        params.put("fullpath", this.mFullPath);
-        if (mOpId > 0) {
-            params.put("op_id", mOpId + "");
-        } else if (mOpName != null && !mOpName.isEmpty()) {
-            params.put("op_name", mOpName);
-        }
-        params.put("overwrite", (mOverwrite ? 1 : 0) + "");
-        params.put("dateline", mDateline + "");
-        params.put("sign", generateSign(params));
-
-        params.put("filesize", this.mFileinfo.fileSize + "");
-        params.put("filehash", this.mFileinfo.fileHash);
-
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
     private boolean decodeAddFileResult(ReturnResult result) throws YunkuException {
@@ -290,13 +275,13 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
      * @throws Exception
      */
     private ReturnResult uploadInit() throws YunkuException {
-        String url = this.mFileinfo.uploadServer + URL_UPLOAD_INIT + "?org_client_id=" + this.mClientId;
+        String url = this.mFileinfo.uploadServer + URL_UPLOAD_INIT + "?org_client_id=" + this.mEngine.getClientId();
         final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-pathhash", this.mFileinfo.hash);
         headParams.put("x-gk-upload-filename", URLEncoder.encodeUTF8(this.mFileinfo.filename));
         headParams.put("x-gk-upload-filehash", this.mFileinfo.fileHash);
         headParams.put("x-gk-upload-filesize", String.valueOf(this.mFileinfo.fileSize));
-        ReturnResult result = new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+        ReturnResult result = this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
 
         if (result.isOK()) {
             JSONObject json = new JSONObject(result.getBody());
@@ -318,7 +303,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         headParams.put("x-gk-upload-session", mSession);
 
         long checkSize = 0;
-        ReturnResult result = new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+        ReturnResult result = this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.GET).executeSync();
         if (result.isOK()) {
             try {
                 checkSize = Long.parseLong(result.getBody());
@@ -401,7 +386,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
 
         int retry = 10;
         while (retry-- > 0) {
-            result = new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+            result = this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
             if (result.getCode() == HttpURLConnection.HTTP_ACCEPTED) {
                 try {
                     Thread.sleep(2000);
@@ -430,28 +415,7 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_ABORT;
         final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
-        new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
-    }
-
-    /**
-     * 为上传文件打标签
-     * @throws YunkuException
-     */
-    private void tagUploadFile() throws YunkuException {
-        if (Util.isEmpty(this.mTags) || this.mManager == null) {
-            return;
-        }
-        ReturnResult result = null;
-        if (mManager instanceof EntFileManager) {
-            result = ((EntFileManager) mManager).addUploadTags(this.mFileinfo.fullpath);
-
-        } else if (mManager instanceof com.yunkuent.sdk.compat.v2.EntFileManager) {
-            result = ((com.yunkuent.sdk.compat.v2.EntFileManager) mManager).addUploadTags(this.mFileinfo.fullpath);
-        }
-
-        if (result == null || !result.isOK()) {
-            throw new YunkuException("fail to call add_tag", result);
-        }
+        this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
     /**
@@ -460,6 +424,4 @@ public class UploadManager<T> extends HttpEngine implements Runnable {
     public void stop() {
         mIsStop = true;
     }
-
-
 }

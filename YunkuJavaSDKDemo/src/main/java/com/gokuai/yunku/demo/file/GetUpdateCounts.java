@@ -17,7 +17,7 @@ public class GetUpdateCounts {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         Calendar calendar = Calendar.getInstance();

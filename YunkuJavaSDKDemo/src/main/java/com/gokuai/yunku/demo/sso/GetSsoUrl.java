@@ -1,7 +1,6 @@
 package com.gokuai.yunku.demo.sso;
 
 import com.gokuai.base.DebugConfig;
-import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.SSOManagerHelper;
 
 /**
@@ -13,7 +12,7 @@ public class GetSsoUrl {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
         String account = "gk001";
 

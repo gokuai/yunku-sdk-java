@@ -14,7 +14,7 @@ public class PrintWithLogWithYourEngine {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 
         DebugConfig.setListener(new YourDetector());
 

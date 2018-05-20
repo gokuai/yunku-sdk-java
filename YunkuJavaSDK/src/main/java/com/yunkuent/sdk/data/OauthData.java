@@ -1,87 +1,75 @@
 package com.yunkuent.sdk.data;
 
+import com.gokuai.base.utils.Util;
 import org.json.JSONObject;
 
-/**
- * oauth返回数据
- * 
- * httpcode-200: access_token: 要获取的“access_token” expires_in:
- * “access_token”的有效期，一秒为单位 refresh_token: 用于刷新“access_token” httpcode-: error:
- * 
- */
 public class OauthData {
 
-	private final static String ACCESS_TOKEN = "access_token";
-	private final static String EXPIRES_IN = "expires_in";
-	private final static String REFRESH_TOKEN = "refresh_token";
-	private final static String ERROR = "error";
+    private final static String ACCESS_TOKEN = "access_token";
+    private final static String EXPIRES_IN = "expires_in";
+    private final static String REFRESH_TOKEN = "refresh_token";
+    private final static String ERROR = "error";
+    private final static String ERROR_DESCRIPTION = "error_description";
 
-	private int code = 0;
-	private String access_token;
-	private int expires_in;
-	private String refresh_token;
+    private String json;
+
+    private String accessToken = "";
+    private int expiresIn;
+    private String refreshToken = "";
+
     private String error;
+    private String errorDescription;
 
-	public static OauthData create(String jsonString) {
-		JSONObject json = null;
+    public static OauthData create(String jsonString) {
+        if (Util.isEmpty(jsonString)) {
+            return null;
+        }
 
-		try {
-			json = new JSONObject(jsonString);
-		} catch (Exception e) {
-			json = null;
-		}
+        JSONObject json;
+        try {
+            json = new JSONObject(jsonString);
+        } catch (Exception e) {
+            json = null;
+        }
 
-		if (json == null) {
-			return null;
-		}
+        if (json == null) {
+            return null;
+        }
 
         OauthData data = new OauthData();
-        data.setToken(json.optString(ACCESS_TOKEN));
-        data.setExpires_in(json.optInt(EXPIRES_IN));
-		data.setRefresh_token(json.optString(REFRESH_TOKEN));
-        data.setError(json.optString(ERROR));
+        data.json = jsonString;
+        data.accessToken = json.optString(ACCESS_TOKEN);
+        data.expiresIn = json.optInt(EXPIRES_IN);
+        data.refreshToken = json.optString(REFRESH_TOKEN);
+
+        data.error = json.optString(ERROR);
+        data.errorDescription = json.optString(ERROR_DESCRIPTION);
+
         return data;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getToken() {
-		return access_token;
-	}
-
-	public void setToken(String token) {
-		this.access_token = token;
-	}
-
-	public int getExpires_in() {
-		return expires_in;
-	}
-
-	public void setExpires_in(int expires_in) {
-		this.expires_in = expires_in;
-	}
-
-    public String getRefresh_token() {
-        return refresh_token;
     }
 
-    public void setRefresh_token(String refresh_token) {
-        this.refresh_token = refresh_token;
+    public String getToken() {
+        return this.accessToken;
     }
 
-	@Override
-	public String toString() {
-		return "OauthData [code=" + code + ", error=" + error + ", token="
-				+ access_token + "]";
-	}
+    public int getExpiresIn() {
+        return this.expiresIn;
+    }
 
-    public void setError(String error) {
-        this.error = error;
+    public String getRefreshToken() {
+        return this.refreshToken;
+    }
+
+    public String getError() {
+        return this.error;
+    }
+
+    public String getErrorDescription() {
+        return this.errorDescription;
+    }
+
+    @Override
+    public String toString() {
+        return this.json;
     }
 }

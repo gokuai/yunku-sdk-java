@@ -14,7 +14,7 @@ public class GetFileList {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().getFileList("","filename asc", "BrandonTest", 0,100,false);

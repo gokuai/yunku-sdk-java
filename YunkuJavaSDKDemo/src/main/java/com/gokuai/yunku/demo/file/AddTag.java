@@ -14,7 +14,7 @@ public class AddTag {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().addTag("default/custom/upload/path/search.txt", new String[]{"test", "test1"});

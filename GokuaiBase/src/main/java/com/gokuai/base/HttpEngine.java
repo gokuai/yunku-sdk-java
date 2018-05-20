@@ -1,10 +1,7 @@
 package com.gokuai.base;
 
 import com.gokuai.base.utils.Util;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -12,62 +9,35 @@ import java.util.HashMap;
  */
 public abstract class HttpEngine extends SignAbility {
 
+    public static final int ERRORID_NETDISCONNECT = 1;
     private final static String LOG_TAG = "HttpEngine";
 
-    protected String mClientSecret;
-    protected String mClientId;
-
-
-    public HttpEngine(String clientId, String clientSecret) {
-        mClientId = clientId;
-        mClientSecret = clientSecret;
+    public HttpEngine(String clientId, String secret) {
+        super(clientId, secret);
     }
-
-
-    public static final int ERRORID_NETDISCONNECT = 1;
 
     /**
      * 从服务器获得数据后的回调
-     *
-     * @author Administrator
      */
     public interface DataListener {
-        void onReceivedData(int apiId, Object object, int errorId);
+        void onReceivedData(int apiId, ReturnResult result, int errorId);
     }
 
-    /**
-     * API签名,SSO签名
-     *
-     * @param params
-     * @return
-     */
-    public String generateSign(HashMap<String, String> params) {
-        return generateSign(params, mClientSecret);
+    public interface RequestHelperCallback {
+        ReturnResult hook(ReturnResult result);
     }
-
-    /**
-     * @param params
-     * @param ignoreKeys 忽略签名
-     * @return
-     */
-    protected String generateSign(HashMap<String, String> params, ArrayList<String> ignoreKeys) {
-        return generateSign(params, mClientSecret, ignoreKeys);
-    }
-
 
     /**
      * 请求协助类
      */
     public class RequestHelper {
-        RequestMethod method;
-        HashMap<String, String> params;
-        HashMap<String, String> headParams;
         String url;
+        RequestMethod method = RequestMethod.POST;
+        protected HashMap<String, String> params;
+        HashMap<String, String> headParams;
         boolean checkAuth;
         String postType = NetConfig.POST_DEFAULT_FORM_TYPE;
         IAsyncTarget target;
-
-        ArrayList<String> ignoreKeys;
 
         public RequestHelper setMethod(RequestMethod method) {
             this.method = method;
@@ -99,14 +69,27 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
-        public RequestHelper setIgnoreKeys(ArrayList<String> ignoreKeys) {
-            this.ignoreKeys = ignoreKeys;
-            return this;
-        }
-
         public RequestHelper setTarget(IAsyncTarget target) {
             this.target = target;
             return this;
+        }
+
+        /**
+         * 设置公共参数, 如计算签名
+         */
+        protected void setCommonParams() {
+            if (this.params == null) {
+                this.params = new HashMap<String, String>();
+            }
+            this.params.put("sign", HttpEngine.this.generateSign(params));
+        }
+
+        private void checkNecessaryParams() {
+            if (Util.isEmpty(url)) {
+                throw new IllegalArgumentException("url must not be null");
+            }
+
+            this.setCommonParams();
         }
 
         /**
@@ -115,19 +98,14 @@ public abstract class HttpEngine extends SignAbility {
          * @return
          */
         public ReturnResult executeSync() {
-            checkNecessaryParams(url, method);
-
-            if (!isNetworkAvailableEx()) {
-                return null;
-            }
+            this.checkNecessaryParams();
 
             if (checkAuth) {
                 if (HttpEngine.this instanceof IAuthRequest) {
-                    return ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, ignoreKeys, postType);
+                    return ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, postType);
                 } else {
                     LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
                 }
-
             }
             return NetConnection.sendRequest(url, method, params, headParams, postType);
         }
@@ -137,15 +115,13 @@ public abstract class HttpEngine extends SignAbility {
          *
          * @return
          */
-        public IAsyncTarget executeAsync(DataListener listener, int apiId, RequestHelperCallBack callBack) {
-
-            checkNecessaryParams(url, method);
+        public IAsyncTarget executeAsync(DataListener listener, int apiId, RequestHelperCallback callback) {
+            this.checkNecessaryParams();
 
             if (target != null) {
-                return target.execute(listener, this, callBack, apiId);
-
+                return target.execute(listener, this, callback, apiId);
             }
-            return new DefaultAsyncTarget().execute(listener, this, callBack, apiId);
+            return new DefaultAsyncTarget().execute(listener, this, callback, apiId);
         }
 
         /**
@@ -157,28 +133,5 @@ public abstract class HttpEngine extends SignAbility {
             return executeAsync(listener, apiId, null);
         }
 
-
-        private void checkNecessaryParams(String url, RequestMethod method) {
-            if (Util.isEmpty(url)) {
-                throw new IllegalArgumentException("url must not be null");
-            }
-
-            if (method == null) {
-                throw new IllegalArgumentException("method must not be null");
-            }
-        }
-    }
-
-
-    public interface RequestHelperCallBack {
-        Object getReturnData(ReturnResult result);
-    }
-
-
-    /**
-     * @return
-     */
-    protected boolean isNetworkAvailableEx() {
-        return true;
     }
 }

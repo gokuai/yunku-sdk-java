@@ -14,7 +14,7 @@ public class GetGroupMembers {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntManagerHelper.getInstance().getGroupMembers(154837, 0, 3, true);

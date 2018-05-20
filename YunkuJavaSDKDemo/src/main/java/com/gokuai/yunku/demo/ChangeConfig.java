@@ -16,9 +16,9 @@ public class ChangeConfig {
     public static void main(String[] args) throws IOException {
 
         new ConfigHelper()
-                .apiHost("http://yk3-api-ent.gokuai.com")
-                .language("Zh-CN")
-                .blockSize(1024 * 1024)
+                .apiHost("http://yk3.gokuai.com/m-open")
+                .language("zh-CN")
+                .retry(3)
                 .config();
 
         ReturnResult result = EntFileManagerHelper.getInstance().previewUrl("upload/1521779111710/1521779111710.xls", true, "tom");

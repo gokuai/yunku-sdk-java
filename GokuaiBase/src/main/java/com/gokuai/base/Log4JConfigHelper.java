@@ -69,7 +69,7 @@ public class Log4JConfigHelper {
      * 日志打印配置信息
      */
     private static void logConfiguration() {
-        if (DebugConfig.PRINT_LOG) {
+        if (DebugConfig.DEBUG) {
 
             ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
             builder.setStatusLevel(org.apache.logging.log4j.Level.INFO);

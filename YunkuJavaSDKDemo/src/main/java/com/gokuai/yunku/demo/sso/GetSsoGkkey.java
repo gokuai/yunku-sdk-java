@@ -14,7 +14,7 @@ public class GetSsoGkkey {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
         String account = "gk001";
 

@@ -12,13 +12,13 @@ import com.yunkuent.sdk.compat.v2.ConfigHelper;
 public class ChangeConfig {
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         new ConfigHelper()
                 .apiHost("http://apihost")
                 .oauthHost("http://oauthHost")
-                .language("Zh-CN")
+                .language("zh-CN")
                 .userAgent("[Your User Agent]")
                 .config();
 

@@ -12,7 +12,7 @@ public class CreateEnt {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = ThirdPartyManagerHelper.getInstance().createEnt("yunku3","yunku3","","","");

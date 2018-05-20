@@ -8,7 +8,7 @@ import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
 public class CopyAll {
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().copyAll("file1.jpg|file2.jpg", "folder1|folder2", "");

@@ -61,7 +61,7 @@ public class LogPrint {
     }
 
     private static void print(String logTag, String level, String log) {
-        if (DebugConfig.PRINT_LOG) {
+        if (DebugConfig.DEBUG) {
 
             if (mDetector != null) {
                 mDetector.getLog(logTag, level, log);

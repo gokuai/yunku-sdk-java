@@ -14,7 +14,7 @@ public class Destroy {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().destroy("AxT0EUEjtYc8za41xXl1dKFJ40");

@@ -11,7 +11,7 @@ public class PrintWIthLog4JEngine {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 
         LogPrint.info(TAG,"System out log");
 

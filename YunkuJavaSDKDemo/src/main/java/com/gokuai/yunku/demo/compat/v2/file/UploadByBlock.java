@@ -19,13 +19,13 @@ public class UploadByBlock {
 
         //-------- 如果想改编上传基础配置，可以进行以几种配置------
         new ConfigHelper()
-                .uploadOpname("[Default Name]")
+                .uploadOpName("[Default Name]")
                 .uploadRootPath("default/custom/upload/path")
-                .uploadTags("[tag1]|[tag2]").config();
+                .config();
 
         //---------------------------------------------------
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 
         try {
             FileInfo file = EntFileManagerHelper.getInstance().uploadByBlock("testBlockSize.jpg", "", 0, Config.TEST_FILE_PATH, true, 10485760);

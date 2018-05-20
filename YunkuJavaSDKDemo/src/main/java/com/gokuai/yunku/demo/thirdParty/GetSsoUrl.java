@@ -12,10 +12,10 @@ public class GetSsoUrl {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = ThirdPartyManagerHelper.getInstance().getSsoUrl("");
+        ReturnResult result = ThirdPartyManagerHelper.getInstance().getSsoUrl("[ticket]");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

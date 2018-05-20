@@ -14,10 +14,10 @@ public class Bind {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntLibraryManagerHelper.getInstance().bind(1258748,"YunkuJavaSDKDemo",null);
+        ReturnResult result = EntLibraryManagerHelper.getInstance().bind(1258748,"YunkuJavaSDKDemo");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

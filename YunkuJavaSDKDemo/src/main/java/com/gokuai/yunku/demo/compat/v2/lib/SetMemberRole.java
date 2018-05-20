@@ -14,7 +14,7 @@ public class SetMemberRole {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().setMemberRole(1262679,13862,new int[]{239931});

@@ -12,7 +12,7 @@ public class GetEntInfo {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = ThirdPartyManagerHelper.getInstance().getEntInfo();

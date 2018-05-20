@@ -53,36 +53,6 @@ public class YunkuEntFileTest {
     }
 
     @Test
-    public void createFile() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.createFile("doc/1.xlsx","",TEST_FILE_PATH,false);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void createFileAndOverWrite() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.createFile("doc/1.xlsx","",TEST_FILE_PATH);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void createFileByStream() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        FileInputStream stream = new FileInputStream(new File(TEST_FILE_PATH));
-        ReturnResult r = entFile.createFile("doc/1.xlsx","",stream,false);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void createFileByStreamAndOverWrite() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        FileInputStream stream = new FileInputStream(new File(TEST_FILE_PATH));
-        ReturnResult r = entFile.createFile("doc/1.xlsx","",stream);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
     public void uploadByBlock() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
@@ -135,13 +105,6 @@ public class YunkuEntFileTest {
     }
 
     @Test
-    public void sendmsg() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.sendmsg("msgTest", "msg", "", "", "");
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
     public void links() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         ReturnResult r = entFile.links(true);
@@ -155,22 +118,6 @@ public class YunkuEntFileTest {
         calendar.add(Calendar.DATE, -1);//昨天
         Date date = calendar.getTime();
         ReturnResult r = entFile.getUpdateCounts( date.getTime(), System.currentTimeMillis(), false);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void createFileByUrlAndOverWrite() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.createFileByUrl("qq.jpg", 0,
-                "", "http://reso2.yiihuu.com/976162-z.jpg");
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void createFileByUrl() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.createFileByUrl("qq.jpg", 0,
-                "", true, "http://reso2.yiihuu.com/976162-z.jpg");
         Assert.assertEquals(200,r.getCode());
     }
 

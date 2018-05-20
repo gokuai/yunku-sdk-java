@@ -5,7 +5,6 @@ import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.compat.v2.helper.EntManagerHelper;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.yunkuent.sdk.ConfigHelper;
-import com.yunkuent.sdk.compat.v2.HostConfig;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -18,7 +17,7 @@ public class SetProxy {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("",80));

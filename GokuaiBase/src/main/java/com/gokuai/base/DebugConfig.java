@@ -5,7 +5,7 @@ package com.gokuai.base;
  */
 public class DebugConfig {
 
-    public static boolean PRINT_LOG = false;
+    public static boolean DEBUG = false;
 
     public static String LOG_PATH = "LogPath/";
 

@@ -59,7 +59,6 @@ public class EntLibManager extends OauthEngine {
         params.put("org_capacity", orgCapacity);
         params.put("storage_point_name", storagePointName);
         params.put("org_logo", orgLogo);
-        params.put("sign", generateSign(params));
         return new HttpEngine.RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -86,7 +85,6 @@ public class EntLibManager extends OauthEngine {
         if (memberId > 0) {
             params.put("member_id", memberId + "");
         }
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -106,7 +104,6 @@ public class EntLibManager extends OauthEngine {
         params.put("org_id", String.valueOf(orgId));
         params.put("title", appName);
         params.put("url", linkUrl);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -121,7 +118,6 @@ public class EntLibManager extends OauthEngine {
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("org_client_id", orgClientId);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -140,7 +136,6 @@ public class EntLibManager extends OauthEngine {
         params.put("start", start + "");
         params.put("size", size + "");
         params.put("org_id", orgId + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -159,7 +154,6 @@ public class EntLibManager extends OauthEngine {
         params.put("role_id", roleId + "");
         params.put("org_id", orgId + "");
         params.put("member_ids", Util.intArrayToString(memberIds, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -178,7 +172,6 @@ public class EntLibManager extends OauthEngine {
         params.put("org_id", orgId + "");
         params.put("role_id", roleId + "");
         params.put("member_ids", Util.intArrayToString(memberIds, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -195,7 +188,6 @@ public class EntLibManager extends OauthEngine {
         addAuthParams(params);
         params.put("org_id", orgId + "");
         params.put("member_ids", Util.intArrayToString(memberIds, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -210,7 +202,6 @@ public class EntLibManager extends OauthEngine {
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("org_id", orgId + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -229,7 +220,6 @@ public class EntLibManager extends OauthEngine {
         params.put("org_id", orgId + "");
         params.put("group_id", groupId + "");
         params.put("role_id", roleId + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -246,7 +236,6 @@ public class EntLibManager extends OauthEngine {
         addAuthParams(params);
         params.put("org_id", orgId + "");
         params.put("group_id", groupId + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -265,7 +254,6 @@ public class EntLibManager extends OauthEngine {
         params.put("org_id", orgId + "");
         params.put("group_id", groupId + "");
         params.put("role_id", roleId + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -279,8 +267,7 @@ public class EntLibManager extends OauthEngine {
         String url = URL_API_DESTROY;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
-        params.put("org_client_id", orgClientId + "");
-        params.put("sign", generateSign(params));
+        params.put("org_client_id", orgClientId);
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -302,12 +289,11 @@ public class EntLibManager extends OauthEngine {
             params.put("org_name", orgName);
         }
         if (orgCapacity != null && !orgCapacity.isEmpty()) {
-            params.put("org_capacity", orgCapacity + "");
+            params.put("org_capacity", orgCapacity);
         }
         if (orgLogo != null && !orgLogo.isEmpty()) {
             params.put("org_logo", orgLogo);
         }
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -325,8 +311,7 @@ public class EntLibManager extends OauthEngine {
         addAuthParams(params);
         params.put("org_id", orgId + "");
         params.put("type", type.toString().toLowerCase());
-        params.put("ids", Util.strArrayToString(ids, ",") + "");
-        params.put("sign", generateSign(params));
+        params.put("ids", Util.strArrayToString(ids, ","));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -341,7 +326,6 @@ public class EntLibManager extends OauthEngine {
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("org_id", orgId + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -352,7 +336,7 @@ public class EntLibManager extends OauthEngine {
      * @return
      */
     public EntLibManager clone() {
-        return new EntLibManager(mClientId, mClientSecret, mIsEnt, mToken);
+        return new EntLibManager(mClientId, mSecret, mIsEnt, mToken);
     }
 
 }

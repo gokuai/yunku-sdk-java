@@ -7,5 +7,5 @@ public interface IAsyncTarget {
 
     void cancel();
 
-    IAsyncTarget execute(HttpEngine.DataListener listener, HttpEngine.RequestHelper helper, HttpEngine.RequestHelperCallBack callBack, int apiId);
+    IAsyncTarget execute(HttpEngine.DataListener listener, HttpEngine.RequestHelper helper, HttpEngine.RequestHelperCallback callback, int apiId);
 }

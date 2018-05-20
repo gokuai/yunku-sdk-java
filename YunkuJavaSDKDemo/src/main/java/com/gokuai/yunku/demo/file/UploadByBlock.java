@@ -3,8 +3,11 @@ package com.gokuai.yunku.demo.file;
 import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
+
+import java.util.Date;
 
 /**
  * Created by qp on 2017/3/2.
@@ -15,12 +18,20 @@ public class UploadByBlock {
 
     public static void main(String[] args) {
 
-        DebugConfig.PRINT_LOG = true;
+        DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
+        new ConfigHelper()
+                .apiHost("http://yk3.gokuai.com/m-open")
+                .retry(5)
+                .language("zh-CN")
+                .config();
+
         try {
+            System.out.println(new Date().toString());
             //overwrite=false, 如果有重名 file.fullpath 的文件会自动追加(2), (3)...
-            FileInfo file = EntFileManagerHelper.getInstance().uploadByBlock("RiverOtters-Yellowstone_GettyImages_RM-564829679_1080_HD_ZH-CN.mp4", "", 0, "/Pictures/RiverOtters-Yellowstone_GettyImages_RM-564829679_1080_HD_ZH-CN.mp4", true);
+            FileInfo file = EntFileManagerHelper.getInstance().uploadByBlock("pic/Love.jpg", "", 0, "/Pictures/Love.jpg", true);
+            System.out.println(new Date().toString());
             System.out.println(file.fullpath + " upload success");
         } catch (YunkuException e) {
             System.out.println("upload fail");

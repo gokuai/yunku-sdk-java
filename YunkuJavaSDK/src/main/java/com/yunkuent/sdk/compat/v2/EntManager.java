@@ -50,7 +50,6 @@ public class EntManager extends OauthEngine {
         String url = URL_API_GET_ROLES;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -67,7 +66,6 @@ public class EntManager extends OauthEngine {
         addAuthParams(params);
         params.put("start", start + "");
         params.put("size", size + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -80,7 +78,6 @@ public class EntManager extends OauthEngine {
         }
         params.put("out_id", outId);
         params.put("account", account);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -127,7 +124,6 @@ public class EntManager extends OauthEngine {
         String url = URL_API_GET_GROUPS;
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -146,7 +142,6 @@ public class EntManager extends OauthEngine {
         if (fileOnly) {
             params.put("file", "1");
         }
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -184,7 +179,6 @@ public class EntManager extends OauthEngine {
 //        } else {
 //            params.put("user_ids", Util.strArrayToString(userIds, ",") + "");
 //        }
-//        params.put("sign", generateSign(params));
 //        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
 //    }
 
@@ -209,7 +203,6 @@ public class EntManager extends OauthEngine {
         params.put("member_email", memberEmail);
         params.put("member_phone", memberPhone);
         params.put("password", password);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -225,7 +218,6 @@ public class EntManager extends OauthEngine {
         addAuthParams(params);
         params.put("out_id", oudId);
         params.put("state", state ? "1" : "0");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -240,7 +232,6 @@ public class EntManager extends OauthEngine {
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -259,7 +250,6 @@ public class EntManager extends OauthEngine {
         params.put("out_id", outId);
         params.put("name", name);
         params.put("parent_out_id", parentOutId);
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -274,7 +264,6 @@ public class EntManager extends OauthEngine {
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("groups", Util.strArrayToString(groups, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -291,7 +280,6 @@ public class EntManager extends OauthEngine {
         addAuthParams(params);
         params.put("group_out_id", groupOutId);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -308,7 +296,6 @@ public class EntManager extends OauthEngine {
         addAuthParams(params);
         params.put("group_out_id", groupOutId);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -329,7 +316,6 @@ public class EntManager extends OauthEngine {
         params.put("start", start + "");
         params.put("size", size + "");
         params.put("show_child", (showChild ? 1 : 0) + "");
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
@@ -344,7 +330,6 @@ public class EntManager extends OauthEngine {
         HashMap<String, String> params = new HashMap<String, String>();
         addAuthParams(params);
         params.put("members", Util.strArrayToString(members, ","));
-        params.put("sign", generateSign(params));
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -355,6 +340,6 @@ public class EntManager extends OauthEngine {
      * @return
      */
     public EntManager clone() {
-        return new EntManager(mClientId, mClientSecret, mIsEnt, mToken);
+        return new EntManager(mClientId, mSecret, mIsEnt, mToken);
     }
 }

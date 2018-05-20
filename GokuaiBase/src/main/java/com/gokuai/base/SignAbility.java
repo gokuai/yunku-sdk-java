@@ -7,28 +7,26 @@ import java.util.*;
 /**
  * Created by Brandon on 14/12/16.
  */
-abstract class SignAbility {
+public class SignAbility {
+    static List<String> IGNORE_KEYS = Arrays.asList("filehash", "filesize", "sign");
 
+    protected final String mClientId;
+    protected final String mSecret;
 
-    /**
-     * 根据clientsecret 签名
-     *
-     * @param params
-     * @return
-     */
-    public String generateSign(HashMap<String, String> params, String secret) {
-        return generateSign(params, secret, new ArrayList<String>());
+    public SignAbility(String clientId, String secret) {
+        this.mClientId = clientId;
+        this.mSecret = secret;
     }
 
-    /**
-     * 根据clientsecret 签名 ,排除不需要签名的value
-     *
-     * @param params
-     * @param secret
-     * @param ignoreKeys
-     * @return
-     */
-    protected String generateSign(HashMap<String, String> params, String secret, ArrayList<String> ignoreKeys) {
+    public String getClientId() {
+        return this.mClientId;
+    }
+
+    public String getSecret() {
+        return this.mSecret;
+    }
+
+    protected String generateSign(HashMap<String, String> params) {
         //移除 null 参数
         Iterator it = params.entrySet().iterator();
         while (it.hasNext()) {
@@ -38,31 +36,19 @@ abstract class SignAbility {
             }
         }
 
-        ArrayList<String> keys = new ArrayList<String>(params.keySet());
-        Collections.sort(keys, mComparator);
-        int size = params.size();
-        String string_to_sign = "";
-
-        if (size > 0) {
-            for (int i = 0; i < size - 1; i++) {
-                String key = keys.get(i);
-                if (ignoreKeys != null && ignoreKeys.contains(key)) {
+        List<String> keys = new ArrayList<String>(params.keySet());
+        Collections.sort(keys);
+        String strToSign = "";
+        if (!params.isEmpty()) {
+            for (String key:keys) {
+                if (IGNORE_KEYS.contains(key)) {
                     continue;
                 }
-
                 String value = params.get(key);
-                string_to_sign += value + "\n";
-
+                strToSign += "\n" + value;
             }
-            string_to_sign += params.get(keys.get(size - 1));
+            strToSign = strToSign.substring(1);
         }
-        return Util.getHmacSha1(string_to_sign, secret);
+        return Util.getHmacSha1(strToSign, this.getSecret());
     }
-
-
-    private Comparator<String> mComparator = new Comparator<String>() {
-        public int compare(String p1, String p2) {
-            return p1.compareTo(p2);
-        }
-    };
 }

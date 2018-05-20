@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,7 +21,7 @@ public final class NetConnection {
 
     private static Proxy mProxy = null;
     private static String mUserAgent = null;
-    private static String mAcceptLanguage = Locale.getDefault().toString().contains("zh") ? "zh-CN" : "en-US";
+    private static String mAcceptLanguage = "zh-CN";
     private static long mTimeout = 1800;
     private static long mConnectTimeout = 10;
     private static int mRetry = 0;
@@ -163,10 +162,11 @@ public final class NetConnection {
                 body = resp.body().string();
 
                 if (!Util.isEmpty(body)) {
-                    if (body.length() > 1000) {
-                        body = body.substring(0, 1000);
+                    String response = body;
+                    if (response.length() > 1000) {
+                        response = body.substring(0, 1000);
                     }
-                    LogPrint.info(LOG_TAG, "response:" + body);
+                    LogPrint.info(LOG_TAG, "response:" + response);
                 }
 
                 break;
