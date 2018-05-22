@@ -81,7 +81,7 @@ public abstract class HttpEngine extends SignAbility {
             if (this.params == null) {
                 this.params = new HashMap<String, String>();
             }
-            this.params.put("sign", HttpEngine.this.generateSign(params));
+            this.params.put("sign", HttpEngine.this.generateSign(this.params));
         }
 
         private void checkNecessaryParams() {

@@ -50,10 +50,9 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     private final String URL_API_ADD_TAG = HostConfig.API_ENT_HOST + "/1/file/add_tag";
     private final String URL_API_DEL_TAG = HostConfig.API_ENT_HOST + "/1/file/del_tag";
 
-    protected static String CLIENT_ID_KEY = "org_client_id";
-
     public EntFileManager(String orgClientId, String secret) {
         super(orgClientId, secret);
+        this.clientIdKey = "org_client_id";
     }
 
     /**
@@ -630,7 +629,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @return
      */
     public ReturnResult getDownloadUrlByHash(String hash, final boolean isOpen, NetType net) {
-        return getDownloadUrl(hash, null, isOpen, net, "");
+        return getDownloadUrl(hash, null, isOpen, net, null);
     }
 
     /**
@@ -642,7 +641,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @return
      */
     public ReturnResult getDownloadUrlByFullpath(String fullpath, final boolean isOpen, NetType net) {
-        return getDownloadUrl(null, fullpath, isOpen, net, "");
+        return getDownloadUrl(null, fullpath, isOpen, net, null);
     }
 
     /**
