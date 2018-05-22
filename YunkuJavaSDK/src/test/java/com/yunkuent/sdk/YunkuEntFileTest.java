@@ -5,67 +5,53 @@ import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
 import com.yunkuent.sdk.upload.UploadCallback;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Created by qp on 2017/3/8.
- */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class YunkuEntFileTest {
 
     public static final String ORG_CLIENT_ID = "";
     public static final String ORG_CLIENT_SECRET = "";
-
-    public static final String TEST_FILE_PATH = "testData/1.xlsx";
-
-    @Test
-    public void getFileList() throws Exception{
-            EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-            ReturnResult r = entFile.getFileList();
-            Assert.assertEquals(200,r.getCode());
-    }
+    public static final String TEST_FILE_PATH = "/tmp/test.xlsx";
+    public static final String TEST_FILE_FULLLPATH = "test/1.xlsx";
+    public static final String TEST_FILE_FOLDER = "test";
 
     @Test
-    public void getUpdateList() throws Exception {
+    public void t001() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getUpdateList(false, 0);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.createFolder(TEST_FILE_FOLDER, "");
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void getFileInfo() throws Exception {
+    public void t002() throws Exception {
+        final CountDownLatch latch = new CountDownLatch(1);
+        Assert.assertEquals(true, new File(TEST_FILE_PATH).exists());
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getFileInfo("doc/1.xlsx", EntFileManager.NetType.DEFAULT, false);
-        Assert.assertEquals(200,r.getCode());
+        try {
+            FileInfo info = entFile.uploadByBlock(TEST_FILE_FULLLPATH, "", 0, TEST_FILE_PATH, true, 10485760);
+        } catch (YunkuException e) {
+            String msg = "errorMsg:" + e.getMessage();
+            if (e.getReturnResult() != null) {
+                msg += " body:" + e.getReturnResult().getBody();
+            }
+            System.out.println(msg);
+            Assert.fail();
+        }
     }
 
     @Test
-    public void createFolder() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.createFolder("test","");
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void uploadByBlock() throws Exception {
+    public void t003() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
-        Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        FileInfo info = entFile.uploadByBlock("doc/1.xlsx", "", 0, TEST_FILE_PATH, true, 10485760);
-    }
-
-    @Test
-    public void uploadByBlockAsync() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        final CountDownLatch latch = new CountDownLatch(1);
-        Assert.assertEquals(true,new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlockAsync("doc/1.xlsx", "", 0, TEST_FILE_PATH, true, 10485760, new UploadCallback() {
+        Assert.assertEquals(true, new File(TEST_FILE_PATH).exists());
+        entFile.uploadByBlockAsync(TEST_FILE_FULLLPATH, "", 0, TEST_FILE_PATH, true, 1024, new UploadCallback() {
             @Override
             public void onSuccess(String fullpath, FileInfo file) {
                 latch.countDown();
@@ -74,12 +60,12 @@ public class YunkuEntFileTest {
 
             @Override
             public void onFail(String fullpath, YunkuException e) {
-                Assert.fail();
                 String msg = "fail:" + fullpath + " errorMsg:" + e.getMessage();
                 if (e.getReturnResult() != null) {
                     msg += " body:" + e.getReturnResult().getBody();
                 }
                 System.out.println(msg);
+                Assert.fail();
             }
 
             @Override
@@ -91,146 +77,134 @@ public class YunkuEntFileTest {
     }
 
     @Test
-    public void move() throws Exception {
+    public void t004() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.move("qq.jpg","test/qq.jpg","");
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.getFileInfo(TEST_FILE_FULLLPATH, EntFileManager.NetType.DEFAULT, false);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Ignore("getDownloadUrlByHash is ignored")
+    @Test
+    public void t005() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.getDownloadUrlByHash("", false, EntFileManager.NetType.DEFAULT);
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void link() throws Exception {
+    public void t006() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.link("qq.jpg", 0, EntFileManager.AuthType.DEFAULT, null);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.getDownloadUrlByFullpath(TEST_FILE_FULLLPATH, false, EntFileManager.NetType.DEFAULT);
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void links() throws Exception {
+    public void t007() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.links(true);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.previewUrl(TEST_FILE_FULLLPATH, false, "");
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void getUpdateCounts() throws Exception {
+    public void t008() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);//昨天
-        Date date = calendar.getTime();
-        ReturnResult r = entFile.getUpdateCounts( date.getTime(), System.currentTimeMillis(), false);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.history(TEST_FILE_FULLLPATH, 0, 100);
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void getUploadServers() throws Exception {
+    public void t009() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getUploadServers();
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Ignore
-    public void getServerSite() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getServerSite("");
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.link(TEST_FILE_FULLLPATH, 0, EntFileManager.AuthType.DEFAULT, null);
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void search() throws Exception {
+    public void t010() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.search("tes", "", 0, 100, ScopeType.FILENAME, ScopeType.TAG, ScopeType.CONTENT);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.addTag(TEST_FILE_FULLLPATH, new String[]{"test", "test1"});
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void getDownloadUrlByHash() throws Exception {
+    public void t011() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getDownloadUrlByHash("26fc89ba1076ead1946f08759d6afe196716ba10",false,EntFileManager.NetType.DEFAULT);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.delTag(TEST_FILE_FULLLPATH, new String[]{"test", "test1"});
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void getDownloadUrlByFullPath() throws Exception {
+    public void t012() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getDownloadUrlByFullpath("qq.jpg",false, EntFileManager.NetType.DEFAULT);
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.search("test", "", 0, 100, ScopeType.FILENAME, ScopeType.TAG, ScopeType.CONTENT);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Ignore("copy is ignored")
+    @Test
+    public void t013() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.copy(TEST_FILE_FULLLPATH, "2" + TEST_FILE_FULLLPATH, "");
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Ignore("move is ignored")
+    @Test
+    public void t014() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.move(TEST_FILE_FULLLPATH, "1.xlsx", "");
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Ignore("recover is ignored")
+    @Test
+    public void t015() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.recover(TEST_FILE_FULLLPATH, "");
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void del() throws Exception {
+    public void t016() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.del("test.jpg","");
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.recycle(0, 10);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Ignore("setPermission is ignored")
+    @Test
+    public void t017() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.setPermission(TEST_FILE_FOLDER, 1, FilePermissions.FILE_PREVIEW, FilePermissions.FILE_DELETE, FilePermissions.FILE_READ);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Ignore("setPermission is ignored")
+    @Test
+    public void t018() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.getPermission(TEST_FILE_FOLDER, 1);
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void AddTag() throws Exception {
+    public void t100() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.addTag("test", new String[]{"test","test1"});
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.getFileList();
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void copy() throws Exception {
+    public void t200() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.copy("qq.jpg", "test/qq.jpg", "");
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.del(TEST_FILE_FULLLPATH, "");
+        Assert.assertEquals(200, r.getCode());
     }
 
     @Test
-    public void delCompletely() throws Exception {
+    public void t201() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.delCompletely(new String[]{"test.jpg","test(3).jpg"}, "");
-        Assert.assertEquals(200,r.getCode());
+        ReturnResult r = entFile.delCompletely(new String[]{TEST_FILE_FULLLPATH}, "");
+        Assert.assertEquals(200, r.getCode());
     }
-
-    @Test
-    public void delTag() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.delTag("test", new String[]{"test","test1"});
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void getPermission() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getPermission("test", 216144);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void history() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.history("test", 0, 100);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void previewUrl() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.previewUrl( "test.jpg", false, "");
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void recover() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.recover("qq.jpg", "");
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void recycle() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.recycle(0, 100);
-        Assert.assertEquals(200,r.getCode());
-    }
-
-    @Test
-    public void setPermission() throws Exception {
-        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.setPermission("test", 4,  FilePermissions.FILE_PREVIEW,FilePermissions.FILE_DELETE,FilePermissions.FILE_READ);
-        Assert.assertEquals(200,r.getCode());
-    }
-
 }
