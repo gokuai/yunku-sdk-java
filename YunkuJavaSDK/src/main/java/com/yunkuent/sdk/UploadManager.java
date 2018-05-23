@@ -103,7 +103,7 @@ public class UploadManager {
     }
 
     private void doUploadAsync() {
-        Thread thread = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -125,8 +125,7 @@ public class UploadManager {
                     }
                 }
             }
-        });
-        thread.run();
+        }).start();
     }
 
     private void startUpload() throws YunkuException, IOException {
