@@ -13,6 +13,8 @@ public class LogPrint {
 
     public static final String INFO = "info";
 
+    public static final String DEBUG = "debug";
+
     public static final String ERROR = "error";
 
     public static final String WARN = "warn";
@@ -37,7 +39,10 @@ public class LogPrint {
      */
     public static void info(String logTag, String log) {
         print(logTag, INFO, log);
+    }
 
+    public static void debug(String logTag, String log) {
+        print(logTag, DEBUG, log);
     }
 
     /**
@@ -74,12 +79,10 @@ public class LogPrint {
             if (WARN.equals(level) || ERROR.equals(level)) {
                 System.err.print(logContent);
 
-            } else if (INFO.equals(level)) {
+            } else if (INFO.equals(level) || DEBUG.equals(level)) {
                 System.out.println(logContent);
-
             }
         }
-
     }
 
     private static String getCurrentTimeStamp() {

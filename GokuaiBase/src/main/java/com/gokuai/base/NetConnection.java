@@ -54,7 +54,6 @@ public final class NetConnection {
         mRetry = retry;
     }
 
-
     /**
      * 发送请求
      *
@@ -65,7 +64,7 @@ public final class NetConnection {
      * @return
      */
     public static ReturnResult sendRequest(String url, RequestMethod method,
-                                     HashMap<String, String> params, HashMap<String, String> headParams) {
+                                           HashMap<String, String> params, HashMap<String, String> headParams) {
 
         return sendRequest(url, method, params, headParams, NetConfig.POST_DEFAULT_FORM_TYPE);
     }
@@ -81,25 +80,18 @@ public final class NetConnection {
      * @param url
      * @param method
      * @param params
-     * @param headParams
+     * @param headerMap
      * @return
      */
     public static ReturnResult sendRequest(String url, RequestMethod method,
-                                     HashMap<String, String> params, HashMap<String, String> headParams, String postType) {
-        LogPrint.info(LOG_TAG, "sendRequest(): url is: " + url + " params" + params + ", headParams, " + headParams);
-
-
-        OkHttpClient client = getOkHttpClient();
+                                           HashMap<String, String> params, HashMap<String, String> headerMap, String postType) {
+        LogPrint.debug(LOG_TAG, "sendRequest(): url is: " + url + " params" + params + ", headers, " + headerMap);
 
         String paramsString = "";
-
         MediaType contentType = null;
 
-        int statusCode = 0;
-        String body = "";
-
         if (postType.equals(NetConfig.POST_DEFAULT_FORM_TYPE)) {
-            paramsString = Util.getParamsStringFromHashMapParams(params);
+            paramsString = Util.mapToQueryString(params);
             contentType = MediaType.parse(URL_ENCODE);
 
         } else if (postType.equals(NetConfig.POST_JSON_TYPE)) {
@@ -107,53 +99,51 @@ public final class NetConnection {
             contentType = MediaType.parse(JSON_STRING);
         }
 
-        if (method.equals(RequestMethod.GET) && !Util.isEmpty(paramsString)) {
-            url += (url.indexOf("?") > 0 ? "&" : "?") + paramsString;
-            LogPrint.info(LOG_TAG, method + ":" + url);
-        }
-
         Headers.Builder headerBuilder = new Headers.Builder();
-        if (headParams != null) {
-
-            for (String key : headParams.keySet()) {
-                headerBuilder.add(key, headParams.get(key));
+        headerBuilder.set("User-Agent", getUserAgent());
+        headerBuilder.set("Accept-Language", mAcceptLanguage);
+        if (headerMap != null) {
+            for (String key : headerMap.keySet()) {
+                String value = headerMap.get(key);
+                if (value == null) {
+                    continue;
+                }
+                headerBuilder.set(key, value);
             }
         }
+        Headers headers = headerBuilder.build();
 
-        String userAgent = getUserAgent();
+        LogPrint.debug(LOG_TAG, method + " " + url + " " + paramsString + " " + headers.toString());
 
-        headerBuilder.add("User-Agent", userAgent);
-
-        headerBuilder.add("Accept-Language", mAcceptLanguage);
-
-        Request.Builder requestBuilder = new Request.Builder();
-        Request request = null;
+        Request request;
         if (method.equals(RequestMethod.GET)) {
-            request = requestBuilder.url(url).headers(headerBuilder.build()).get().build();
 
-        } else if (method.equals(RequestMethod.POST)) {
+            if (!Util.isEmpty(paramsString)) {
+                url += (url.indexOf("?") > 0 ? "&" : "?") + paramsString;
+            }
+            request = new Request.Builder().get().url(url).headers(headers).build();
+
+        } else if (method.equals(RequestMethod.POST) || method.equals(RequestMethod.PUT)) {
+
             RequestBody postBody = RequestBody.create(contentType, paramsString);
-            request = requestBuilder.url(url).post(postBody).headers(headerBuilder.build()).build();
+            request = new Request.Builder().method(method.toString(), postBody).url(url).headers(headers).build();
 
-        } else if (method.equals(RequestMethod.DELETE)) {
-            RequestBody deleteBody = RequestBody.create(contentType, paramsString);
-            request = requestBuilder.url(url).delete(deleteBody).headers(headerBuilder.build()).build();
-
-        } else if (method.equals(RequestMethod.PUT)) {
-            RequestBody putBody = RequestBody.create(contentType, paramsString);
-            request = requestBuilder.url(url).put(putBody).headers(headerBuilder.build()).build();
         } else {
             return null;
         }
 
+
+        int statusCode = 0;
+        String body = "";
         int retry = mRetry;
         while (true) {
             try {
+                OkHttpClient client = getOkHttpClient();
                 Response resp = client.newCall(request).execute();
 
                 if (resp.header("X-GOKUAI-DEBUG") != null) {
-                try {
-                        LogPrint.error(LOG_TAG, "X-GOKUAI-DEBUG:" + new String(Base64.decode(resp.header("X-GOKUAI-DEBUG").getBytes())));
+                    try {
+                        LogPrint.debug(LOG_TAG, "X-GOKUAI-DEBUG: " + new String(Base64.decode(resp.header("X-GOKUAI-DEBUG").getBytes())));
                     } catch (IOException e) {
                     }
                 }
@@ -166,13 +156,14 @@ public final class NetConnection {
                     if (response.length() > 1000) {
                         response = body.substring(0, 1000);
                     }
-                    LogPrint.info(LOG_TAG, "response:" + response);
+                    LogPrint.debug(LOG_TAG, "response: " + response);
                 }
 
                 break;
 
             } catch (IOException e) {
 
+                LogPrint.error(LOG_TAG, e.getMessage());
                 if (retry-- > 0) {
                     //网络异常自动重试
                     try {

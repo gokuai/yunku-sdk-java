@@ -280,7 +280,7 @@ public class UploadManager {
         headParams.put("x-gk-upload-filename", URLEncoder.encodeUTF8(this.mFileinfo.filename));
         headParams.put("x-gk-upload-filehash", this.mFileinfo.fileHash);
         headParams.put("x-gk-upload-filesize", String.valueOf(this.mFileinfo.fileSize));
-        ReturnResult result = this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+        ReturnResult result = this.mEngine.new RequestHelper().setHeaders(headParams).setUrl(url).setMethod(RequestMethod.POST).disableSign().executeSync();
 
         if (result.isOK()) {
             JSONObject json = new JSONObject(result.getBody());
@@ -302,7 +302,7 @@ public class UploadManager {
         headParams.put("x-gk-upload-session", mSession);
 
         long checkSize = 0;
-        ReturnResult result = this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+        ReturnResult result = this.mEngine.new RequestHelper().setHeaders(headParams).setUrl(url).setMethod(RequestMethod.GET).disableSign().executeSync();
         if (result.isOK()) {
             try {
                 checkSize = Long.parseLong(result.getBody());
@@ -385,7 +385,7 @@ public class UploadManager {
 
         int retry = 10;
         while (retry-- > 0) {
-            result = this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+            result = this.mEngine.new RequestHelper().setHeaders(headParams).setUrl(url).setMethod(RequestMethod.POST).disableSign().executeSync();
             if (result.getCode() == HttpURLConnection.HTTP_ACCEPTED) {
                 try {
                     Thread.sleep(2000);
@@ -414,7 +414,7 @@ public class UploadManager {
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_ABORT;
         final HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
-        this.mEngine.new RequestHelper().setHeadParams(headParams).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+        this.mEngine.new RequestHelper().setHeaders(headParams).setUrl(url).setMethod(RequestMethod.POST).disableSign().executeSync();
     }
 
     /**

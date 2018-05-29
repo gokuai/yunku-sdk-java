@@ -351,17 +351,19 @@ public class Util {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    public static String getParamsStringFromHashMapParams(HashMap<String, String> params) {
+    public static String mapToQueryString(HashMap<String, String> params) {
         String paramsString = "";
         if (params != null && params.size() > 0) {
-            Set<String> keys = params.keySet();
 
-            for (String key : keys) {
+            for (String key : params.keySet()) {
                 String value = params.get(key);
-                paramsString += key + "=" + URLEncoder.encodeUTF8(value) + "&";
+                if (value == null) {
+                    continue;
+                }
+                paramsString += "&" + key + "=" + URLEncoder.encodeUTF8(value);
             }
-            if (paramsString.endsWith("&")) {
-                paramsString = paramsString.substring(0, paramsString.length() - 1);
+            if (paramsString.startsWith("&")) {
+                paramsString = paramsString.substring(1);
             }
         }
         return paramsString;

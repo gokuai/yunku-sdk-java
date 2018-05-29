@@ -34,10 +34,11 @@ public abstract class HttpEngine extends SignAbility {
         String url;
         RequestMethod method = RequestMethod.POST;
         protected HashMap<String, String> params;
-        HashMap<String, String> headParams;
+        HashMap<String, String> headers;
         boolean checkAuth;
         String postType = NetConfig.POST_DEFAULT_FORM_TYPE;
         IAsyncTarget target;
+        boolean disableSign = false;
 
         public RequestHelper setMethod(RequestMethod method) {
             this.method = method;
@@ -49,8 +50,8 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
-        public RequestHelper setHeadParams(HashMap<String, String> headParams) {
-            this.headParams = headParams;
+        public RequestHelper setHeaders(HashMap<String, String> headers) {
+            this.headers = headers;
             return this;
         }
 
@@ -74,10 +75,18 @@ public abstract class HttpEngine extends SignAbility {
             return this;
         }
 
+        public RequestHelper disableSign() {
+            this.disableSign = true;
+            return this;
+        }
+
         /**
          * 设置公共参数, 如计算签名
          */
         protected void setCommonParams() {
+            if (this.disableSign) {
+                return;
+            }
             if (this.params == null) {
                 this.params = new HashMap<String, String>();
             }
@@ -102,12 +111,12 @@ public abstract class HttpEngine extends SignAbility {
 
             if (checkAuth) {
                 if (HttpEngine.this instanceof IAuthRequest) {
-                    return ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headParams, postType);
+                    return ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headers, postType);
                 } else {
                     LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
                 }
             }
-            return NetConnection.sendRequest(url, method, params, headParams, postType);
+            return NetConnection.sendRequest(url, method, params, headers, postType);
         }
 
         /**
