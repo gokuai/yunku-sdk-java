@@ -8,6 +8,7 @@ import java.net.Proxy;
 public class ConfigHelper {
 
     private String mOauthHost;
+    private String mWebHost;
     private String mApiHost;
     private String mUploadRootPath;
     private String mUploadOpName;
@@ -37,6 +38,11 @@ public class ConfigHelper {
      */
     public ConfigHelper oauthHost(String oauthHost) {
         this.mOauthHost = oauthHost;
+        return this;
+    }
+
+    public ConfigHelper webHost(String webHost) {
+        this.mWebHost = webHost;
         return this;
     }
 
@@ -139,6 +145,10 @@ public class ConfigHelper {
 
         if (!Util.isEmpty(mOauthHost)) {
             HostConfig.OAUTH_HOST = mOauthHost;
+        }
+
+        if (!Util.isEmpty(mWebHost)) {
+            HostConfig.WEB_HOST = this.mWebHost;
         }
 
         if (mProxy != null) {

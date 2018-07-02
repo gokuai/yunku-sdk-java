@@ -17,7 +17,7 @@ public class Del {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().del("test/qq.jpg","qp");
+        ReturnResult result = EntFileManagerHelper.getInstance().del(new String[]{"test3", "test1"}, true, "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

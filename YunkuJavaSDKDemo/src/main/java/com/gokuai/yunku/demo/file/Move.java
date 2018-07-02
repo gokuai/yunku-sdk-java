@@ -17,7 +17,7 @@ public class Move {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().move("qqq.jpg","test/qqq.jpg","Brandon");
+        ReturnResult result = EntFileManagerHelper.getInstance().move("qqq.jpg","test/qqq.jpg","tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

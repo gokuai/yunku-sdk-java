@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class SSOManager extends HttpEngine {
 
-    private final String URL_ENTGRANT_URL = HostConfig.OAUTH_HOST + "/account/autologin/entgrant";
+    private final String URL_ENTGRANT_URL = HostConfig.WEB_HOST + "/account/autologin/entgrant";
 
     public SSOManager(String clientId, String clientSecret) {
         super(clientId, clientSecret);

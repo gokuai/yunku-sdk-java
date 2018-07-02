@@ -13,6 +13,7 @@ import java.net.Proxy;
 
 public class HostConfig {
 
+    protected static String WEB_HOST = "http://yk3.gokuai.com";
     protected static String OAUTH_HOST = "http://yk3-api.gokuai.com";
     protected static String API_ENT_HOST = "http://yk3-api-ent.gokuai.com";
 

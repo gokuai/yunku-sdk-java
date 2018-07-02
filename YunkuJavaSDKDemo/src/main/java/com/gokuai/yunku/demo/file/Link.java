@@ -18,7 +18,7 @@ public class Link {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().link("qq.jpg", 0, EntFileManager.AuthType.DEFAULT, null);
+        ReturnResult result = EntFileManagerHelper.getInstance().link("qq.jpg", 0, EntFileManager.AuthType.DEFAULT, null, "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

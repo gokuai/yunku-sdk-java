@@ -1,24 +1,24 @@
-package com.gokuai.yunku.demo.file;
+package com.gokuai.yunku.demo.library;
 
 import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
-import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
+import com.gokuai.yunku.demo.helper.EntLibraryManagerHelper;
+import com.yunkuent.sdk.EntLibManager;
 
 /**
  * Created by qp on 2017/3/2.
  *
- * WEB直接上传文件 (支持50MB以上文件的上传)
+ * 获取库信息
  */
-public class GetUploadServers {
+public class Log {
 
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().getUploadServers();
-
+        ReturnResult result = EntLibraryManagerHelper.getInstance().getLogByOrgId(1451560, null, EntLibManager.OrderBy.ASC, null, null, 0, 100);
         DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

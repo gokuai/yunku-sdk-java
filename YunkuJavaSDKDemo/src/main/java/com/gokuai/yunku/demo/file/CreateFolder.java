@@ -17,7 +17,7 @@ public class CreateFolder {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().createFolder("test","Brandon");
+        ReturnResult result = EntFileManagerHelper.getInstance().createFolder("test","tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

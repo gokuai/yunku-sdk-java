@@ -15,13 +15,9 @@ public class ChangeConfig {
 
     public static void main(String[] args) throws IOException {
 
-        new ConfigHelper()
-                .apiHost("http://yk3.gokuai.com/m-open")
-                .language("zh-CN")
-                .retry(3)
-                .config();
+        new ConfigHelper().apiHost("http://yk3.gokuai.com/m-open").config();
 
-        ReturnResult result = EntFileManagerHelper.getInstance().previewUrl("upload/1521779111710/1521779111710.xls", true, "tom");
+        ReturnResult result = EntFileManagerHelper.getInstance().previewUrl("test.xlsx", true, "tom", "tom");
         DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }

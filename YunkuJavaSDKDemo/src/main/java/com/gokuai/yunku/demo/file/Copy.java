@@ -17,7 +17,7 @@ public class Copy {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().copy("qq.jpg", "test/qq.jpg", "qp");
+        ReturnResult result = EntFileManagerHelper.getInstance().copy("qq.jpg", "test/qq.jpg", "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

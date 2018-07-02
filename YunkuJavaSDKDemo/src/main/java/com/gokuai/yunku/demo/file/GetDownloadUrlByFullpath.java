@@ -4,6 +4,7 @@ import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
+import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.EntFileManager;
 
 /**
@@ -18,7 +19,7 @@ public class GetDownloadUrlByFullpath {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().getDownloadUrlByFullpath("qq.jpg",false, EntFileManager.NetType.DEFAULT);
+        ReturnResult result = EntFileManagerHelper.getInstance().getDownloadUrlByFullpath("test.docx", "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

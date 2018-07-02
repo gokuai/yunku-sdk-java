@@ -163,7 +163,7 @@ public class EntFileManager extends HttpEngine implements IEntFileManager {
         return fullPath;
     }
 
-    public ReturnResult createFile(String fullpath, String fileHash, long fileSize, int opId, String opName, boolean overwrite) {
+    public ReturnResult createFile(String fullpath, String fileHash, long fileSize, boolean overwrite, String opName, int opId) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_client_id", mClientId);
         params.put("fullpath", fullpath);

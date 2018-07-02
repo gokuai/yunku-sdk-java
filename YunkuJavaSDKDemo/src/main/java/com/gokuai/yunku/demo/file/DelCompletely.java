@@ -17,7 +17,7 @@ public class DelCompletely {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().delCompletely(new String[]{"aaa.jpg"}, "Brandon");
+        ReturnResult result = EntFileManagerHelper.getInstance().delCompletely(new String[]{"aaa.jpg"}, "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

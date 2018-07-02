@@ -17,7 +17,7 @@ public class DelTag {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().delTag("test", new String[]{"test","test1"});
+        ReturnResult result = EntFileManagerHelper.getInstance().delTag("test.txt", new String[]{"tag1", "tag2"}, "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

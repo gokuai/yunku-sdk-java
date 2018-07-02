@@ -15,7 +15,7 @@ public class Recover {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().recover("qq.jpg", "qp");
+        ReturnResult result = EntFileManagerHelper.getInstance().recover(new String[]{"qq.jpg"}, "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

@@ -4,6 +4,7 @@ import com.gokuai.base.DebugConfig;
 import com.gokuai.base.ReturnResult;
 import com.gokuai.yunku.demo.helper.DeserializeHelper;
 import com.gokuai.yunku.demo.helper.EntFileManagerHelper;
+import com.yunkuent.sdk.ConfigHelper;
 
 /**
  * Created by qp on 2017/3/2.
@@ -17,7 +18,7 @@ public class GetFileList {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().getFileList("","filename asc", "BrandonTest", 0,100,false);
+        ReturnResult result = EntFileManagerHelper.getInstance().getFileList("","filename asc", 0,100);
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }

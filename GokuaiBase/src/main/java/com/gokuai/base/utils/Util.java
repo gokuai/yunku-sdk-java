@@ -133,6 +133,18 @@ public class Util {
         return strReturn;
     }
 
+    public static String ArrayToString(Object[] array, String conv) {
+        String strReturn = "";
+        int length = array.length;
+        if (length > 0) {
+            for (int i = 0; i < length - 1; i++) {
+                strReturn += array[i].toString() + conv;
+            }
+            strReturn += array[length - 1].toString();
+        }
+        return strReturn;
+    }
+
     /**
      * String[] 转 string
      *

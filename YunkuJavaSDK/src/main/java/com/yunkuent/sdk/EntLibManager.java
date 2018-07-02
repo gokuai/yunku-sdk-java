@@ -12,11 +12,17 @@ import java.util.HashMap;
 public class EntLibManager extends EntEngine {
 
     private final String URL_API_CREATE_LIB = HostConfig.API_ENT_HOST + "/1/org/create";
+    private final String URL_API_SET = HostConfig.API_ENT_HOST + "/1/org/set";
+    private final String URL_API_GET_INFO = HostConfig.API_ENT_HOST + "/1/org/info";
+    private final String URL_API_INFO_BY_MEMBER = HostConfig.API_ENT_HOST + "/1/org/info_by_member";
+    private final String URL_API_SET_BY_MEMBER = HostConfig.API_ENT_HOST + "/1/org/set_by_member";
     private final String URL_API_GET_LIB_LIST = HostConfig.API_ENT_HOST + "/1/org/ls";
     private final String URL_API_BIND = HostConfig.API_ENT_HOST + "/1/org/bind";
     private final String URL_API_UNBIND = HostConfig.API_ENT_HOST + "/1/org/unbind";
 
     private final String URL_API_GET_MEMBERS = HostConfig.API_ENT_HOST + "/1/org/get_members";
+    private final String URL_API_GET_MEMBER = HostConfig.API_ENT_HOST + "/1/org/get_member";
+    private final String URL_API_SET_OWNER = HostConfig.API_ENT_HOST + "/1/org/set_owner";
     private final String URL_API_ADD_MEMBERS = HostConfig.API_ENT_HOST + "/1/org/add_member";
     private final String URL_API_SET_MEMBER_ROLE = HostConfig.API_ENT_HOST + "/1/org/set_member_role";
     private final String URL_API_DEL_MEMBER = HostConfig.API_ENT_HOST + "/1/org/del_member";
@@ -25,9 +31,7 @@ public class EntLibManager extends EntEngine {
     private final String URL_API_DEL_GROUP = HostConfig.API_ENT_HOST + "/1/org/del_group";
     private final String URL_API_SET_GROUP_ROLE = HostConfig.API_ENT_HOST + "/1/org/set_group_role";
     private final String URL_API_DESTROY = HostConfig.API_ENT_HOST + "/1/org/destroy";
-    private final String URL_API_GET_MEMBER = HostConfig.API_ENT_HOST + "/1/org/get_member";
-    private final String URL_API_SET = HostConfig.API_ENT_HOST + "/1/org/set";
-    private final String URL_API_GET_INFO = HostConfig.API_ENT_HOST + "/1/org/info";
+    private final String URL_API_LOG = HostConfig.API_ENT_HOST + "/1/org/log";
 
     public EntLibManager(String clientId, String secret) {
         super(clientId, secret);
@@ -309,21 +313,161 @@ public class EntLibManager extends EntEngine {
      * @return
      */
     public ReturnResult getInfo(int orgId) {
-        String url = URL_API_GET_INFO;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("org_id", Integer.toString(orgId));
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+        return new RequestHelper().setParams(params).setUrl(URL_API_GET_INFO).setMethod(RequestMethod.GET).executeSync();
     }
-
 
     /**
-     * 复制EntLibManager对象
+     * 获取成员个人库信息, memberId, outId, account和email传其中一个即可
      *
-     * @return
+     * @param memberId  成员ID
+     * @param outId     成员外部系统ID
+     * @param account   成员外部系统登录帐号
+     * @param email     公有云帐号登录邮箱
+     * @return ReturnResult
      */
-    public EntLibManager clone() {
-        return new EntLibManager(mClientId, mSecret);
+    public ReturnResult getInfoByMembmer(int memberId, String outId, String account, String email) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        if (memberId > 0) {
+            params.put("member_id", Integer.toString(memberId));
+        } else if (!Util.isEmpty(outId)) {
+            params.put("out_id", outId);
+        } else if (!Util.isEmpty(account)) {
+            params.put("account", account);
+        } else if (!Util.isEmpty(email)) {
+            params.put("email", email);
+        }
+        return new RequestHelper().setParams(params).setUrl(URL_API_INFO_BY_MEMBER).setMethod(RequestMethod.GET).executeSync();
     }
 
+    /**
+     * 设置成员个人库信息空间
+     *
+     * @param memberId  成员ID
+     * @param outId     成员外部系统ID
+     * @param account   成员外部系统登录帐号
+     * @param email     公有云帐号登录邮箱
+     * @param capacity  空间,单位字节
+     * @return ReturnResult
+     */
+    public ReturnResult setByMembmer(int memberId, String outId, String account, String email, long capacity) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        if (memberId > 0) {
+            params.put("member_id", Integer.toString(memberId));
+        } else if (!Util.isEmpty(outId)) {
+            params.put("out_id", outId);
+        } else if (!Util.isEmpty(account)) {
+            params.put("account", account);
+        } else if (!Util.isEmpty(email)) {
+            params.put("email", email);
+        }
+        params.put("capacity", Long.toString(capacity));
+        return new RequestHelper().setParams(params).setUrl(URL_API_SET_BY_MEMBER).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     *
+     * @param orgId         库ID
+     * @param acts          需要查询的动作, null表示返回所有动作
+     * @param orderby       排序方式
+     * @param startDateline 开始时间
+     * @param endDateline   结束时间
+     * @param start         开始位置
+     * @param size          获取数量
+     * @return ReturnResult
+     */
+    public ReturnResult getLogByOrgId(int orgId, Act[] acts, OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {
+        return this.getLog(orgId, 0, acts, orderby, startDateline, endDateline, start, size);
+    }
+
+    /**
+     *
+     * @param mountId       库空间ID
+     * @param acts          需要查询的动作, null表示返回所有动作
+     * @param orderby       排序方式
+     * @param startDateline 开始时间
+     * @param endDateline   结束时间
+     * @param start         开始位置
+     * @param size          获取数量
+     * @return ReturnResult
+     */
+    public ReturnResult getLogByMountId(int mountId, Act[] acts, OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {
+        return this.getLog(mountId, 0, acts, orderby, startDateline, endDateline, start, size);
+    }
+
+    private ReturnResult getLog(int orgId, int mountId, Act[] acts, OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        if (orgId > 0) {
+            params.put("org_id", Integer.toString(orgId));
+        } else if (mountId > 0) {
+            params.put("mount_id", Integer.toString(mountId));
+        }
+        if (acts != null && acts.length > 0) {
+            params.put("act", Util.ArrayToString(acts, ","));
+        }
+        if (orderby != null) {
+            params.put("orderby", orderby.toString());
+        }
+        if (startDateline != null) {
+            params.put("start_dateline", startDateline.toString());
+        }
+        if (endDateline != null) {
+            params.put("end_dateline", endDateline.toString());
+        }
+        if (start > 0) {
+            params.put("start", Integer.toString(start));
+        }
+        if (size > 0) {
+            params.put("size", Integer.toString(size));
+        }
+        return new RequestHelper().setParams(params).setUrl(URL_API_LOG).setMethod(RequestMethod.GET).executeSync();
+    }
+
+    public enum OrderBy {
+        ASC("asc"),
+        DESC("desc");
+
+        private String order;
+
+        OrderBy(String order) {
+            this.order = order;
+        }
+
+        @Override
+        public String toString() {
+            return this.order;
+        }
+    }
+
+    public enum Act {
+        DELETE("0"),
+        CREATE("1"),
+        RENAME("2"),
+        EDIT("3"),
+        MOVE("4"),
+        RECOVER("5"),
+        REVERT("6"),
+        LOCK("12"),
+        UNLOCK("13"),
+        DOWNLOAD("20"),
+        PREVIEW("21"),
+        LINK_CREATE("1014"),
+        LINK_ACCESS("1015"),
+        LINK_DOWNLOAD("1016"),
+        LINK_SAVE("1017"),
+        LINK_UPLOAD("1018");
+
+        private String act;
+
+        Act(String act) {
+            this.act = act;
+        }
+
+        @Override
+        public String toString() {
+            return this.act;
+        }
+    }
 
 }

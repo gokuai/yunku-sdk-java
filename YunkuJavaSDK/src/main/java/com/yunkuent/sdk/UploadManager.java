@@ -156,7 +156,7 @@ public class UploadManager {
 
         for (int trys = 0; trys < 3; trys++) {
 
-            result = ((IEntFileManager)this.mEngine).createFile(this.mFullpath, this.mFileinfo.fileHash, this.mFileinfo.fileSize, mOpId, mOpName, mOverwrite);
+            result = ((IEntFileManager)this.mEngine).createFile(this.mFullpath, this.mFileinfo.fileHash, this.mFileinfo.fileSize, mOverwrite, mOpName, mOpId);
             boolean shouldUpload = this.decodeAddFileResult(result);
             if (!shouldUpload) {
                 return;

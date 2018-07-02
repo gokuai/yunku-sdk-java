@@ -41,17 +41,6 @@ public class EntManager extends EntEngine {
     }
 
     /**
-     * 复制一个EntManager对象
-     *
-     * @return
-     */
-    public EntManager clone() {
-        return new EntManager(mClientId, mSecret);
-    }
-
-
-
-    /**
      * 添加或修改同步成员
      *
      * @param outId

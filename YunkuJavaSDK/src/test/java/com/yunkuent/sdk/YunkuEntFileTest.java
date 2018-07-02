@@ -25,7 +25,7 @@ public class YunkuEntFileTest {
     @Test
     public void t001() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.createFolder(TEST_FILE_FOLDER, "");
+        ReturnResult r = entFile.createFolder(TEST_FILE_FOLDER, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -35,7 +35,7 @@ public class YunkuEntFileTest {
         Assert.assertEquals(true, new File(TEST_FILE_PATH).exists());
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         try {
-            FileInfo info = entFile.uploadByBlock(TEST_FILE_FULLLPATH, "", 0, TEST_FILE_PATH, true, 10485760);
+            FileInfo info = entFile.uploadByBlock(TEST_FILE_FULLLPATH, "tom", 0, TEST_FILE_PATH, true, 10485760);
         } catch (YunkuException e) {
             String msg = "errorMsg:" + e.getMessage();
             if (e.getReturnResult() != null) {
@@ -51,7 +51,7 @@ public class YunkuEntFileTest {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
         Assert.assertEquals(true, new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlockAsync(TEST_FILE_FULLLPATH, "", 0, TEST_FILE_PATH, true, 1024, new UploadCallback() {
+        entFile.uploadByBlockAsync(TEST_FILE_FULLLPATH, "tom", 0, TEST_FILE_PATH, true, 1024, new UploadCallback() {
             @Override
             public void onSuccess(String fullpath, FileInfo file) {
                 latch.countDown();
@@ -79,7 +79,7 @@ public class YunkuEntFileTest {
     @Test
     public void t004() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getFileInfo(TEST_FILE_FULLLPATH, EntFileManager.NetType.DEFAULT, false);
+        ReturnResult r = entFile.getFileInfo(TEST_FILE_FULLLPATH);
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -87,21 +87,21 @@ public class YunkuEntFileTest {
     @Test
     public void t005() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getDownloadUrlByHash("", false, EntFileManager.NetType.DEFAULT);
+        ReturnResult r = entFile.getDownloadUrlByHash("", "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void t006() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getDownloadUrlByFullpath(TEST_FILE_FULLLPATH, false, EntFileManager.NetType.DEFAULT);
+        ReturnResult r = entFile.getDownloadUrlByFullpath(TEST_FILE_FULLLPATH, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void t007() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.previewUrl(TEST_FILE_FULLLPATH, false, "");
+        ReturnResult r = entFile.previewUrl(TEST_FILE_FULLLPATH, true, "tom", "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -115,21 +115,21 @@ public class YunkuEntFileTest {
     @Test
     public void t009() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.link(TEST_FILE_FULLLPATH, 0, EntFileManager.AuthType.DEFAULT, null);
+        ReturnResult r = entFile.link(TEST_FILE_FULLLPATH, 0, EntFileManager.AuthType.DEFAULT, null, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void t010() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.addTag(TEST_FILE_FULLLPATH, new String[]{"test", "test1"});
+        ReturnResult r = entFile.addTag(TEST_FILE_FULLLPATH, new String[]{"test", "test1"}, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void t011() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.delTag(TEST_FILE_FULLLPATH, new String[]{"test", "test1"});
+        ReturnResult r = entFile.delTag(TEST_FILE_FULLLPATH, new String[]{"test", "test1"}, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -144,7 +144,7 @@ public class YunkuEntFileTest {
     @Test
     public void t013() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.copy(TEST_FILE_FULLLPATH, "2" + TEST_FILE_FULLLPATH, "");
+        ReturnResult r = entFile.copy(TEST_FILE_FULLLPATH, "2" + TEST_FILE_FULLLPATH, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -152,7 +152,7 @@ public class YunkuEntFileTest {
     @Test
     public void t014() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.move(TEST_FILE_FULLLPATH, "1.xlsx", "");
+        ReturnResult r = entFile.move(TEST_FILE_FULLLPATH, "1.xlsx", "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -160,7 +160,7 @@ public class YunkuEntFileTest {
     @Test
     public void t015() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.recover(TEST_FILE_FULLLPATH, "");
+        ReturnResult r = entFile.recover(new String[]{TEST_FILE_FULLLPATH}, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -175,11 +175,11 @@ public class YunkuEntFileTest {
     @Test
     public void t017() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.setPermission(TEST_FILE_FOLDER, 1, FilePermissions.FILE_PREVIEW, FilePermissions.FILE_DELETE, FilePermissions.FILE_READ);
+        ReturnResult r = entFile.setPermission(TEST_FILE_FOLDER, 1, "tom", FilePermissions.FILE_PREVIEW, FilePermissions.FILE_DELETE, FilePermissions.FILE_READ);
         Assert.assertEquals(200, r.getCode());
     }
 
-    @Ignore("setPermission is ignored")
+    @Ignore("getPermission is ignored")
     @Test
     public void t018() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
@@ -190,21 +190,21 @@ public class YunkuEntFileTest {
     @Test
     public void t100() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getFileList();
+        ReturnResult r = entFile.getFileList(0, 100);
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void t200() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.del(TEST_FILE_FULLLPATH, "");
+        ReturnResult r = entFile.del(new String[]{TEST_FILE_FULLLPATH}, false, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void t201() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.delCompletely(new String[]{TEST_FILE_FULLLPATH}, "");
+        ReturnResult r = entFile.delCompletely(new String[]{TEST_FILE_FULLLPATH}, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 }

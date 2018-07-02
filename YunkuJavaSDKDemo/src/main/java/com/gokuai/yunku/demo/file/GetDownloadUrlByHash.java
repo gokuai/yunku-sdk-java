@@ -18,7 +18,7 @@ public class GetDownloadUrlByHash {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-        ReturnResult result = EntFileManagerHelper.getInstance().getDownloadUrlByHash("a712811330970ce5c13673ba73708cb85175fcd3",false, EntFileManager.NetType.DEFAULT);
+        ReturnResult result = EntFileManagerHelper.getInstance().getDownloadUrlByHash("a712811330970ce5c13673ba73708cb85175fcd3", "tom");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }
