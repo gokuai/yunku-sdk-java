@@ -49,6 +49,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     private final String URL_API_SET_PERMISSION = HostConfig.API_ENT_HOST + "/1/file/file_permission";
     private final String URL_API_ADD_TAG = HostConfig.API_ENT_HOST + "/1/file/add_tag";
     private final String URL_API_DEL_TAG = HostConfig.API_ENT_HOST + "/1/file/del_tag";
+    private final String URL_API_STAT = HostConfig.API_ENT_HOST + "/1/file/stat";
 
     public EntFileManager(String orgClientId, String secret) {
         super(orgClientId, secret);
@@ -948,6 +949,16 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      */
     public ReturnResult delTag(String fullpath, String[] tags, String opName) {
         return this.delTag(fullpath, tags, opName, 0);
+    }
+
+    /**
+     * 获取库的统计信息
+     *
+     * @return
+     */
+    public ReturnResult stat() {
+        String url = URL_API_STAT;
+        return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
     public enum AuthType {

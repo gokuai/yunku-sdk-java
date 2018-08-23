@@ -10,6 +10,7 @@ import com.yunkuent.sdk.upload.UploadCallback;
 import com.yunkuent.sdk.utils.YKUtils;
 import okhttp3.*;
 import org.json.JSONObject;
+import sun.misc.IOUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -24,6 +25,7 @@ public class UploadManager {
     private static final String URL_UPLOAD_PART = "/upload_part";
     private static final String URL_UPLOAD_ABORT = "/upload_abort";
     private static final String URL_UPLOAD_FINISH = "/upload_finish";
+    private static final String URL_UPLOAD_ALL = "/upload_all";
     private static int RETRY = 0;
 
     private final int mBlockSize;// 上传分块大小
@@ -168,6 +170,11 @@ public class UploadManager {
 
             LogPrint.info(LOG_TAG, "The server is " + this.mFileinfo.uploadServer);
 
+            if (this.mBlockSize == 0) {
+                this.uploadAll();
+                return;
+            }
+
             result = this.uploadInit();
             if (result == null) {
                 continue;
@@ -268,6 +275,53 @@ public class UploadManager {
         }
     }
 
+    private ReturnResult uploadAll() throws YunkuException {
+        String url = this.mFileinfo.uploadServer + URL_UPLOAD_ALL + "?org_client_id=" + this.mEngine.getClientId();
+
+        Headers.Builder headerBuilder = new Headers.Builder();
+        headerBuilder.set("x-gk-upload-pathhash", this.mFileinfo.hash);
+        headerBuilder.set("x-gk-upload-filename", URLEncoder.encodeUTF8(this.mFileinfo.filename));
+        headerBuilder.set("x-gk-upload-filehash", this.mFileinfo.fileHash);
+        headerBuilder.set("x-gk-upload-filesize", String.valueOf(this.mFileinfo.fileSize));
+
+        byte[] uploadData;
+        try {
+            uploadData = IOUtils.readFully(this.mStream, -1, true);
+        } catch (IOException e) {
+            throw new YunkuException("fail to load upload data", new ReturnResult(e));
+        }
+
+        Request.Builder requestBuilder = new Request.Builder();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), uploadData);
+        Request request = requestBuilder
+                .url(url)
+                .put(requestBody)
+                .headers(headerBuilder.build())
+                .build();
+
+        int retry = RETRY;
+        while (true) {
+            try {
+
+                Response resp = this.getUploadHttpClient().newCall(request).execute();
+                return new ReturnResult(resp.code(), resp.body().string());
+
+            } catch (IOException e) {
+
+                if (retry-- > 0) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e1) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    throw new YunkuException("fail to call upload_all", new ReturnResult(e));
+                }
+
+            }
+        }
+    }
+
     /**
      * 初始化上传
      *
@@ -275,7 +329,7 @@ public class UploadManager {
      */
     private ReturnResult uploadInit() throws YunkuException {
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_INIT + "?org_client_id=" + this.mEngine.getClientId();
-        final HashMap<String, String> headParams = new HashMap<String, String>();
+        HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-pathhash", this.mFileinfo.hash);
         headParams.put("x-gk-upload-filename", URLEncoder.encodeUTF8(this.mFileinfo.filename));
         headParams.put("x-gk-upload-filehash", this.mFileinfo.fileHash);
@@ -298,7 +352,7 @@ public class UploadManager {
 
     private long uploadReq() throws YunkuException {
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_REQ;
-        final HashMap<String, String> headParams = new HashMap<String, String>();
+        HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
 
         long checkSize = 0;
@@ -379,7 +433,7 @@ public class UploadManager {
      */
     private ReturnResult uploadFinish() throws YunkuException {
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_FINISH;
-        final HashMap<String, String> headParams = new HashMap<String, String>();
+        HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
         ReturnResult result = null;
 
@@ -412,7 +466,7 @@ public class UploadManager {
             return;
         }
         String url = this.mFileinfo.uploadServer + URL_UPLOAD_ABORT;
-        final HashMap<String, String> headParams = new HashMap<String, String>();
+        HashMap<String, String> headParams = new HashMap<String, String>();
         headParams.put("x-gk-upload-session", mSession);
         this.mEngine.new RequestHelper().setHeaders(headParams).setUrl(url).setMethod(RequestMethod.POST).disableSign().executeSync();
     }

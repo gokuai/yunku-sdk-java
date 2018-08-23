@@ -256,12 +256,11 @@ public class Util {
      * @return 文件名
      */
     public static String getNameFromPath(String filePath) {
-        int point = getPathLastIndex(filePath);
-        int length = filePath.length();
-        if (point == -1) {
+        int index = getPathLastIndex(filePath);
+        if (index == -1) {
             return filePath;
         } else {
-            return filePath.substring(point, length);
+            return filePath.substring(index + 1);
         }
     }
 
