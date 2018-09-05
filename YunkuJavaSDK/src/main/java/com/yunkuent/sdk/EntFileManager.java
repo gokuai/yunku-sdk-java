@@ -8,6 +8,7 @@ import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
 import com.yunkuent.sdk.upload.IEntFileManager;
 import com.yunkuent.sdk.upload.UploadCallback;
+import com.yunkuent.sdk.utils.YKUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -129,12 +130,16 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      *
      * @param isCompare 是比对模式
      * @param fetchDateline 时间戳
+     * @param dir 1只返回目录, 0只返回文件, 空或null返回所有
      * @return ReturnResult
      */
-    public ReturnResult getUpdateList(boolean isCompare, long fetchDateline) {
+    public ReturnResult getUpdateList(boolean isCompare, long fetchDateline, String dir) {
         HashMap<String, String> params = new HashMap<String, String>();
         if (isCompare) {
             params.put("mode", "compare");
+        }
+        if (!YKUtils.isEmpty(dir)) {
+            params.put("dir", dir);
         }
         params.put("fetch_dateline", Long.toString(fetchDateline));
         return new RequestHelper().setParams(params).setUrl(URL_API_UPDATE_LIST).setMethod(RequestMethod.GET).executeSync();

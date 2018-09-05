@@ -1,19 +1,19 @@
-# 够快云库 3.0 Java SDK 使用说明
+# 够快云库3.0 Java SDK
 
-[![](https://jitpack.io/v/gokuai/yunku-sdk-java.svg)](https://jitpack.io/#gokuai/yunku-sdk-java)
-
-**注意: SDK版本 >=`4.0` 对接口返回类型和分块上传做了重构, 不兼容以前的版本**
-
->够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
+**注意: Tag 4.0 以后的版本对接口返回类型和分块上传做了重构, 不兼容以前的版本**
 
 ## 兼容
+
 * Java 7 或者更高
 * 支持 Android 系统
 
 ## 引用 
-将`[yunku-java-sdk].jar`文件引用进项目，或者将`YunkuJavaSDK`做为依赖项目。
 
-或者 Gradle:
+以下配置中的`{version}`使用最新的JitPack版本:
+
+[![](https://jitpack.io/v/gokuai/yunku-sdk-java.svg)](https://jitpack.io/#gokuai/yunku-sdk-java)
+
+* Gradle方式
 
 ```groovy
 	allprojects {
@@ -26,10 +26,11 @@
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:4.5'
+	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:{version}'
 	}
 ```
-或者Maven：
+
+* Maven方式
 
 ```xml
 	<repositories>
@@ -44,9 +45,11 @@
 	<dependency>
 	    <groupId>com.github.gokuai.yunku-sdk-java</groupId>
 	    <artifactId>YunkuJavaSDK</artifactId>
-	    <version>4.5</version>
+	    <version>{version}</version>
 	</dependency>
 ```
+
+> 够快云库 2.0 Java SDK 使用说明 [请查看这里][1]
 
 ## 初始化
 
