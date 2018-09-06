@@ -18,7 +18,7 @@ public class GetUpdateList {
         DebugConfig.DEBUG = true;
 //        DebugConfig.LOG_PATH="LogPath/";
 
-            ReturnResult result = EntFileManagerHelper.getInstance().getUpdateList(false, 0);
+            ReturnResult result = EntFileManagerHelper.getInstance().getUpdateList(false, 0, null);
 
             DeserializeHelper.getInstance().deserializeReturn(result);
         }
