@@ -2,8 +2,6 @@ package com.gokuai.base;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
-
 /**
  * 返回结果和返回状态号
  */

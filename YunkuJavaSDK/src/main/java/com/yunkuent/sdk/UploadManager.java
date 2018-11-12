@@ -10,7 +10,6 @@ import com.yunkuent.sdk.upload.UploadCallback;
 import com.yunkuent.sdk.utils.YKUtils;
 import okhttp3.*;
 import org.json.JSONObject;
-import sun.misc.IOUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -286,7 +285,13 @@ public class UploadManager {
 
         byte[] uploadData;
         try {
-            uploadData = IOUtils.readFully(this.mStream, -1, true);
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[16384];
+            while ((nRead = this.mStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            uploadData = buffer.toByteArray();
         } catch (IOException e) {
             throw new YunkuException("fail to load upload data", new ReturnResult(e));
         }
