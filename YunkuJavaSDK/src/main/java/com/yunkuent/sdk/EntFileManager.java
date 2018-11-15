@@ -11,8 +11,7 @@ import com.yunkuent.sdk.upload.UploadCallback;
 import com.yunkuent.sdk.utils.YKUtils;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by Brandon on 2014/8/14.
@@ -719,17 +718,21 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     }
 
     /**
-     * 获取上传地址
-     * <p>
-     * (支持50MB以上文件的上传)
+     * 获取上传地址和临时key
+     * (为网页上传提供上传地址和key)
      *
+     * @param fullpath
+     * @param timeout 临时key失效时长, 单位秒
      * @return
      */
-    public ReturnResult getUploadServers() {
+    public ReturnResult getUploadServers(String fullpath, int timeout) {
         String url = URL_API_UPLOAD_SERVERS;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("fullpath", fullpath);
+        params.put("timeout", Integer.toString(timeout));
+        params.put("rand", Integer.toString((new Random()).nextInt(100000)));
         return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
-
 
     /**
      * 获取服务器地址
