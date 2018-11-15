@@ -39,6 +39,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     private final String URL_API_MOVE_FILE = HostConfig.API_ENT_HOST + "/1/file/move";
     private final String URL_API_HISTORY_FILE = HostConfig.API_ENT_HOST + "/1/file/history";
     private final String URL_API_LINK_FILE = HostConfig.API_ENT_HOST + "/1/file/link";
+    private final String URL_API_LINK_CLOSE = HostConfig.API_ENT_HOST + "/1/file/link_close";
     private final String URL_API_GET_LINK = HostConfig.API_ENT_HOST + "/1/file/links";
     private final String URL_API_UPDATE_COUNT = HostConfig.API_ENT_HOST + "/1/file/updates_count";
     private final String URL_API_GET_SERVER_SITE = HostConfig.API_ENT_HOST + "/1/file/servers";
@@ -612,7 +613,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     }
 
     /**
-     * 获取文件链接
+     * 获取文件外链
      *
      * @param fullpath
      * @param deadline
@@ -635,6 +636,39 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
             params.put("auth", authType.toString().toLowerCase());
         }
         params.put("password", password);
+        this.setOp(params, opName, opId);
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 关闭文件外链
+     *
+     * @param code
+     * @param opName
+     * @param opId
+     * @return
+     */
+    public ReturnResult linkCloseByCode(String code, String opName, int opId) {
+        String url = URL_API_LINK_CLOSE;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("code", code);
+        this.setOp(params, opName, opId);
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 关闭文件外链
+     *
+     * @param fullpath
+     * @param opName
+     * @param opId
+     * @return
+     */
+    public ReturnResult linkCloseByFullpath(String fullpath, String opName, int opId) {
+        String url = URL_API_LINK_CLOSE;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("fullpath", fullpath);
+        this.setOp(params, opName, opId);
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
