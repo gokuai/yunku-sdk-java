@@ -8,7 +8,9 @@ public class PreviewUrl {
 
     public static void main(String[] args) {
 
-        new ConfigHelper().apiHost("http://wanda.gokuai.com/m-open").config();
+//        new ConfigHelper()
+//                .apiHost("http://yk3.gokuai.com/m-open")
+//                .config();
 
         String clientId = "";
         String secret = "";

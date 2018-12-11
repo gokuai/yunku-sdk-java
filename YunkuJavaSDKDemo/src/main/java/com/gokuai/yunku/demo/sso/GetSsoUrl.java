@@ -13,7 +13,6 @@ public class GetSsoUrl {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
         String account = "gk001";
 
         String result = SSOManagerHelper.getInstance().getSsoUrl(account, null);

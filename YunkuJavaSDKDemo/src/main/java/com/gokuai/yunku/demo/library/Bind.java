@@ -15,7 +15,6 @@ public class Bind {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().bind(1258748,"YunkuJavaSDKDemo");
 

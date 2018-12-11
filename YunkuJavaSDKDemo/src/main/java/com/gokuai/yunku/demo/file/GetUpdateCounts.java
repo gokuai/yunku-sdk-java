@@ -18,7 +18,6 @@ public class GetUpdateCounts {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);//昨天

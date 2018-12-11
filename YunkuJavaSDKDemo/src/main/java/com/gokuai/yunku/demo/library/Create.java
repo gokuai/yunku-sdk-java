@@ -16,7 +16,6 @@ public class Create {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().create("test", "1073741824", "destroy", "test lib");
 

@@ -16,7 +16,6 @@ public class Set {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().set(1258748, "ttt", "1073741824", "");
 

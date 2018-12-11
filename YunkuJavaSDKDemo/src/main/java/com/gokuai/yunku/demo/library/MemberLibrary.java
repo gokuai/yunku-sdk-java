@@ -15,7 +15,6 @@ public class MemberLibrary {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         //获取个人库信息
         ReturnResult result = EntLibraryManagerHelper.getInstance().getInfoByMembmer(0, null, "tom", null);

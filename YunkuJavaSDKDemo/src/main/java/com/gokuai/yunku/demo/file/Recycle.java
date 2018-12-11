@@ -15,7 +15,6 @@ public class Recycle {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().recycle(0, 100);
 

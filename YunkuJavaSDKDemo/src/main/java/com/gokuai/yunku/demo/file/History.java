@@ -15,7 +15,6 @@ public class History {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().history("test", 0, 100);
 

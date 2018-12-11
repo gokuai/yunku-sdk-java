@@ -15,7 +15,6 @@ public class DelGroup {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().delGroup(1258748,71715);
 

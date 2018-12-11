@@ -16,7 +16,6 @@ public class GetUpdateList {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
             ReturnResult result = EntFileManagerHelper.getInstance().getUpdateList(false, 0, null);
 

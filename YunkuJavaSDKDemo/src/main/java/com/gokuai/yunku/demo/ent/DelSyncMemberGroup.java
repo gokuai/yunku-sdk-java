@@ -15,7 +15,6 @@ public class DelSyncMemberGroup {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntManagerHelper.getInstance().delSyncMemberGroup(new String[]{"MemberTest2"});
 

@@ -15,7 +15,6 @@ public class GetSsoGkkey {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
         String account = "gk001";
 
         ReturnResult result = SSOManagerHelper.getInstance().getSsoGkkey(account);

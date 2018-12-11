@@ -16,7 +16,6 @@ public class SetPermission {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().setPermission("test", 4, "tom",
                 FilePermissions.FILE_PREVIEW, FilePermissions.FILE_DELETE,

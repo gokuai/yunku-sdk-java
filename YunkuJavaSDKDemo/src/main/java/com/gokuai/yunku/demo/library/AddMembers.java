@@ -15,7 +15,6 @@ public class AddMembers {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().addMembers(1258748,3330,new int[]{52064});
 

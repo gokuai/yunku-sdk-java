@@ -15,7 +15,6 @@ public class AddSyncMember {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntManagerHelper.getInstance().addSyncMember("MemberTest1", "Member1", "Member1", "1234", "111", "111", null);
 

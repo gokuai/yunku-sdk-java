@@ -15,7 +15,6 @@ public class Move {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().move("qqq.jpg","test/qqq.jpg","tom");
 

@@ -16,7 +16,6 @@ public class Log {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntLibraryManagerHelper.getInstance().getLogByOrgId(1451560, null, EntLibManager.OrderBy.ASC, null, null, 0, 100);
         DeserializeHelper.getInstance().deserializeReturn(result);

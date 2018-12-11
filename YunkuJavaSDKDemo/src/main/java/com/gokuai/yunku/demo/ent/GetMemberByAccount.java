@@ -15,7 +15,6 @@ public class GetMemberByAccount {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntManagerHelper.getInstance().getMemberByAccount("6905656124312207", false);
 

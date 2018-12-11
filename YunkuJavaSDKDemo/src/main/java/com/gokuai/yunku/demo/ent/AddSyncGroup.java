@@ -15,8 +15,6 @@ public class AddSyncGroup {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
-
 
         ReturnResult result = EntManagerHelper.getInstance().addSyncGroup("ParentGroup", "ParentGroup", "");
         ReturnResult result1 = EntManagerHelper.getInstance().addSyncGroup("GroupTest", "Group", "ParentGroup");

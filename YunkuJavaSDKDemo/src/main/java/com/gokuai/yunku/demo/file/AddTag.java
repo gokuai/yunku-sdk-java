@@ -15,7 +15,6 @@ public class AddTag {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().addTag("test.txt", new String[]{"tag1", "tag2"}, "tom");
 

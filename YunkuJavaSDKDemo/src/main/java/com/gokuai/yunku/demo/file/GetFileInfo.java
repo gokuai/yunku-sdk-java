@@ -16,7 +16,6 @@ public class GetFileInfo {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         ReturnResult result = EntFileManagerHelper.getInstance().getFileInfo("default/custom/upload/path/search3.txt");
 

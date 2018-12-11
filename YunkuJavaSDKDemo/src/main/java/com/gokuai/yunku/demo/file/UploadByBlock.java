@@ -19,10 +19,9 @@ public class UploadByBlock {
     public static void main(String[] args) {
 
         DebugConfig.DEBUG = true;
-//        DebugConfig.LOG_PATH="LogPath/";
 
         new ConfigHelper()
-                .apiHost("http://yk3.gokuai.com/m-open")
+//                .apiHost("http://yk3.gokuai.com/m-open")
                 .retry(5)
                 .language("zh-CN")
                 .config();
