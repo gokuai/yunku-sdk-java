@@ -5,8 +5,12 @@ import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import okhttp3.*;
 
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.Proxy;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +29,7 @@ public final class NetConnection {
     private static long mTimeout = 1800;
     private static long mConnectTimeout = 10;
     private static int mRetry = 0;
+    private static boolean mTrustSsl = false;
 
     public static void setUserAgent(String userAgent) {
         mUserAgent = userAgent;
@@ -32,6 +37,10 @@ public final class NetConnection {
 
     public static String getUserAgent() {
         return Util.isEmpty(mUserAgent) ? USER_AGENT : USER_AGENT + ";" + mUserAgent;
+    }
+
+    public static void trustSsl(boolean trust) {
+        mTrustSsl = trust;
     }
 
     public static void setAcceptLanguage(String acceptLanguage) {
@@ -181,16 +190,52 @@ public final class NetConnection {
         return new ReturnResult(statusCode, body);
     }
 
-    public static OkHttpClient getOkHttpClient() {
+    private static final TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                }
 
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[]{};
+                }
+            }
+    };
+    private static final SSLContext trustAllSslContext;
+
+    static {
+        try {
+            trustAllSslContext = SSLContext.getInstance("SSL");
+            trustAllSslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final SSLSocketFactory trustAllSslSocketFactory = trustAllSslContext.getSocketFactory();
+
+    public static OkHttpClient getOkHttpClient() {
         ArrayList<Protocol> list = new ArrayList<Protocol>();
         list.add(Protocol.HTTP_1_1);
         list.add(Protocol.HTTP_2);
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+        if (mTrustSsl) {
+            builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        }
         if (mProxy != null) {
             builder.proxy(mProxy);
         }
-
         builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
         builder.readTimeout(mTimeout, TimeUnit.SECONDS);
         return builder.build();

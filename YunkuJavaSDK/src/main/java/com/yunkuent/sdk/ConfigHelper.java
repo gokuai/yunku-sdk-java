@@ -14,6 +14,7 @@ public class ConfigHelper {
     private String mUploadOpName;
     private Proxy mProxy;
     private String mUserAgent;
+    private boolean mTrustSsl = false;
     private String mLanguage;
     private long mConnectTimeout;
     private long mTimeout;
@@ -29,7 +30,6 @@ public class ConfigHelper {
     public ConfigHelper apiHost(String apiHost) {
         this.mApiHost = apiHost;
         return this;
-
     }
 
     /**
@@ -81,6 +81,15 @@ public class ConfigHelper {
      */
     public ConfigHelper userAgent(String userAgent) {
         this.mUserAgent = userAgent;
+        return this;
+    }
+
+    /**
+     * @param trust
+     * @return
+     */
+    public ConfigHelper trustSsl(boolean trust) {
+        this.mTrustSsl = trust;
         return this;
     }
 
@@ -158,6 +167,8 @@ public class ConfigHelper {
         if (!Util.isEmpty(mUserAgent)) {
             NetConnection.setUserAgent(mUserAgent);
         }
+
+        NetConnection.trustSsl(this.mTrustSsl);
 
         if (mConnectTimeout > 0) {
             NetConnection.setConnectTimeout(mConnectTimeout);
