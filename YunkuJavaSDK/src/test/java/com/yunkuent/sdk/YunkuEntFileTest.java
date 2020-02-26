@@ -101,7 +101,7 @@ public class YunkuEntFileTest {
     @Test
     public void t007() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.previewUrl(TEST_FILE_FULLLPATH, true, "tom", "tom");
+        ReturnResult r = entFile.getPreviewUrlByFullpath(TEST_FILE_FULLLPATH, true, "tom", "tom");
         Assert.assertEquals(200, r.getCode());
     }
 

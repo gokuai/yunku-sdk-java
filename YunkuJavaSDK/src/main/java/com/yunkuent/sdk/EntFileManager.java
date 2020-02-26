@@ -851,33 +851,141 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * 文件预览地址
      *
      * @param fullpath
-     * @param showWaterMark
+     * @param showWatermark
      * @param memberName
      * @param opName
-     * @param opId
      * @return
      */
-    public ReturnResult previewUrl(String fullpath, boolean showWaterMark, String memberName, String opName, int opId) {
-        String url = URL_API_PREVIEW_URL;
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("fullpath", fullpath);
-        params.put("member_name", memberName);
-        params.put("watermark", (showWaterMark ? "1" : "0"));
-        this.setOp(params, opName, opId);
-        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    public ReturnResult getPreviewUrlByFullpath(String fullpath, boolean showWatermark, String memberName, String opName) {
+        return getPreviewUrl(null, fullpath, showWatermark, memberName, opName, 0);
     }
 
     /**
      * 文件预览地址
      *
      * @param fullpath
-     * @param showWaterMark
+     * @param showWatermark
+     * @param memberName
+     * @param opId
+     * @return
+     */
+    public ReturnResult getPreviewUrlByFullpath(String fullpath, boolean showWatermark, String memberName, int opId) {
+        return getPreviewUrl(null, fullpath, showWatermark, memberName, null, opId);
+    }
+
+    /**
+     * 文件预览地址
+     *
+     * @param hash
+     * @param showWatermark
      * @param memberName
      * @param opName
      * @return
      */
-    public ReturnResult previewUrl(String fullpath, boolean showWaterMark, String memberName, String opName) {
-        return previewUrl(fullpath, showWaterMark, memberName, opName, 0);
+    public ReturnResult getPreviewUrlByHash(String hash, boolean showWatermark, String memberName, String opName) {
+        return getPreviewUrl(hash, null, showWatermark, memberName, opName, 0);
+    }
+
+    /**
+     * 文件预览地址
+     *
+     * @param hash
+     * @param showWatermark
+     * @param memberName
+     * @param opId
+     * @return
+     */
+    public ReturnResult getPreviewUrlByHash(String hash, boolean showWatermark, String memberName, int opId) {
+        return getPreviewUrl(hash, null, showWatermark, memberName, null, opId);
+    }
+
+    /**
+     * 文件预览地址
+     *
+     * @param hash
+     * @param fullpath
+     * @param showWatermark
+     * @param memberName
+     * @param opName
+     * @param opId
+     * @return
+     */
+    public ReturnResult getPreviewUrl(String hash, String fullpath, boolean showWatermark, String memberName, String opName, int opId) {
+        String url = URL_API_PREVIEW_URL;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("hash", hash);
+        params.put("fullpath", fullpath);
+        params.put("member_name", memberName);
+        params.put("watermark", (showWatermark ? "1" : "0"));
+        this.setOp(params, opName, opId);
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+    }
+
+    /**
+     * 通过文件路径获取批注地址
+     *
+     * @param fullpath
+     * @param outId 外部帐号系统ID
+     * @return
+     */
+    public ReturnResult getAnnotationUrlByFullpath(String fullpath, String outId) {
+        return getAnnotationUrl(null, fullpath, outId, 0);
+    }
+
+    /**
+     * 通过文件路径获取批注地址
+     *
+     * @param fullpath
+     * @param opId 操作用户ID
+     * @return
+     */
+    public ReturnResult getAnnotationUrlByFullpath(String fullpath, int opId) {
+        return getAnnotationUrl(null, fullpath, null, opId);
+    }
+
+    /**
+     * 通过文件唯一标识获取批注地址
+     *
+     * @param hash
+     * @param outId 外部帐号系统ID
+     * @return
+     */
+    public ReturnResult getAnnotationUrlByHash(String hash, String outId) {
+        return getAnnotationUrl(hash, null, outId, 0);
+    }
+
+    /**
+     * 通过文件唯一标识获取批注地址
+     *
+     * @param hash
+     * @param opId 操作用户ID
+     * @return
+     */
+    public ReturnResult getAnnotationUrlByHash(String hash, int opId) {
+        return getAnnotationUrl(hash, null, null, opId);
+    }
+
+    /**
+     * 获取批注地址
+     *
+     * @param hash
+     * @param fullpath
+     * @param outId
+     * @param opId
+     * @return
+     */
+    public ReturnResult getAnnotationUrl(String hash, String fullpath, String outId, int opId) {
+        String url = URL_API_PREVIEW_URL;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("hash", hash);
+        params.put("fullpath", fullpath);
+        params.put("annotation", "display");
+        if (opId > 0) {
+            params.put("op_id", Integer.toString(opId));
+        } else if (!Util.isEmpty(outId)) {
+            params.put("out_id", outId);
+        }
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
     /**

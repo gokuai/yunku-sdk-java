@@ -1,10 +1,9 @@
 package com.gokuai.yunku.demo.file;
 
 import com.gokuai.base.ReturnResult;
-import com.yunkuent.sdk.ConfigHelper;
 import com.yunkuent.sdk.EntFileManager;
 
-public class PreviewUrl {
+public class GetPreviewUrl {
 
     public static void main(String[] args) {
 
@@ -23,7 +22,7 @@ public class PreviewUrl {
         String WatermarkMemberName = "";
 
         EntFileManager manager = new EntFileManager(clientId, secret);
-        ReturnResult result = manager.previewUrl(fullpath, showWatermark, WatermarkMemberName, "tom");
+        ReturnResult result = manager.getPreviewUrlByFullpath(fullpath, showWatermark, WatermarkMemberName, "tom");
 
         if (result.isOK()) {
             //成功的结果

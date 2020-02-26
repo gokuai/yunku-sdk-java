@@ -17,7 +17,7 @@ public class ChangeConfig {
 
         new ConfigHelper().apiHost("http://yk3.gokuai.com/m-open").config();
 
-        ReturnResult result = EntFileManagerHelper.getInstance().previewUrl("test.xlsx", true, "tom", "tom");
+        ReturnResult result = EntFileManagerHelper.getInstance().getPreviewUrlByFullpath("test.xlsx", true, "tom", "tom");
         DeserializeHelper.getInstance().deserializeReturn(result);
     }
 }
