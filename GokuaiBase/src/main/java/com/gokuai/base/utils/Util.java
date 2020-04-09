@@ -4,10 +4,12 @@ package com.gokuai.base.utils;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class Util {
     /**
@@ -301,7 +303,6 @@ public class Util {
 
     public static String getFileSha1(String path) {
         String filehash = "";
-        path = URLDecoder.decode(path.replace("file://", ""));
         File file = new File(path);
         if (file.exists()) {
             FileInputStream in = null;
