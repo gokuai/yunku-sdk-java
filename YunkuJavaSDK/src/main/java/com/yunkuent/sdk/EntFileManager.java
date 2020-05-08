@@ -731,7 +731,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         params.put("fullpath", fullpath);
         params.put("timeout", Integer.toString(timeout));
         params.put("rand", Integer.toString((new Random()).nextInt(100000)));
-        return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
     /**
