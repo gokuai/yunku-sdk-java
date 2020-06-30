@@ -216,6 +216,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         params.put("filehash", fileHash);
         params.put("filesize", Long.toString(fileSize));
         params.put("overwrite", (overwrite ? "1" : "0"));
+        params.put("storage_check", "0");
         this.setOp(params, opName, opId);
         return new RequestHelper().setParams(params).setUrl(URL_API_CREATE_FILE).setMethod(RequestMethod.POST).executeSync();
     }
