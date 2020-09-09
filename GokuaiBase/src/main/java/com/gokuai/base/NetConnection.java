@@ -31,6 +31,10 @@ public final class NetConnection {
     private static boolean mTrustSsl = false;
     private static OkHttpClient mHttpClient = null;
 
+    private NetConnection() {
+
+    }
+
     public static void setUserAgent(String userAgent) {
         mUserAgent = userAgent;
     }
@@ -219,24 +223,28 @@ public final class NetConnection {
 
     private static final SSLSocketFactory trustAllSslSocketFactory = trustAllSslContext.getSocketFactory();
 
-    public static synchronized OkHttpClient getOkHttpClient() {
+    public static OkHttpClient getOkHttpClient() {
         if (mHttpClient == null) {
-            OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-            if (mTrustSsl) {
-                builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-                builder.hostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
+            synchronized (NetConnection.class) {
+                if (mHttpClient == null) {
+                    OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+                    if (mTrustSsl) {
+                        builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+                        builder.hostnameVerifier(new HostnameVerifier() {
+                            @Override
+                            public boolean verify(String hostname, SSLSession session) {
+                                return true;
+                            }
+                        });
                     }
-                });
+                    if (mProxy != null) {
+                        builder.proxy(mProxy);
+                    }
+                    builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
+                    builder.readTimeout(mTimeout, TimeUnit.SECONDS);
+                    mHttpClient = builder.build();
+                }
             }
-            if (mProxy != null) {
-                builder.proxy(mProxy);
-            }
-            builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
-            builder.readTimeout(mTimeout, TimeUnit.SECONDS);
-            mHttpClient = builder.build();
         }
         return mHttpClient;
     }
