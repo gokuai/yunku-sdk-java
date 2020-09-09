@@ -11,7 +11,6 @@ import java.net.Proxy;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +29,7 @@ public final class NetConnection {
     private static long mConnectTimeout = 10;
     private static int mRetry = 0;
     private static boolean mTrustSsl = false;
+    private static OkHttpClient mHttpClient = null;
 
     public static void setUserAgent(String userAgent) {
         mUserAgent = userAgent;
@@ -219,27 +219,25 @@ public final class NetConnection {
 
     private static final SSLSocketFactory trustAllSslSocketFactory = trustAllSslContext.getSocketFactory();
 
-    public static OkHttpClient getOkHttpClient() {
-        ArrayList<Protocol> list = new ArrayList<Protocol>();
-        list.add(Protocol.HTTP_1_1);
-        list.add(Protocol.HTTP_2);
-        OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        if (mTrustSsl) {
-            builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager)trustAllCerts[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+    public static synchronized OkHttpClient getOkHttpClient() {
+        if (mHttpClient == null) {
+            OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+            if (mTrustSsl) {
+                builder.sslSocketFactory(trustAllSslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+                builder.hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            }
+            if (mProxy != null) {
+                builder.proxy(mProxy);
+            }
+            builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
+            builder.readTimeout(mTimeout, TimeUnit.SECONDS);
+            mHttpClient = builder.build();
         }
-        if (mProxy != null) {
-            builder.proxy(mProxy);
-        }
-        builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
-        builder.readTimeout(mTimeout, TimeUnit.SECONDS);
-        return builder.build();
+        return mHttpClient;
     }
-
-
 }

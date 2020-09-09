@@ -324,7 +324,7 @@ public class UploadManager {
         while (true) {
             try {
 
-                Response resp = this.getUploadHttpClient().newCall(request).execute();
+                Response resp = NetConnection.getOkHttpClient().newCall(request).execute();
                 return new ReturnResult(resp.code(), resp.body().string());
 
             } catch (IOException e) {
@@ -421,7 +421,7 @@ public class UploadManager {
         while (true) {
             try {
 
-                Response resp = this.getUploadHttpClient().newCall(request).execute();
+                Response resp = NetConnection.getOkHttpClient().newCall(request).execute();
                 return new ReturnResult(resp.code(), resp.body().string());
 
             } catch (IOException e) {
@@ -438,13 +438,6 @@ public class UploadManager {
 
             }
         }
-    }
-
-    private OkHttpClient getUploadHttpClient() {
-        if (this.mUploadHttpClient == null) {
-            this.mUploadHttpClient = NetConnection.getOkHttpClient();
-        }
-        return this.mUploadHttpClient;
     }
 
     /**
