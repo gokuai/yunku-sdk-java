@@ -1,3 +1,7 @@
+plugins {
+    id 'java-library'
+}
+
 group 'com.gokuai'
 apply plugin: 'java'
 
@@ -13,6 +17,9 @@ repositories {
 }
 
 dependencies {
-    compile project(':GokuaiBase')
-    testCompile group: 'junit', name: 'junit', version: '4.13'
+    api project(':GokuaiBase')
+    implementation 'org.json:json:20210307'
+    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    testImplementation 'junit:junit:4.13.2'
 }

@@ -242,6 +242,7 @@ public final class NetConnection {
                     }
                     builder.connectTimeout(mConnectTimeout, TimeUnit.SECONDS);
                     builder.readTimeout(mTimeout, TimeUnit.SECONDS);
+                    builder.writeTimeout(mTimeout, TimeUnit.SECONDS);
                     mHttpClient = builder.build();
                 }
             }

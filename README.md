@@ -26,7 +26,7 @@
 
 ```groovy
 	dependencies {
-	        compile 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:{version}'
+	        implementation 'com.github.gokuai.yunku-sdk-java:YunkuJavaSDK:{version}'
 	}
 ```
 
