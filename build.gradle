@@ -4,23 +4,30 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
 
-    sourceCompatibility = 1.7 // java 7
-    targetCompatibility = 1.7
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
+    java {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+        withSourcesJar()
+        withJavadocJar()
     }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
+    publishing {
+        publications {
+            // 每个子模块发布一个 Java 组件（含主包、-sources、-javadoc）
+            mavenJava(MavenPublication) {
+                from components.java
 
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
+                // 如需显式指定坐标，可在这里设置；默认继承 project.group / name / version
+                // groupId = 'com.example'
+                // artifactId = project.name
+                // version = project.version
+            }
+        }
     }
 }
+
