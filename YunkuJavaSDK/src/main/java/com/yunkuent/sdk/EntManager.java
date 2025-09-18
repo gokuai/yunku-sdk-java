@@ -36,6 +36,10 @@ public class EntManager extends EntEngine {
     private final String URL_API_GET_GROUP_MEMBERS = HostConfig.API_ENT_HOST + "/1/ent/get_group_members";
     private final String URL_API_GET_ROLES = HostConfig.API_ENT_HOST + "/1/ent/get_roles";
 
+    private final String URL_API_GET_GROUP_BY_OUT_ID = HostConfig.API_ENT_HOST + "/1/ent/get_group_by_out_id";
+
+    private final String URL_API_ENT_LOG = HostConfig.API_ENT_HOST + "/1/ent/log";
+
     public EntManager(String clientId, String secret) {
         super(clientId, secret);
     }
@@ -531,4 +535,93 @@ public class EntManager extends EntEngine {
         return new RequestHelper().setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
+    /**
+     * 通过外部部门ID获取部门信息
+     *
+     * @param outIds
+     * @return
+     */
+    public ReturnResult getGroupByOutID(String clientId, String[] outIds) {
+        String url = URL_API_GET_GROUP_BY_OUT_ID;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("client_id", clientId);
+        params.put("out_ids", Util.strArrayToString(outIds, ","));
+
+        params.put("dateline", Util.getUnixDateline() + "");
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     *管理日志
+     *
+     * @param clientId       企业ID
+     * @param entType        类型, 不传默认返回所有类型
+     *                       1	子管理员
+     *                       2	成员信息
+     *                       3	企业设置
+     *                       4	组织架构
+     *                       5	角色
+     *                       6	成员设备
+     *                       7	存储点
+     *                       8	文件库
+     *                       9	开发授权
+     *
+     * @param orderby        排序方式
+     * @param startDateline  开始时间
+     * @param endDateline    结束时间
+     * @param start          开始位置
+     * @param size           获取数量
+     * @return ReturnResult
+     */
+    public ReturnResult getLogByClientId(String clientId, EntManager.entType entType, EntLibManager.OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {
+        return this.getLog(clientId, entType, orderby, startDateline, endDateline, start, size);
+    }
+
+    private ReturnResult getLog(String clientId, EntManager.entType entType, EntLibManager.OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("client_id", clientId);
+        params.put("dateline", Util.getUnixDateline() + "");
+        if (entType != null ) {
+            params.put("type", entType.toString());
+        }
+        if (orderby != null) {
+            params.put("orderby", orderby.toString());
+        }
+        if (startDateline != null) {
+            params.put("start_dateline", startDateline.toString());
+        }
+        if (endDateline != null) {
+            params.put("end_dateline", endDateline.toString());
+        }
+        if (start > 0) {
+            params.put("start", Integer.toString(start));
+        }
+        if (size > 0) {
+            params.put("size", Integer.toString(size));
+        }
+        return new RequestHelper().setParams(params).setUrl(URL_API_ENT_LOG).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    public enum entType {
+        SUB_ADMIN("1"),
+        MEMBER_INFO("2"),
+        COMPANY_SETTING("3"),
+        ORG_STRUCTURE("4"),
+        ROLE("5"),
+        MEMBER_DEVICE("6"),
+        STORAGE_POINT("7"),
+        FILE_LIBRARY("8"),
+        DEV_AUTH("9");
+
+        private String entType;
+
+        entType(String entType) {
+            this.entType = entType;
+        }
+
+        @Override
+        public String toString() {
+            return this.entType;
+        }
+    }
 }

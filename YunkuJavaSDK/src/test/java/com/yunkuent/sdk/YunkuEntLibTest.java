@@ -146,4 +146,11 @@ public class YunkuEntLibTest {
         Assert.assertEquals(200, r.getCode());
     }
 
+    @Test
+    public void OrgSearch() throws Exception {
+        EntLibManager entLib = new EntLibManager(CLIENT_ID, CLIENT_SECRET);
+        ReturnResult r = entLib.getOrgSearchByClientId(CLIENT_ID, "YunkuJavaSDKDemo", 0);
+        Assert.assertEquals(200, r.getCode());
+    }
+
 }

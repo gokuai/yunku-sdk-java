@@ -33,6 +33,8 @@ public class EntLibManager extends EntEngine {
     private final String URL_API_DESTROY = HostConfig.API_ENT_HOST + "/1/org/destroy";
     private final String URL_API_LOG = HostConfig.API_ENT_HOST + "/1/org/log";
 
+    private final String URL_API_GET_SEARCH = HostConfig.API_ENT_HOST + "/1/org/search";
+
     public EntLibManager(String clientId, String secret) {
         super(clientId, secret);
     }
@@ -394,6 +396,26 @@ public class EntLibManager extends EntEngine {
      */
     public ReturnResult getLogByMountId(int mountId, Act[] acts, OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {
         return this.getLog(mountId, 0, acts, orderby, startDateline, endDateline, start, size);
+    }
+
+    /**
+     *
+     * @param clientId       企业ID
+     * @param name           库名称name，库名称前缀prefix, 模糊匹配, name 和 prefix 只需传其中一个
+     * @param size           获取数量
+     * @return ReturnResult
+     */
+    public ReturnResult getOrgSearchByClientId(String clientId, String name, int size) {
+
+        String url = URL_API_GET_SEARCH;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("client_id", clientId);
+        params.put("prefix", name);
+        params.put("dateline", Util.getUnixDateline() + "");
+        if (size > 0) {
+            params.put("size", Integer.toString(size));
+        }
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
     private ReturnResult getLog(int orgId, int mountId, Act[] acts, OrderBy orderby, Long startDateline, Long endDateline, int start, int size) {

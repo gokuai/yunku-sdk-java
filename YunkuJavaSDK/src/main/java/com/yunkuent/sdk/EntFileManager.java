@@ -52,6 +52,21 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     private final String URL_API_DEL_TAG = HostConfig.API_ENT_HOST + "/1/file/del_tag";
     private final String URL_API_STAT = HostConfig.API_ENT_HOST + "/1/file/stat";
 
+    private final String URL_API_CEDIT_URL = HostConfig.API_ENT_HOST + "/1/file/cedit_url";
+
+    private final String URL_API_SET_PERMISSION_INHERIT = HostConfig.API_ENT_HOST + "/1/file/set_permission_inherit";
+
+    private final String URL_API_GET_ALL_PERMISSION = HostConfig.API_ENT_HOST + "/1/file/get_all_permission";
+
+    private final String URL_API_RESET_PERMISSION = HostConfig.API_ENT_HOST + "/1/file/reset_permission";
+
+    private final String URL_API_SET_METADATA = HostConfig.API_ENT_HOST + "/1/file/set_metadata";
+
+    private final String URL_API_DEL_METADATA = HostConfig.API_ENT_HOST + "/1/file/del_metadata";
+
+    private final String URL_API_QUEUE_STATUS = HostConfig.API_ENT_HOST + "/1/file/queue_status";
+
+
     public EntFileManager(String orgClientId, String secret) {
         super(orgClientId, secret);
         this.clientIdKey = "org_client_id";
@@ -1123,5 +1138,203 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         DEFAULT,
         IN
     }
+
+    /**
+     * 文件协同编辑链接
+     *
+     * @param clientId
+     * @param fullpath      文件路径, 需传fullpath或hash其中一个参数
+     * @param hash          文件唯一标识, 需传fullpath或hash其中一个参数
+     * @param readonly      1表示只读打开, 默认允许编辑
+     * @param timeout       编辑链接过期时间, 单位秒, 默认3600, 1小时后过期
+     * @param opId          操作人ID, 可以用out_id或account代替
+     * @param outId         操作人外部系统帐号ID
+     * @param account       操作人外部系统帐号
+     * @param dateline
+     * @return
+     */
+    public ReturnResult getCeditUrl(Integer clientId, String fullpath, String hash, Integer readonly, Integer timeout, String opId, String outId, String account, Long dateline) {
+        String url = URL_API_CEDIT_URL;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        if (fullpath != null && !fullpath.isEmpty()) {
+            params.put("fullpath", fullpath);
+        }
+        if (hash != null && !hash.isEmpty()) {
+            params.put("hash", hash);
+        }
+        if (readonly != null) {
+            params.put("readonly", readonly.toString());
+        }
+        Integer default_timeout = 3600;
+        if (timeout != null) {
+            default_timeout = timeout;
+        }
+        params.put("timeout", default_timeout.toString());
+        if (opId != null && !opId.isEmpty()) {
+            params.put("op_id", opId);
+        } else if (outId != null && !outId.isEmpty()) {
+            params.put("out_id", outId);
+        } else {
+            params.put("account", account);
+        }
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 设置文件夹权限继承状态
+     *
+     * @param clientId
+     * @param fullpath
+     * @param inherit       1表示继承, 0表示不继承
+     * @param dateline
+     * @return
+     */
+    public ReturnResult setPermissionInherit(Integer clientId, String fullpath, EntFileManager.fileInherit inherit, Long dateline) {
+        String url = URL_API_SET_PERMISSION_INHERIT;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        params.put("fullpath", fullpath);
+        params.put("inherit", inherit.toString());
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    public enum fileInherit {
+        INHERIT("1"),
+        UNINHERIT("0");
+
+        private String fileInherit;
+
+        fileInherit(String fileInherit) {
+            this.fileInherit = fileInherit;
+        }
+
+        @Override
+        public String toString() {
+            return this.fileInherit;
+        }
+    }
+
+    /**
+     * 获取文件夹单独设置的权限
+     *注意: 仅返回单独设置的权限, 不包括从上级或部门继承的权限
+     *
+     * @param clientId
+     * @param fullpath
+     * @param dateline
+     * @return
+     */
+    public ReturnResult getAllPermission(Integer clientId, String fullpath, Long dateline) {
+        String url = URL_API_GET_ALL_PERMISSION;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        params.put("fullpath", fullpath);
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 重置或移除文件夹权限
+     * 当文件夹为继承状态时, 该操作将重置指定成员或部门的权限, 使之与上级文件夹权限保持一致; 如果成员通过部门加入, 则重置后权限与部门权限保持一致
+     * 当文件夹为非继承状态时, 该操作将移除指定成员或部门, 如果成员通过部门加入, 由于无法移除这些成员, 配合 clear 参数:
+     * 不传或传 0 重置成员权限, 使之与所在部门的权限保持一致
+     * 传 1 清空成员权限
+     *
+     * @param clientId
+     * @param fullpath
+     * @param memberIds     需要重置/移除的成员ID, 多个使用半角逗号,分隔
+     * @param groupIds      需要重置/移除的部门ID, 多个使用半角逗号,分隔
+     * @param clear         清空通过部门加入的成员的权限, 该参数在非继承状态时有效, 默认 0
+     * @param dateline
+     * @return
+     */
+    public ReturnResult resetPermission(Integer clientId, String fullpath, int[] memberIds,int[] groupIds, Integer clear, Long dateline) {
+        String url = URL_API_RESET_PERMISSION;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        params.put("fullpath", fullpath);
+        params.put("members", Util.intArrayToString(memberIds, ","));
+        params.put("groups", Util.intArrayToString(groupIds, ","));
+        if (clear != null && clear > 0) {
+            params.put("clear", clear.toString());
+        }
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 添加或修改元数据
+     *
+     * @param clientId
+     * @param fullpath          文件路径, 需传fullpath或hash其中一个参数
+     * @param hash              文件唯一标识, 需传fullpath或hash其中一个参数
+     * @param key
+     * @param metadata          JSON Object字符串
+     * @param display           在文件列表上展示的属性, 值为属性key, 多个使用半角逗号,分隔
+     * @param dateline
+     * @return
+     */
+    public ReturnResult setMetadata(Integer clientId, String fullpath, String hash, String key, String metadata, Long dateline, String[] display) {
+        String url = URL_API_SET_METADATA;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        if (fullpath != null && fullpath.length() > 0) {
+            params.put("fullpath", fullpath);
+        } else {
+            params.put("hash", hash);
+        }
+        params.put("key", key);
+        params.put("metadata", metadata);
+        if (display != null && display.length > 0) {
+            params.put("display", Util.strArrayToString(display, ","));
+        }
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 删除元数据
+     *
+     * @param clientId
+     * @param fullpath          文件路径, 需传fullpath或hash其中一个参数
+     * @param hash              文件唯一标识, 需传fullpath或hash其中一个参数
+     * @param key
+     * @param dateline
+     * @return
+     */
+    public ReturnResult delMetadata(Integer clientId, String fullpath, String hash, String key, Long dateline) {
+        String url = URL_API_DEL_METADATA;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        if (fullpath != null && fullpath.length() > 0) {
+            params.put("fullpath", fullpath);
+        } else {
+            params.put("hash", hash);
+        }
+        params.put("key", key);
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+    /**
+     * 查询队列状态
+     *
+     * @param clientId
+     * @param queueId
+     * @param dateline
+     * @return
+     */
+    public ReturnResult delMetadata(Integer clientId, Integer queueId, Long dateline) {
+        String url = URL_API_QUEUE_STATUS;
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("org_client_id", clientId.toString());
+        params.put("queue_id", queueId.toString());
+        params.put("dateline", dateline.toString());
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
+    }
+
+
 
 }

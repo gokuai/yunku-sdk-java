@@ -1,6 +1,8 @@
 package com.yunkuent.sdk;
 
 import com.gokuai.base.ReturnResult;
+import com.gokuai.base.utils.Util;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -133,6 +135,20 @@ public class YunkuEntTest {
     public void addSyncAdmin() throws Exception {
         EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
         ReturnResult r = ent.addSyncAdmin("$:LWCP_v1:$ypc3i0Op0Tn0Ge2GvyShWA==", "", false);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void getGroupByOutId() throws Exception {
+        EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
+        ReturnResult r = ent.getGroupByOutID(CLIENT_ID, new String[]{"MemberTest1"});
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void getEntLog() throws Exception {
+        EntManager ent = new EntManager(CLIENT_ID, CLIENT_SECRET);
+        ReturnResult r = ent.getLogByClientId(CLIENT_ID, null, null, null, null, 0, 0);
         Assert.assertEquals(200, r.getCode());
     }
 }
