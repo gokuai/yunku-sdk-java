@@ -167,9 +167,13 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param net 网络类似
      * @return ReturnResult
      */
-    public ReturnResult getFileInfo(String fullpath, NetType net, boolean getAttribute) {
+    public ReturnResult getFileInfo(String hash, String fullpath, NetType net, boolean getAttribute) {
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("fullpath", fullpath);
+        if (hash != null && !Util.isEmpty(hash)) {
+            params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
+        }
         params.put("attribute", (getAttribute ? "1" : "0"));
         switch (net) {
             case DEFAULT:
@@ -187,8 +191,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param fullpath 文件完整路径
      * @return ReturnResult
      */
-    public ReturnResult getFileInfo(String fullpath) {
-        return this.getFileInfo(fullpath, NetType.DEFAULT, false);
+    public ReturnResult getFileInfo(String hash, String fullpath) {
+        return this.getFileInfo(hash, fullpath, NetType.DEFAULT, false);
     }
 
     /**
@@ -848,8 +852,11 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     public ReturnResult getDownloadUrl(String hash, String fullpath, boolean isOpen, NetType net, String fileName, String opName, int opId) {
         String url = URL_API_GET_UPLOAD_URL;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("hash", hash);
-        params.put("fullpath", fullpath);
+        if (hash != null && !Util.isEmpty(hash)) {
+            params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
+        }
         params.put("filename", fileName);
         params.put("open", (isOpen ? "1" : "0"));
         switch (net) {
@@ -929,8 +936,11 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     public ReturnResult getPreviewUrl(String hash, String fullpath, boolean showWatermark, String memberName, String opName, int opId) {
         String url = URL_API_PREVIEW_URL;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("hash", hash);
-        params.put("fullpath", fullpath);
+        if (hash != null && !Util.isEmpty(hash)) {
+            params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
+        }
         params.put("member_name", memberName);
         params.put("watermark", (showWatermark ? "1" : "0"));
         this.setOp(params, opName, opId);
@@ -1150,18 +1160,16 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opId          操作人ID, 可以用out_id或account代替
      * @param outId         操作人外部系统帐号ID
      * @param account       操作人外部系统帐号
-     * @param dateline
      * @return
      */
-    public ReturnResult getCeditUrl(Integer clientId, String fullpath, String hash, Integer readonly, Integer timeout, String opId, String outId, String account, Long dateline) {
+    public ReturnResult getCeditUrl(String clientId, String hash, String fullpath, Integer readonly, Integer timeout, String opId, String outId, String account) {
         String url = URL_API_CEDIT_URL;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
-        if (fullpath != null && !fullpath.isEmpty()) {
-            params.put("fullpath", fullpath);
-        }
-        if (hash != null && !hash.isEmpty()) {
+//        params.put("org_client_id", clientId);
+        if (hash != null && !Util.isEmpty(hash)) {
             params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
         }
         if (readonly != null) {
             params.put("readonly", readonly.toString());
@@ -1171,14 +1179,14 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
             default_timeout = timeout;
         }
         params.put("timeout", default_timeout.toString());
-        if (opId != null && !opId.isEmpty()) {
+        if (opId != null && !Util.isEmpty(opId)) {
             params.put("op_id", opId);
-        } else if (outId != null && !outId.isEmpty()) {
+        } else if (outId != null && !Util.isEmpty(outId)) {
             params.put("out_id", outId);
         } else {
             params.put("account", account);
         }
-        params.put("dateline", dateline.toString());
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -1188,16 +1196,15 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param clientId
      * @param fullpath
      * @param inherit       1表示继承, 0表示不继承
-     * @param dateline
      * @return
      */
-    public ReturnResult setPermissionInherit(Integer clientId, String fullpath, EntFileManager.fileInherit inherit, Long dateline) {
+    public ReturnResult setPermissionInherit(String clientId, String fullpath, EntFileManager.fileInherit inherit) {
         String url = URL_API_SET_PERMISSION_INHERIT;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
+//        params.put("org_client_id", clientId);
         params.put("fullpath", fullpath);
         params.put("inherit", inherit.toString());
-        params.put("dateline", dateline.toString());
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -1223,15 +1230,14 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      *
      * @param clientId
      * @param fullpath
-     * @param dateline
      * @return
      */
-    public ReturnResult getAllPermission(Integer clientId, String fullpath, Long dateline) {
+    public ReturnResult getAllPermission(String clientId, String fullpath) {
         String url = URL_API_GET_ALL_PERMISSION;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
+//        params.put("org_client_id", clientId);
         params.put("fullpath", fullpath);
-        params.put("dateline", dateline.toString());
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -1247,20 +1253,23 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param memberIds     需要重置/移除的成员ID, 多个使用半角逗号,分隔
      * @param groupIds      需要重置/移除的部门ID, 多个使用半角逗号,分隔
      * @param clear         清空通过部门加入的成员的权限, 该参数在非继承状态时有效, 默认 0
-     * @param dateline
      * @return
      */
-    public ReturnResult resetPermission(Integer clientId, String fullpath, int[] memberIds,int[] groupIds, Integer clear, Long dateline) {
+    public ReturnResult resetPermission(String clientId, String fullpath, int[] memberIds,int[] groupIds, Integer clear) {
         String url = URL_API_RESET_PERMISSION;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
+//        params.put("org_client_id", clientId);
         params.put("fullpath", fullpath);
-        params.put("members", Util.intArrayToString(memberIds, ","));
-        params.put("groups", Util.intArrayToString(groupIds, ","));
+        if (memberIds != null && memberIds.length > 0) {
+            params.put("members", Util.intArrayToString(memberIds, ","));
+        }
+        if (groupIds != null && groupIds.length > 0) {
+            params.put("groups", Util.intArrayToString(groupIds, ","));
+        }
         if (clear != null && clear > 0) {
             params.put("clear", clear.toString());
         }
-        params.put("dateline", dateline.toString());
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -1273,24 +1282,23 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param key
      * @param metadata          JSON Object字符串
      * @param display           在文件列表上展示的属性, 值为属性key, 多个使用半角逗号,分隔
-     * @param dateline
      * @return
      */
-    public ReturnResult setMetadata(Integer clientId, String fullpath, String hash, String key, String metadata, Long dateline, String[] display) {
+    public ReturnResult setMetadata(String clientId, String hash, String fullpath, String key, String metadata, String[] display) {
         String url = URL_API_SET_METADATA;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
-        if (fullpath != null && fullpath.length() > 0) {
-            params.put("fullpath", fullpath);
-        } else {
+//        params.put("org_client_id", clientId);
+        if (hash != null && !Util.isEmpty(hash)) {
             params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
         }
         params.put("key", key);
         params.put("metadata", metadata);
         if (display != null && display.length > 0) {
             params.put("display", Util.strArrayToString(display, ","));
         }
-        params.put("dateline", dateline.toString());
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -1301,20 +1309,20 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param fullpath          文件路径, 需传fullpath或hash其中一个参数
      * @param hash              文件唯一标识, 需传fullpath或hash其中一个参数
      * @param key
-     * @param dateline
      * @return
      */
-    public ReturnResult delMetadata(Integer clientId, String fullpath, String hash, String key, Long dateline) {
+    public ReturnResult delMetadata(String clientId, String hash, String fullpath, String key) {
         String url = URL_API_DEL_METADATA;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
-        if (fullpath != null && fullpath.length() > 0) {
-            params.put("fullpath", fullpath);
-        } else {
+//        params.put("org_client_id", clientId);
+        if (hash != null && !Util.isEmpty(hash)) {
             params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
         }
+
         params.put("key", key);
-        params.put("dateline", dateline.toString());
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -1323,15 +1331,15 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      *
      * @param clientId
      * @param queueId
-     * @param dateline
      * @return
      */
-    public ReturnResult delMetadata(Integer clientId, Integer queueId, Long dateline) {
+    public ReturnResult getQueueStatus(String clientId, Integer queueId, String hash) {
         String url = URL_API_QUEUE_STATUS;
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("org_client_id", clientId.toString());
+//        params.put("org_client_id", clientId);
         params.put("queue_id", queueId.toString());
-        params.put("dateline", dateline.toString());
+        params.put("hash", hash);
+//        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 

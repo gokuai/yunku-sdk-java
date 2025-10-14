@@ -79,7 +79,7 @@ public class YunkuEntFileTest {
     @Test
     public void t004() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getFileInfo(TEST_FILE_FULLLPATH);
+        ReturnResult r = entFile.getFileInfo("", TEST_FILE_FULLLPATH);
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -205,6 +205,55 @@ public class YunkuEntFileTest {
     public void t201() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         ReturnResult r = entFile.delCompletely(new String[]{TEST_FILE_FULLLPATH}, "tom");
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testGetCeditUrl() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.getCeditUrl(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, null, null, null, "", "", "");
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testSetPermissionInherit() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.setPermissionInherit(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, EntFileManager.fileInherit.INHERIT);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testGetAllPermission() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.getAllPermission(ORG_CLIENT_ID, TEST_FILE_FULLLPATH);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testResetPermission() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.resetPermission(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, null, null, null);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testSetMetadata() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.setMetadata(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, "", "", "", null);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testDelMetadata() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.delMetadata(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, "", "");
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void testGetQueueStatus() throws Exception {
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.getQueueStatus(ORG_CLIENT_ID, 0, "");
         Assert.assertEquals(200, r.getCode());
     }
 }

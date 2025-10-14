@@ -17,7 +17,7 @@ public class GetFileInfo {
 
         DebugConfig.DEBUG = true;
 
-        ReturnResult result = EntFileManagerHelper.getInstance().getFileInfo("default/custom/upload/path/search3.txt");
+        ReturnResult result = EntFileManagerHelper.getInstance().getFileInfo("", "default/custom/upload/path/search3.txt");
 
         DeserializeHelper.getInstance().deserializeReturn(result);
     }
