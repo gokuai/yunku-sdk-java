@@ -429,14 +429,15 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param sp                保留参数
      * @param opName            操作人名称
      * @param opId              操作人ID
+     * @param copyAll           1复制文件的所有属性, 包括操作人, 默认0不复制
      * @return ReturnResult
      */
-    public ReturnResult copyAll(String[] originFullpaths, String[] targetPaths, String sp, String opName, int opId) {
+    public ReturnResult copyAll(String[] originFullpaths, String[] targetPaths, String sp, String opName, int opId, String copyAll) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("from_fullpaths", Util.strArrayToString(originFullpaths, "|"));
         params.put("paths", Util.strArrayToString(targetPaths, "|"));
         params.put("sp", sp);
-        params.put("copy_all", "1");
+        params.put("copy_all", copyAll);
         this.setOp(params, opName, opId);
         return new RequestHelper().setParams(params).setUrl(URL_API_MCOPY_FILE).setMethod(RequestMethod.POST).executeSync();
     }
@@ -450,7 +451,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @return ReturnResult
      */
     public ReturnResult copyAll(String[] originFullpaths, String[] targetPaths, String opName) {
-        return this.copyAll(originFullpaths, targetPaths, null, opName, 0);
+        return this.copyAll(originFullpaths, targetPaths, null, opName, 0, "1");
     }
 
     /**
@@ -1333,12 +1334,12 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param queueId
      * @return
      */
-    public ReturnResult getQueueStatus(String clientId, Integer queueId, String hash) {
+    public ReturnResult getQueueStatus(String clientId, String queueId) {
         String url = URL_API_QUEUE_STATUS;
         HashMap<String, String> params = new HashMap<String, String>();
 //        params.put("org_client_id", clientId);
-        params.put("queue_id", queueId.toString());
-        params.put("hash", hash);
+        params.put("queue_id", queueId);
+//        params.put("hash", hash);
 //        params.put("dateline", Util.getUnixDateline() + "");
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }

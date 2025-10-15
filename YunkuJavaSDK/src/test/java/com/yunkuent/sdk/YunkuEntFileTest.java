@@ -16,10 +16,10 @@ import java.util.concurrent.CountDownLatch;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class YunkuEntFileTest {
 
-    public static final String ORG_CLIENT_ID = "";
-    public static final String ORG_CLIENT_SECRET = "";
+    public static final String ORG_CLIENT_ID = "6jONsUeRVH2cO0Xq55RPYq3V2o";
+    public static final String ORG_CLIENT_SECRET = "WHK9GbgCHfoZugUjIkPF6SxXgbg";
     public static final String TEST_FILE_PATH = "/tmp/test.xlsx";
-    public static final String TEST_FILE_FULLLPATH = "test/1.xlsx";
+    public static final String TEST_FILE_FULLLPATH = "2023够快云库简易使用手册.docx";
     public static final String TEST_FILE_FOLDER = "test";
 
     @Test
@@ -79,7 +79,7 @@ public class YunkuEntFileTest {
     @Test
     public void t004() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getFileInfo("", TEST_FILE_FULLLPATH);
+        ReturnResult r = entFile.getFileInfo("cb1cc6cc1795a7d07612929d50cc2e05134b2faa", TEST_FILE_FULLLPATH);
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -211,7 +211,7 @@ public class YunkuEntFileTest {
     @Test
     public void testGetCeditUrl() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getCeditUrl(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, null, null, null, "", "", "");
+        ReturnResult r = entFile.getCeditUrl(ORG_CLIENT_ID, "", TEST_FILE_FULLLPATH, null, null, "614741", "", "");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -239,21 +239,21 @@ public class YunkuEntFileTest {
     @Test
     public void testSetMetadata() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.setMetadata(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, "", "", "", null);
+        ReturnResult r = entFile.setMetadata(ORG_CLIENT_ID, "cb1cc6cc1795a7d07612929d50cc2e05134b2faa", TEST_FILE_FULLLPATH, "13_68ef355d0575a", "{\"name\":\" 元数据测试\"}", null);
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void testDelMetadata() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.delMetadata(ORG_CLIENT_ID, TEST_FILE_FULLLPATH, "", "");
+        ReturnResult r = entFile.delMetadata(ORG_CLIENT_ID, "cb1cc6cc1795a7d07612929d50cc2e05134b2faa", TEST_FILE_FULLLPATH, "13_68ef355d0575a");
         Assert.assertEquals(200, r.getCode());
     }
 
     @Test
     public void testGetQueueStatus() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getQueueStatus(ORG_CLIENT_ID, 0, "");
+        ReturnResult r = entFile.getQueueStatus(ORG_CLIENT_ID, "dfca55c64fd2871db49d6f2c8f868a2600642c70");
         Assert.assertEquals(200, r.getCode());
     }
 }
