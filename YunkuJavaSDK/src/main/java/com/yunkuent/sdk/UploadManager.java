@@ -147,7 +147,13 @@ public class UploadManager {
 
     private void startUpload() throws YunkuException, IOException {
         ReturnResult result;
+        long totalTime = System.currentTimeMillis();  // 总上传开始时间
+        long createFileTime = System.currentTimeMillis();
+        long hashTime= System.currentTimeMillis();
+        long uploadTime = System.currentTimeMillis();
+        long uploadServerTime = System.currentTimeMillis();
 
+        hashTime = System.currentTimeMillis();
         if (mStream != null) {
             mStream = Util.cloneInputStream(mStream);
             FileInfo fileInfo = YKUtils.getFileSha1(mStream, false);
@@ -167,12 +173,15 @@ public class UploadManager {
             mStream = new FileInputStream(mLocalFile);
         }
 
+        hashTime = System.currentTimeMillis() - hashTime;
         if (mStream == null) {
             throw new YunkuException("fail to open file stream");
         }
 
+        uploadTime = System.currentTimeMillis();
         for (int trys = 0; trys < 3; trys++) {
 
+            createFileTime = System.currentTimeMillis();
             result = ((IEntFileManager)this.mEngine).createFile(this.mFullpath, this.mFileinfo.fileHash, this.mFileinfo.fileSize, mOverwrite, mOpName, mOpId);
             boolean shouldUpload = this.decodeAddFileResult(result);
             if (!shouldUpload) {
@@ -183,6 +192,7 @@ public class UploadManager {
                 throw new YunkuException("fail to get upload server", result);
             }
 
+            createFileTime = System.currentTimeMillis() -createFileTime;
             LogPrint.info(LOG_TAG, "The server is " + this.mFileinfo.uploadServer);
 
             if (this.mBlockSize == 0) {
@@ -217,6 +227,7 @@ public class UploadManager {
 
             mStream.skip(offset);
 
+            uploadTime = System.currentTimeMillis();
             while (offset < this.mFileinfo.fileSize - 1 && !this.mIsStop) {
 
                 if (mCallback != null) {
@@ -225,6 +236,9 @@ public class UploadManager {
 
                 buflen = offset + this.mBlockSize > mFileinfo.fileSize ? (int) (mFileinfo.fileSize - offset) : this.mBlockSize;
                 byte[] buffer = new byte[buflen];
+
+                long chunkStart = System.currentTimeMillis();
+
                 mStream.read(buffer);
                 crc.update(buffer);
                 crc32 = crc.getValue();
@@ -269,7 +283,20 @@ public class UploadManager {
                 break;
             }
         }
+
+        uploadTime = System.currentTimeMillis() - uploadTime;
+
+        // 上传完成阶段
+        uploadServerTime = System.currentTimeMillis();
+
         this.uploadFinish();
+
+        uploadServerTime = System.currentTimeMillis() - uploadServerTime;
+
+        totalTime = System.currentTimeMillis() - totalTime;
+
+        LogPrint.info(LOG_TAG, "[UploadLog] fullPath: " + mFullpath + " fileSize: " + this.mFileinfo.fileSize + " hashTime: " + hashTime + "ms," + " creatFileTime: " + createFileTime + " ms," + " uploadTime: " + uploadTime + "ms," + " uploadServerTime: " + uploadServerTime + "ms," + " totalTime: " + totalTime + "ms");
+
     }
 
     private boolean decodeAddFileResult(ReturnResult result) throws YunkuException {

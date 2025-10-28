@@ -1,5 +1,7 @@
 package com.yunkuent.sdk;
 
+import com.gokuai.base.DebugConfig;
+import com.gokuai.base.LogPrint;
 import com.gokuai.base.ReturnResult;
 import com.yunkuent.sdk.data.FileInfo;
 import com.yunkuent.sdk.data.YunkuException;
@@ -16,10 +18,10 @@ import java.util.concurrent.CountDownLatch;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class YunkuEntFileTest {
 
-    public static final String ORG_CLIENT_ID = "6jONsUeRVH2cO0Xq55RPYq3V2o";
-    public static final String ORG_CLIENT_SECRET = "WHK9GbgCHfoZugUjIkPF6SxXgbg";
+    public static final String ORG_CLIENT_ID = "";
+    public static final String ORG_CLIENT_SECRET = "";
     public static final String TEST_FILE_PATH = "/tmp/test.xlsx";
-    public static final String TEST_FILE_FULLLPATH = "2023够快云库简易使用手册.docx";
+    public static final String TEST_FILE_FULLLPATH = "image2.png";
     public static final String TEST_FILE_FOLDER = "test";
 
     @Test
@@ -50,8 +52,13 @@ public class YunkuEntFileTest {
     public void t003() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         final CountDownLatch latch = new CountDownLatch(1);
-        Assert.assertEquals(true, new File(TEST_FILE_PATH).exists());
-        entFile.uploadByBlockAsync(TEST_FILE_FULLLPATH, "tom", 0, TEST_FILE_PATH, true, 1024, new UploadCallback() {
+
+        String desktopPath = System.getProperty("user.home") + File.separator + "Desktop";
+        String filePath = desktopPath + File.separator + "uploadTest/image2.png";
+        Assert.assertEquals(true, new File(filePath).exists());
+//        Assert.assertEquals(true, new File(TEST_FILE_PATH).exists());
+        DebugConfig.DEBUG = true;
+        entFile.uploadByBlockAsync(TEST_FILE_FULLLPATH, "tom", 0, filePath, true, 1024, new UploadCallback() {
             @Override
             public void onSuccess(String fullpath, FileInfo file) {
                 latch.countDown();
