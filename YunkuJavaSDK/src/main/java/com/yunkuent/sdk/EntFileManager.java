@@ -52,6 +52,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     private final String URL_API_DEL_TAG = HostConfig.API_ENT_HOST + "/1/file/del_tag";
     private final String URL_API_STAT = HostConfig.API_ENT_HOST + "/1/file/stat";
 
+    // ----新增-----
     private final String URL_API_CEDIT_URL = HostConfig.API_ENT_HOST + "/1/file/cedit_url";
 
     private final String URL_API_SET_PERMISSION_INHERIT = HostConfig.API_ENT_HOST + "/1/file/set_permission_inherit";
@@ -232,12 +233,16 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     public ReturnResult createFile(String fullpath, String fileHash, long fileSize, boolean overwrite, String opName, int opId) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("fullpath", fullpath);
-        params.put("filehash", fileHash);
-        params.put("filesize", Long.toString(fileSize));
         params.put("overwrite", (overwrite ? "1" : "0"));
         params.put("storage_check", "0");
         this.setOp(params, opName, opId);
-        return new RequestHelper().setParams(params).setUrl(URL_API_CREATE_FILE).setMethod(RequestMethod.POST).executeSync();
+
+        params.put("filehash", fileHash);
+        params.put("filesize", Long.toString(fileSize));
+
+        return new RequestHelperIgnoreFilehash().setParams(params).setUrl(URL_API_CREATE_FILE).setMethod(RequestMethod.POST).executeSyncIgnoreFilehash();
+//        return new RequestHelper().setParams(params).setUrl(URL_API_CREATE_FILE).setMethod(RequestMethod.POST).executeSync();
+
     }
 
     //获取实际的上传地址

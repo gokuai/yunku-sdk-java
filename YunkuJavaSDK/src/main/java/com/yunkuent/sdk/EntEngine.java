@@ -25,4 +25,17 @@ public class EntEngine extends HttpEngine {
             super.setCommonParams();
         }
     }
+
+    public class RequestHelperIgnoreFilehash extends HttpEngine.RequestHelper {
+
+        @Override
+        protected void setCommonParamsIgnoreFilehash() {
+            if (this.params == null) {
+                this.params = new HashMap<String, String>();
+            }
+            this.params.put(EntEngine.this.clientIdKey, EntEngine.this.mClientId);
+            this.params.put("dateline", Long.toString(Util.getUnixDateline()));
+            super.setCommonParamsIgnoreFilehash();
+        }
+    }
 }

@@ -93,6 +93,16 @@ public abstract class HttpEngine extends SignAbility {
             this.params.put("sign", HttpEngine.this.generateSign(this.params));
         }
 
+        protected void setCommonParamsIgnoreFilehash() {
+            if (this.disableSign) {
+                return;
+            }
+            if (this.params == null) {
+                this.params = new HashMap<String, String>();
+            }
+            this.params.put("sign", HttpEngine.this.generateSignIgnoreFilehash(this.params));
+        }
+
         private void checkNecessaryParams() {
             if (Util.isEmpty(url)) {
                 throw new IllegalArgumentException("url must not be null");
@@ -108,6 +118,28 @@ public abstract class HttpEngine extends SignAbility {
          */
         public ReturnResult executeSync() {
             this.checkNecessaryParams();
+
+            if (checkAuth) {
+                if (HttpEngine.this instanceof IAuthRequest) {
+                    return ((IAuthRequest) HttpEngine.this).sendRequestWithAuth(url, method, params, headers, postType);
+                } else {
+                    LogPrint.error(LOG_TAG, "You need implement IAuthRequest before set checkAuth=true");
+                }
+            }
+            return NetConnection.sendRequest(url, method, params, headers, postType);
+        }
+
+        /**
+         * 同步执行
+         *
+         * @return
+         */
+        public ReturnResult executeSyncIgnoreFilehash() {
+            if (Util.isEmpty(url)) {
+                throw new IllegalArgumentException("url must not be null");
+            }
+
+            this.setCommonParamsIgnoreFilehash();
 
             if (checkAuth) {
                 if (HttpEngine.this instanceof IAuthRequest) {
