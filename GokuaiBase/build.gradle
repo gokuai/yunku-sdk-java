@@ -14,5 +14,6 @@ dependencies {
     implementation 'org.json:json:20210307'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    implementation 'io.socket:socket.io-client:1.0.2'
     testImplementation 'junit:junit:4.13.2'
 }

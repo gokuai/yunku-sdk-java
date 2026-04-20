@@ -1,7 +1,9 @@
 package com.yunkuent.sdk;
 
+import com.gokuai.base.LogPrint;
 import com.gokuai.base.RequestMethod;
 import com.gokuai.base.ReturnResult;
+import com.gokuai.base.SocketIOConnection;
 import com.gokuai.base.utils.Util;
 import com.google.gson.Gson;
 import com.yunkuent.sdk.data.FileInfo;
@@ -43,7 +45,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     private final String URL_API_UPDATE_COUNT = HostConfig.API_ENT_HOST + "/1/file/updates_count";
     private final String URL_API_GET_SERVER_SITE = HostConfig.API_ENT_HOST + "/1/file/servers";
     private final String URL_API_UPLOAD_SERVERS = HostConfig.API_ENT_HOST + "/1/file/upload_servers";
-    private final String URL_API_GET_UPLOAD_URL = HostConfig.API_ENT_HOST + "/1/file/download_url";
+    private final String URL_API_GET_DOWNLOAD_URL = HostConfig.API_ENT_HOST + "/1/file/download_url";
+    private final String URL_API_PREVIEW_DOWNLOAD_URL = HostConfig.API_ENT_HOST + "/1/file/preview_download_url";
     private final String URL_API_FILE_SEARCH = HostConfig.API_ENT_HOST + "/1/file/search";
     private final String URL_API_PREVIEW_URL = HostConfig.API_ENT_HOST + "/1/file/preview_url";
     private final String URL_API_GET_PERMISSION = HostConfig.API_ENT_HOST + "/1/file/get_permission";
@@ -648,7 +651,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opId
      * @return
      */
-    public ReturnResult link(String fullpath, int deadline, AuthType authType, String password, String opName, int opId) {
+    public ReturnResult link(String fullpath, int deadline, AuthType authType, String password, String opName, int opId, boolean dir, int startline,  boolean keep, int accesslimit, String watermarkContent) {
         String url = URL_API_LINK_FILE;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("fullpath", fullpath);
@@ -662,6 +665,27 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         }
         params.put("password", password);
         this.setOp(params, opName, opId);
+
+        if (dir) {
+            params.put("dir", "1");
+        }
+
+        if (startline != 0) {
+            params.put("startline", Integer.toString(startline));
+        }
+
+        if (keep) {
+            params.put("keep", "1");
+        }
+
+        if (accesslimit > 0) {
+            params.put("access_limit", Integer.toString(accesslimit));
+        }
+
+        if (!Util.isEmpty(watermarkContent)) {
+            params.put("wm_content", watermarkContent);
+        }
+
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
@@ -707,8 +731,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opName
      * @return
      */
-    public ReturnResult link(String fullpath, int deadline, AuthType authType, String password, String opName) {
-        return this.link(fullpath, deadline, authType, password, opName, 0);
+    public ReturnResult link(String fullpath, int deadline, AuthType authType, String password, String opName, boolean dir, int startline,  boolean keep, int accesslimit, String watermarkContent) {
+        return this.link(fullpath, deadline, authType, password, opName, 0, dir, startline, keep, accesslimit, watermarkContent);
     }
 
     /**
@@ -856,7 +880,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @return
      */
     public ReturnResult getDownloadUrl(String hash, String fullpath, boolean isOpen, NetType net, String fileName, String opName, int opId) {
-        String url = URL_API_GET_UPLOAD_URL;
+        String url = URL_API_GET_DOWNLOAD_URL;
         HashMap<String, String> params = new HashMap<String, String>();
         if (hash != null && !Util.isEmpty(hash)) {
             params.put("hash", hash);
@@ -876,17 +900,20 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
 
-    /**
-     * 文件预览地址
-     *
-     * @param fullpath
-     * @param showWatermark
-     * @param memberName
-     * @param opName
-     * @return
-     */
-    public ReturnResult getPreviewUrlByFullpath(String fullpath, boolean showWatermark, String memberName, String opName) {
-        return getPreviewUrl(null, fullpath, showWatermark, memberName, opName, 0);
+
+        /**
+         * 文件预览地址
+         *
+         * @param fullpath
+         * @param showWatermark 是否显示水印
+         * @param memberName 水印中显示的姓名
+         * @param watermarkContent 自定义水印内容
+         * @param thumbnail 是否返回缩略图
+         * @param opName
+         * @return
+         */
+    public ReturnResult getPreviewUrlByFullpath(String fullpath, boolean showWatermark, String memberName, String watermarkContent, boolean thumbnail, String opName) {
+        return getPreviewUrl(null, fullpath, showWatermark, memberName, opName, 0, watermarkContent, thumbnail);
     }
 
     /**
@@ -898,8 +925,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opId
      * @return
      */
-    public ReturnResult getPreviewUrlByFullpath(String fullpath, boolean showWatermark, String memberName, int opId) {
-        return getPreviewUrl(null, fullpath, showWatermark, memberName, null, opId);
+    public ReturnResult getPreviewUrlByFullpath(String fullpath, boolean showWatermark, String memberName, int opId, String watermarkContent, boolean thumbnail) {
+        return getPreviewUrl(null, fullpath, showWatermark, memberName, null, opId, watermarkContent, thumbnail);
     }
 
     /**
@@ -911,8 +938,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opName
      * @return
      */
-    public ReturnResult getPreviewUrlByHash(String hash, boolean showWatermark, String memberName, String opName) {
-        return getPreviewUrl(hash, null, showWatermark, memberName, opName, 0);
+    public ReturnResult getPreviewUrlByHash(String hash, boolean showWatermark, String memberName, String opName, String watermarkContent, boolean thumbnail) {
+        return getPreviewUrl(hash, null, showWatermark, memberName, opName, 0, watermarkContent, thumbnail);
     }
 
     /**
@@ -924,8 +951,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opId
      * @return
      */
-    public ReturnResult getPreviewUrlByHash(String hash, boolean showWatermark, String memberName, int opId) {
-        return getPreviewUrl(hash, null, showWatermark, memberName, null, opId);
+    public ReturnResult getPreviewUrlByHash(String hash, boolean showWatermark, String memberName, int opId, String watermarkContent, boolean thumbnail) {
+        return getPreviewUrl(hash, null, showWatermark, memberName, null, opId, watermarkContent, thumbnail);
     }
 
     /**
@@ -939,7 +966,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opId
      * @return
      */
-    public ReturnResult getPreviewUrl(String hash, String fullpath, boolean showWatermark, String memberName, String opName, int opId) {
+    public ReturnResult getPreviewUrl(String hash, String fullpath, boolean showWatermark, String memberName, String opName, int opId, String watermarkContent, boolean thumbnail) {
         String url = URL_API_PREVIEW_URL;
         HashMap<String, String> params = new HashMap<String, String>();
         if (hash != null && !Util.isEmpty(hash)) {
@@ -949,6 +976,12 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         }
         params.put("member_name", memberName);
         params.put("watermark", (showWatermark ? "1" : "0"));
+        if (!Util.isEmpty(watermarkContent)) {
+            params.put("wm_content", watermarkContent);
+        }
+        if (thumbnail) {
+            params.put("thumbnail", (thumbnail ? "1" : "0"));
+        }
         this.setOp(params, opName, opId);
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
     }
@@ -1006,7 +1039,7 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
      * @param opId
      * @return
      */
-    public ReturnResult getAnnotationUrl(String hash, String fullpath, String outId, int opId) {
+    public ReturnResult getAnnotationUrl(String hash, String fullpath , String outId, int opId ) {
         String url = URL_API_PREVIEW_URL;
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("hash", hash);
@@ -1349,6 +1382,94 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
         return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.POST).executeSync();
     }
 
+    /**
+     * 文件导出链接
+     *
+     * @param fullpath
+     * @param showWatermark 是否显示水印
+     * @param watermarkContent 若显示水印，需要自定义水印内容
+     * @return
+     */
+    public ReturnResult getPreviewDownloadUrl(String fullpath, boolean showWatermark, String watermarkContent) {
+        return getPreviewDownloadUrlBySocket(fullpath, showWatermark, watermarkContent);
+    }
+
+    public ReturnResult getPreviewDownloadUrl(String fullpath) {
+        return getPreviewDownloadUrlBySocket(fullpath, false, "");
+    }
+
+    ReturnResult getPreviewDownloadUrlByFullpath(String hash, String fullpath, boolean watermark, String watermarkContent) {
+        String url = URL_API_PREVIEW_DOWNLOAD_URL;
+        HashMap<String, String> params = new HashMap<String, String>();
+        if (hash != null && !Util.isEmpty(hash)) {
+            params.put("hash", hash);
+        } else {
+            params.put("fullpath", fullpath);
+        }
+        if (watermark) {
+            params.put("watermark", "1");
+        }
+        if (!Util.isEmpty(watermarkContent)) {
+            params.put("wm_content", watermarkContent);
+        }
+
+        return new RequestHelper().setParams(params).setUrl(url).setMethod(RequestMethod.GET).executeSync();
+
+    }
+    
+    ReturnResult getPreviewDownloadUrlBySocket(String fullpath, boolean watermark, String watermarkContent) {
+        ReturnResult httpResponse = getPreviewDownloadUrlByFullpath(null, fullpath, watermark, watermarkContent);
+
+        System.out.println("=== HTTP Response ===");
+        System.out.println(httpResponse.getBody());
+
+        if (httpResponse.getCode() != 200) {
+            return httpResponse;
+        }
+        
+        try {
+            Gson gson = new Gson();
+            SocketIoConfig config = gson.fromJson(httpResponse.getBody(), SocketIoConfig.class);
+
+//            com.google.gson.JsonObject json = gson.fromJson(httpResponse.getBody(), com.google.gson.JsonObject.class);
+//            System.out.println("url: " + json.get("url"));
+//            System.out.println("path: " + json.get("path"));
+//            System.out.println("query: " + json.get("query"));
+//            System.out.println("export_msg: " + json.get("export_msg"));
+
+            if (config.url == null || config.path == null || config.query == null) {
+                return new ReturnResult(new Exception("Invalid socket.io config from API response"));
+            }
+            
+            SocketIOConnection.SocketExportConfig exportConfig = new SocketIOConnection.SocketExportConfig();
+            exportConfig.url = config.url;
+            exportConfig.path = config.path;
+            exportConfig.query = config.query;
+            
+            ExportMsg exportMsg = new ExportMsg();
+            exportMsg.filename = config.export_msg.filename;
+            exportMsg.wm = config.export_msg.wm;
+            exportConfig.exportMsg = gson.toJson(exportMsg);
+            
+            return SocketIOConnection.getInstance().sendExportRequest(exportConfig);
+            
+        } catch (Exception e) {
+            LogPrint.error("EntFileManager", "Failed to process socket.io request: " + e.getMessage());
+            return new ReturnResult(e);
+        }
+    }
+    
+    private static class SocketIoConfig {
+        public String url;
+        public String path;
+        public Map<String, String> query;
+        public ExportMsg export_msg;
+    }
+    
+    private static class ExportMsg {
+        public String filename;
+        public String wm;
+    }
 
 
 }

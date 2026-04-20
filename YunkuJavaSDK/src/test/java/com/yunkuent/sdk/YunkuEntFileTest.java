@@ -108,7 +108,7 @@ public class YunkuEntFileTest {
     @Test
     public void t007() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.getPreviewUrlByFullpath(TEST_FILE_FULLLPATH, true, "tom", "tom");
+        ReturnResult r = entFile.getPreviewUrlByFullpath(TEST_FILE_FULLLPATH, true, "abc", "", true, "tom");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -122,7 +122,7 @@ public class YunkuEntFileTest {
     @Test
     public void t009() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
-        ReturnResult r = entFile.link(TEST_FILE_FULLLPATH, 0, EntFileManager.AuthType.DEFAULT, null, "tom");
+        ReturnResult r = entFile.link(TEST_FILE_FULLLPATH, 0, EntFileManager.AuthType.DEFAULT, null, "tom", false, 0, false, -1,"uuuuu");
         Assert.assertEquals(200, r.getCode());
     }
 
@@ -191,6 +191,18 @@ public class YunkuEntFileTest {
     public void t018() throws Exception {
         EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
         ReturnResult r = entFile.getPermission(TEST_FILE_FOLDER, 1);
+        Assert.assertEquals(200, r.getCode());
+    }
+
+    @Test
+    public void t019() throws Exception {
+        System.out.println("=== t019 Calling getPreviewDownloadUrlBySocket ===");
+        EntFileManager entFile = new EntFileManager(ORG_CLIENT_ID, ORG_CLIENT_SECRET);
+        ReturnResult r = entFile.getPreviewDownloadUrl(TEST_FILE_FULLLPATH, true, "aaaaa");
+        System.out.println("=== Socket Response ===");
+        System.out.println("Code: " + r.getCode());
+        System.out.println("Body: " + r.getBody());
+        System.out.println("=======================");
         Assert.assertEquals(200, r.getCode());
     }
 

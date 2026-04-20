@@ -21,8 +21,14 @@ public class GetPreviewUrl {
         //水印上显示的用户名
         String WatermarkMemberName = "";
 
+        //水印上显示的内容
+        String watermarkContent = "";
+
+        //是否返回缩略图链接
+        boolean thumbnail = true;
+
         EntFileManager manager = new EntFileManager(clientId, secret);
-        ReturnResult result = manager.getPreviewUrlByFullpath(fullpath, showWatermark, WatermarkMemberName, "tom");
+        ReturnResult result = manager.getPreviewUrlByFullpath(fullpath, showWatermark, WatermarkMemberName, watermarkContent, thumbnail, "tom");
 
         if (result.isOK()) {
             //成功的结果

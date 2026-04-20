@@ -154,16 +154,34 @@ System.out.println(result.getBody());
 
 ```
 String fullpath = "doc/new.docx";
-String opName = "user";
 //是否显示水印
 boolean showWatermark = false;
 //水印上显示的用户名
 String WatermarkMemberName = "user";
-ReturnResult result = manager.getPreviewUrlByFullpath(fullpath, showWatermark, WatermarkMemberName, opName);
+//水印上显示的内容
+String watermarkContent = "";
+//是否返回缩略图链接
+boolean thumbnail = false;
+//操作人名称
+String opName = "user";
+ReturnResult result = manager.getPreviewUrlByFullpath(fullpath, showWatermark, WatermarkMemberName, watermarkContent, thumbnail, opName);
 System.out.println(result.getBody());
 //返回的body需要做json解析
 ```
 
+### 获取文件导出链接
+
+```
+String fullpath = "doc/new.docx";
+//是否显示水印,默认为false
+boolean showWatermark = false;
+//若开启水印，可自定义水印内容
+String watermarkContent = "";
+ReturnResult result = manager.getPreviewDownloadUrl(fullpath);
+ReturnResult result = manager.getPreviewDownloadUrl(fullpath, showWatermark, watermarkContent);
+System.out.println(result.getBody());
+//返回的body需要做json解析
+```
 
 ---
 
