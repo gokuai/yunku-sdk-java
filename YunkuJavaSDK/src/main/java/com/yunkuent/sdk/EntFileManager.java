@@ -1420,8 +1420,8 @@ public class EntFileManager extends EntEngine implements IEntFileManager {
     ReturnResult getPreviewDownloadUrlBySocket(String fullpath, boolean watermark, String watermarkContent) {
         ReturnResult httpResponse = getPreviewDownloadUrlByFullpath(null, fullpath, watermark, watermarkContent);
 
-        System.out.println("=== HTTP Response ===");
-        System.out.println(httpResponse.getBody());
+//        System.out.println("=== HTTP Response ===");
+//        System.out.println(httpResponse.getBody());
 
         if (httpResponse.getCode() != 200) {
             return httpResponse;

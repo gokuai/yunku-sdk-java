@@ -40,8 +40,8 @@ public final class SocketIOConnection {
     }
 
     public ReturnResult sendExportRequest(SocketExportConfig config) {
-        LogPrint.debug(LOG_TAG, "sendExportRequest(): url=" + config.url);
-        LogPrint.debug(LOG_TAG, "Socket path: " + config.path + "/socket.io");
+//        LogPrint.debug(LOG_TAG, "sendExportRequest(): url=" + config.url);
+//        LogPrint.debug(LOG_TAG, "Socket path: " + config.path + "/socket.io");
 
         try {
             IO.Options options = new IO.Options();
@@ -57,9 +57,9 @@ public final class SocketIOConnection {
             }
             String queryString = buildQueryString(config.query);
             fullUrl += "?" + queryString;
-            LogPrint.debug(LOG_TAG, "Full URL: " + fullUrl);
+//            LogPrint.debug(LOG_TAG, "Full URL: " + fullUrl);
 
-            LogPrint.debug(LOG_TAG, "Connecting...");
+//            LogPrint.debug(LOG_TAG, "Connecting...");
 
             Socket socket = IO.socket(fullUrl, options);
 
@@ -67,7 +67,7 @@ public final class SocketIOConnection {
 
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 public void call(Object... args) {
-                    LogPrint.debug(LOG_TAG, "Socket connected, emitting export event");
+//                    LogPrint.debug(LOG_TAG, "Socket connected, emitting export event");
                     socket.emit("export", config.exportMsg);
                 }
             });
@@ -79,7 +79,7 @@ public final class SocketIOConnection {
                 public void call(Object... args) {
                     String errorMsg = args.length > 0 ? args[0].toString() : "Unknown server error";
 //                    LogPrint.error(LOG_TAG, "Server Error: " + errorMsg);
-                    System.out.println("Server Error" + errorMsg);
+//                    System.out.println("Server Error" + errorMsg);
                     responseHandler.setErrorMessage(errorMsg);
                     socket.disconnect();
                 }
@@ -88,16 +88,16 @@ public final class SocketIOConnection {
             socket.on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
                 public void call(Object... args) {
 //                    LogPrint.error(LOG_TAG, "Connect error: " + (args.length > 0 ? args[0].toString() : "unknown"));
-                    System.out.println("Connect Error" + (args.length > 0 ? args[0].toString() : "unknown"));
-                    if (args.length > 0 && args[0] instanceof Exception) {
-                        Exception e = (Exception) args[0];
+//                    System.out.println("Connect Error" + (args.length > 0 ? args[0].toString() : "unknown"));
+//                    if (args.length > 0 && args[0] instanceof Exception) {
+//                        Exception e = (Exception) args[0];
 //                        LogPrint.error(LOG_TAG, "Stack: " + e.getMessage());
-                        System.out.println("Stack: " + e.getMessage());
-                        if (e.getCause() != null) {
+//                        System.out.println("Stack: " + e.getMessage());
+//                        if (e.getCause() != null) {
 //                            LogPrint.error(LOG_TAG, "Cause: " + e.getCause().getMessage());
-                            System.out.println("Cause: " + e.getCause().getMessage());
-                        }
-                    }
+//                            System.out.println("Cause: " + e.getCause().getMessage());
+//                        }
+//                    }
                     if (args.length > 0) {
                         responseHandler.handleError("Connection error: " + args[0].toString());
                     } else {
@@ -115,11 +115,11 @@ public final class SocketIOConnection {
 
         } catch (URISyntaxException e) {
 //            LogPrint.error(LOG_TAG, "Invalid socket URL: " + e.getMessage());
-            System.out.println("Invalid socket URL: " + e.getMessage());
+//            System.out.println("Invalid socket URL: " + e.getMessage());
             return new ReturnResult(new Exception("Invalid socket URL: " + e.getMessage()));
         } catch (Exception e) {
 //            LogPrint.error(LOG_TAG, "Socket request failed: " + e.getMessage());
-            System.out.println("Socket request failed: " + e.getMessage());
+//            System.out.println("Socket request failed: " + e.getMessage());
             return new ReturnResult(e);
         }
     }
@@ -195,14 +195,18 @@ public final class SocketIOConnection {
         public void setErrorMessage(String errorMsg) {
             if (!hasError) {
                 hasError = true;
+                int errorCode = 500; // 默认为 500
                 try {
                     JSONObject json = new JSONObject(errorMsg);
+                    if (json.has("error_code")) {
+                        errorCode = json.getInt("error_code");
+                    }
                     if (json.has("error_msg")) {
                         errorMsg = json.getString("error_msg");
                     }
                 } catch (Exception e) {
                 }
-                result = new ReturnResult(500, "Error: " + errorMsg);
+                result = new ReturnResult(errorCode, "Error: " + errorMsg);
                 latch.countDown();
             }
         }

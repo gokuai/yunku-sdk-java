@@ -21,7 +21,7 @@ public class YunkuEntFileTest {
     public static final String ORG_CLIENT_ID = "";
     public static final String ORG_CLIENT_SECRET = "";
     public static final String TEST_FILE_PATH = "/tmp/test.xlsx";
-    public static final String TEST_FILE_FULLLPATH = "image2.png";
+    public static final String TEST_FILE_FULLLPATH = "2025够快云库简易使用手册.docx"; //"image2.png";
     public static final String TEST_FILE_FOLDER = "test";
 
     @Test
